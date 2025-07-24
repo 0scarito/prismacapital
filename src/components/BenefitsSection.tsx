@@ -46,7 +46,7 @@ const BenefitsSection = () => {
                   <div className="w-16 h-16 rounded-xl bg-gradient-prisma flex items-center justify-center mb-4">
                     <benefit.icon className="w-8 h-8 text-white" strokeWidth={2} />
                   </div>
-                  <span className="inline-block bg-accent-amber text-midnight-navy text-xs font-numbers px-3 py-1 rounded-full">
+                  <span className="inline-block bg-metallic-gold text-deep-navy text-xs font-numbers px-3 py-1 rounded-full">
                     {benefit.highlight}
                   </span>
                 </div>
@@ -89,7 +89,7 @@ const BenefitsSection = () => {
               </div>
             </div>
             
-            <div className="text-center p-6 bg-gradient-to-br from-prism-blue/10 to-spectrum-teal/10 rounded-xl border border-primary/20">
+            <div className="text-center p-6 bg-gradient-to-br from-navy-light/10 to-metallic-gold/10 rounded-xl border border-primary/20">
               <div className="font-numbers text-3xl text-primary mb-2">12-15%</div>
               <div className="font-body text-sm text-primary mb-2">Private Equity (IRR historique)</div>
               <div className="w-full h-2 bg-border rounded-full overflow-hidden">
@@ -105,7 +105,7 @@ const BenefitsSection = () => {
             <div>
               <div className="flex items-center mb-6">
                 {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-5 h-5 text-accent-amber fill-current" />
+                  <Star key={i} className="w-5 h-5 text-metallic-gold fill-current" />
                 ))}
               </div>
               

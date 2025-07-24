@@ -7,21 +7,21 @@ const HowItWorksSection = () => {
       title: "Achetez",
       description: "Choisissez une carte Prisma de €50, €100, €250 ou €500 dans n'importe quelle Maison de la Presse.",
       icon: ShoppingCart,
-      color: "prism-blue"
+      color: "navy-light"
     },
     {
       number: "02", 
       title: "Tapez & KYC",
       description: "Le bénéficiaire tape la puce NFC et complète un contrôle de risque de 3 minutes.",
       icon: Smartphone,
-      color: "spectrum-teal"
+      color: "metallic-gold"
     },
     {
       number: "03",
       title: "Possédez",
       description: "Une fois la poche de €500k fermée, les parts d'un ELTIF/FCPR éligible sont émises. Suivez la valeur en ligne.",
       icon: TrendingUp,
-      color: "accent-amber"
+      color: "rich-gold"
     }
   ];
 
@@ -94,19 +94,19 @@ const HowItWorksSection = () => {
           {/* Flow Diagram */}
           <div className="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-8">
             <div className="flex items-center space-x-4">
-              <div className="w-3 h-3 bg-prism-blue rounded-full animate-pulse"></div>
+              <div className="w-3 h-3 bg-navy-light rounded-full animate-pulse"></div>
               <span className="font-body text-sm text-muted-foreground">Achat Carte</span>
             </div>
-            <div className="w-8 h-0.5 bg-gradient-to-r from-prism-blue to-spectrum-teal hidden md:block"></div>
+            <div className="w-8 h-0.5 bg-gradient-to-r from-navy-light to-metallic-gold hidden md:block"></div>
             
             <div className="flex items-center space-x-4">
-              <div className="w-3 h-3 bg-spectrum-teal rounded-full animate-pulse animation-delay-300"></div>
+              <div className="w-3 h-3 bg-metallic-gold rounded-full animate-pulse animation-delay-300"></div>
               <span className="font-body text-sm text-muted-foreground">Poche €500k</span>
             </div>
-            <div className="w-8 h-0.5 bg-gradient-to-r from-spectrum-teal to-accent-amber hidden md:block"></div>
+            <div className="w-8 h-0.5 bg-gradient-to-r from-metallic-gold to-rich-gold hidden md:block"></div>
             
             <div className="flex items-center space-x-4">
-              <div className="w-3 h-3 bg-accent-amber rounded-full animate-pulse animation-delay-500"></div>
+              <div className="w-3 h-3 bg-rich-gold rounded-full animate-pulse animation-delay-500"></div>
               <span className="font-body text-sm text-muted-foreground">Parts ELTIF/FCPR</span>
             </div>
           </div>

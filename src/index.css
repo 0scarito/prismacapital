@@ -8,56 +8,54 @@
 
 @layer base {
   :root {
-    /* New Brand Colors */
-    --deep-navy: 207 60% 11%;
-    --metallic-gold: 37 20% 58%;
-    --rich-gold: 43 45% 68%;
-    --navy-light: 207 45% 25%;
-    --navy-muted: 207 25% 45%;
-    --gold-accent: 43 35% 75%;
-    --warm-cream: 45 25% 95%;
+    /* Prisma Brand Colors */
+    --midnight-navy: 217 91% 11%;
+    --prism-blue: 221 83% 53%;
+    --spectrum-teal: 173 80% 60%;
+    --accent-amber: 45 93% 58%;
+    --warm-grey: 220 14% 96%;
     
     /* Semantic Design Tokens */
     --background: 0 0% 100%;
-    --foreground: 207 60% 11%;
+    --foreground: 217 91% 11%;
     
     --card: 0 0% 100%;
-    --card-foreground: 207 60% 11%;
+    --card-foreground: 217 91% 11%;
     
     --popover: 0 0% 100%;
-    --popover-foreground: 207 60% 11%;
+    --popover-foreground: 217 91% 11%;
     
-    --primary: 207 45% 25%;
-    --primary-foreground: 43 35% 75%;
+    --primary: 221 83% 53%;
+    --primary-foreground: 0 0% 100%;
     
-    --secondary: 45 25% 95%;
-    --secondary-foreground: 207 60% 11%;
+    --secondary: 220 14% 96%;
+    --secondary-foreground: 217 91% 11%;
     
-    --muted: 45 25% 95%;
-    --muted-foreground: 207 25% 45%;
+    --muted: 220 14% 96%;
+    --muted-foreground: 217 32% 45%;
     
-    --accent: 37 20% 58%;
+    --accent: 173 80% 60%;
     --accent-foreground: 0 0% 100%;
     
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
     
-    --border: 207 20% 85%;
-    --input: 207 20% 85%;
-    --ring: 37 20% 58%;
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 221 83% 53%;
     
     --radius: 0.75rem;
     
-    /* New Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(var(--navy-light)), hsl(var(--metallic-gold)));
-    --gradient-hero: linear-gradient(135deg, hsl(var(--deep-navy)), hsl(var(--navy-light)));
-    --gradient-card: linear-gradient(145deg, hsl(var(--navy-light)), hsl(var(--metallic-gold)), hsl(var(--rich-gold)));
-    --gradient-subtle: linear-gradient(180deg, hsl(var(--background)), hsl(var(--warm-cream)));
+    /* Prisma Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(var(--prism-blue)), hsl(var(--spectrum-teal)));
+    --gradient-hero: linear-gradient(135deg, hsl(var(--midnight-navy)), hsl(var(--prism-blue)));
+    --gradient-card: linear-gradient(145deg, hsl(var(--prism-blue)), hsl(var(--spectrum-teal)), hsl(var(--accent-amber)));
+    --gradient-subtle: linear-gradient(180deg, hsl(var(--background)), hsl(var(--warm-grey)));
     
-    /* New Shadows */
-    --shadow-card: 0 10px 40px -10px hsl(var(--navy-light) / 0.2);
-    --shadow-button: 0 4px 20px -4px hsl(var(--navy-light) / 0.3);
-    --shadow-glow: 0 0 40px hsl(var(--metallic-gold) / 0.4);
+    /* Prisma Shadows */
+    --shadow-card: 0 10px 40px -10px hsl(var(--prism-blue) / 0.2);
+    --shadow-button: 0 4px 20px -4px hsl(var(--prism-blue) / 0.3);
+    --shadow-glow: 0 0 40px hsl(var(--spectrum-teal) / 0.4);
     
     /* Animations */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -81,65 +79,51 @@
   }
 
   .dark {
-    /* Dark mode Colors */
-    --background: 207 60% 11%;
-    --foreground: 43 35% 75%;
+    /* Dark mode Prisma Colors */
+    --background: 217 91% 11%;
+    --foreground: 0 0% 100%;
     
-    --card: 207 50% 15%;
-    --card-foreground: 43 35% 75%;
+    --card: 217 80% 15%;
+    --card-foreground: 0 0% 100%;
     
-    --popover: 207 50% 15%;
-    --popover-foreground: 43 35% 75%;
+    --popover: 217 80% 15%;
+    --popover-foreground: 0 0% 100%;
     
-    --primary: 37 20% 58%;
-    --primary-foreground: 207 60% 11%;
+    --primary: 173 80% 60%;
+    --primary-foreground: 217 91% 11%;
     
-    --secondary: 207 40% 20%;
-    --secondary-foreground: 43 35% 75%;
+    --secondary: 217 50% 20%;
+    --secondary-foreground: 0 0% 100%;
     
-    --muted: 207 40% 20%;
-    --muted-foreground: 43 25% 65%;
+    --muted: 217 50% 20%;
+    --muted-foreground: 220 13% 70%;
     
-    --accent: 43 45% 68%;
-    --accent-foreground: 207 60% 11%;
+    --accent: 45 93% 58%;
+    --accent-foreground: 217 91% 11%;
     
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
     
-    --border: 207 40% 25%;
-    --input: 207 40% 25%;
-    --ring: 37 20% 58%;
+    --border: 217 50% 25%;
+    --input: 217 50% 25%;
+    --ring: 173 80% 60%;
     
     /* Dark mode gradients */
-    --gradient-hero: linear-gradient(135deg, hsl(var(--deep-navy)), hsl(var(--navy-light)));
-    --gradient-subtle: linear-gradient(180deg, hsl(var(--deep-navy)), hsl(207 50% 15%));
+    --gradient-hero: linear-gradient(135deg, hsl(var(--midnight-navy)), hsl(var(--prism-blue)));
+    --gradient-subtle: linear-gradient(180deg, hsl(var(--midnight-navy)), hsl(217 80% 15%));
   }
 }
 
 @layer components {
-  /* Enhanced Button Styles with Advanced Animations */
+  /* Prisma Component Styles */
   .btn-prisma {
-    @apply bg-gradient-to-r from-navy-light to-metallic-gold text-white font-semibold py-3 px-6 rounded-lg 
-           shadow-[var(--shadow-button)] hover:scale-105 transition-all duration-300 hover:shadow-[var(--shadow-glow)]
-           hover:from-metallic-gold hover:to-rich-gold relative overflow-hidden;
-    
-    /* Add glow effect on hover */
-    background-size: 200% 100%;
-    animation: gradient-shift 3s ease infinite;
-  }
-  
-  .btn-prisma:hover {
-    animation: gradient-shift 1s ease infinite, pulse-glow 2s ease infinite;
+    @apply bg-gradient-to-r from-primary to-accent text-primary-foreground font-semibold py-3 px-6 rounded-lg 
+           shadow-[var(--shadow-button)] hover:scale-105 transition-all duration-300 hover:shadow-[var(--shadow-glow)];
   }
   
   .btn-prisma-outline {
-    @apply border-2 border-metallic-gold text-metallic-gold bg-transparent font-semibold py-3 px-6 rounded-lg 
-           hover:bg-metallic-gold hover:text-deep-navy transition-all duration-300 hover:scale-105
-           hover:shadow-[var(--shadow-glow)] relative overflow-hidden;
-  }
-  
-  .btn-prisma-outline:hover {
-    animation: pulse-glow 2s ease infinite;
+    @apply border-2 border-primary text-primary bg-transparent font-semibold py-3 px-6 rounded-lg 
+           hover:bg-primary hover:text-primary-foreground transition-all duration-300 hover:scale-105;
   }
   
   .section-container {
@@ -190,10 +174,10 @@
 
 @keyframes pulse-glow {
   0%, 100% {
-    box-shadow: 0 0 20px hsl(var(--metallic-gold) / 0.4);
+    box-shadow: 0 0 20px hsl(var(--spectrum-teal) / 0.4);
   }
   50% {
-    box-shadow: 0 0 40px hsl(var(--metallic-gold) / 0.8), 0 0 60px hsl(var(--navy-light) / 0.4);
+    box-shadow: 0 0 40px hsl(var(--spectrum-teal) / 0.8), 0 0 60px hsl(var(--prism-blue) / 0.4);
   }
 }
 
@@ -203,15 +187,6 @@
   }
   50% {
     transform: translateY(-10px);
-  }
-}
-
-@keyframes gradient-shift {
-  0%, 100% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
   }
 }
 

@@ -40,7 +40,7 @@ const HeroSection = () => {
               </button>
               <button
                 onClick={() => scrollToSection('#partners')}
-                className="btn-prisma-outline text-lg px-8 py-4 text-white border-white hover:bg-white hover:text-deep-navy"
+                className="btn-prisma-outline text-lg px-8 py-4 text-white border-white hover:bg-white hover:text-midnight-navy"
               >
                 Je suis Asset Manager
               </button>
@@ -49,15 +49,15 @@ const HeroSection = () => {
             {/* Trust Indicators */}
             <div className="mt-12 flex flex-wrap justify-center lg:justify-start gap-6 text-white/70">
               <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-metallic-gold rounded-full"></div>
+                <div className="w-2 h-2 bg-spectrum-teal rounded-full"></div>
                 <span className="font-body text-sm">AMF Agréé</span>
               </div>
               <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-rich-gold rounded-full"></div>
+                <div className="w-2 h-2 bg-accent-amber rounded-full"></div>
                 <span className="font-body text-sm">PSD2 Conforme</span>
               </div>
               <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-metallic-gold rounded-full"></div>
+                <div className="w-2 h-2 bg-spectrum-teal rounded-full"></div>
                 <span className="font-body text-sm">RGPD Sécurisé</span>
               </div>
             </div>
@@ -73,7 +73,7 @@ const HeroSection = () => {
               />
               
               {/* Floating Animation Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-navy-light/20 to-transparent"></div>
+              <div className="absolute inset-0 bg-gradient-to-t from-prism-blue/20 to-transparent"></div>
               
               {/* NFC Ripple Effect */}
               <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
@@ -85,7 +85,7 @@ const HeroSection = () => {
 
             {/* Floating Cards Visual Elements */}
             <div className="absolute -top-4 -right-4 w-24 h-16 bg-gradient-card rounded-lg shadow-prisma-glow opacity-80 animate-bounce animation-delay-300"></div>
-            <div className="absolute -bottom-6 -left-6 w-20 h-14 bg-gradient-to-r from-metallic-gold to-rich-gold rounded-lg shadow-prisma-glow opacity-60 animate-bounce animation-delay-500"></div>
+            <div className="absolute -bottom-6 -left-6 w-20 h-14 bg-gradient-to-r from-spectrum-teal to-accent-amber rounded-lg shadow-prisma-glow opacity-60 animate-bounce animation-delay-500"></div>
           </div>
         </div>
       </div>

@@ -56,7 +56,7 @@ const PartnersSection = () => {
                     <h3 className="font-heading text-xl text-foreground mr-3">
                       {benefit.title}
                     </h3>
-                    <span className="bg-metallic-gold text-deep-navy text-sm font-numbers px-3 py-1 rounded-full">
+                    <span className="bg-accent-amber text-midnight-navy text-sm font-numbers px-3 py-1 rounded-full">
                       {benefit.stat}
                     </span>
                   </div>
@@ -79,34 +79,34 @@ const PartnersSection = () => {
               <div className="space-y-6">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
-                    <div className="w-8 h-8 rounded-full bg-navy-light flex items-center justify-center">
+                    <div className="w-8 h-8 rounded-full bg-prism-blue flex items-center justify-center">
                       <span className="text-white text-sm font-bold">1</span>
                     </div>
                     <span className="font-body text-sm">Asset Manager</span>
                   </div>
-                  <div className="flex-1 h-0.5 bg-gradient-to-r from-navy-light to-metallic-gold mx-4"></div>
+                  <div className="flex-1 h-0.5 bg-gradient-to-r from-prism-blue to-spectrum-teal mx-4"></div>
                   <span className="font-numbers text-sm text-muted-foreground">Fonds</span>
                 </div>
 
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
-                    <div className="w-8 h-8 rounded-full bg-metallic-gold flex items-center justify-center">
-                      <span className="text-deep-navy text-sm font-bold">2</span>
+                    <div className="w-8 h-8 rounded-full bg-spectrum-teal flex items-center justify-center">
+                      <span className="text-white text-sm font-bold">2</span>
                     </div>
                     <span className="font-body text-sm">Prisma Capital</span>
                   </div>
-                  <div className="flex-1 h-0.5 bg-gradient-to-r from-metallic-gold to-rich-gold mx-4"></div>
+                  <div className="flex-1 h-0.5 bg-gradient-to-r from-spectrum-teal to-accent-amber mx-4"></div>
                   <span className="font-numbers text-sm text-muted-foreground">Cartes NFC</span>
                 </div>
 
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
-                    <div className="w-8 h-8 rounded-full bg-rich-gold flex items-center justify-center">
-                      <span className="text-deep-navy text-sm font-bold">3</span>
+                    <div className="w-8 h-8 rounded-full bg-accent-amber flex items-center justify-center">
+                      <span className="text-midnight-navy text-sm font-bold">3</span>
                     </div>
                     <span className="font-body text-sm">Points de Vente</span>
                   </div>
-                  <div className="flex-1 h-0.5 bg-rich-gold mx-4"></div>
+                  <div className="flex-1 h-0.5 bg-accent-amber mx-4"></div>
                   <span className="font-numbers text-sm text-muted-foreground">Clients Finaux</span>
                 </div>
               </div>
@@ -137,8 +137,8 @@ const PartnersSection = () => {
               </div>
             </div>
             
-            <div className="absolute -bottom-4 -left-4 bg-metallic-gold rounded-xl p-4 shadow-prisma-glow">
-              <div className="text-deep-navy text-center">
+            <div className="absolute -bottom-4 -left-4 bg-accent-amber rounded-xl p-4 shadow-prisma-glow">
+              <div className="text-midnight-navy text-center">
                 <div className="font-numbers text-2xl">3k+</div>
                 <div className="font-body text-xs">Points de Vente</div>
               </div>

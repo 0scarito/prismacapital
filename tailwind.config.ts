@@ -25,14 +25,12 @@ export default {
 				background: 'hsl(var(--background))',
 				foreground: 'hsl(var(--foreground))',
 				
-				// New Brand Colors
-				'deep-navy': 'hsl(var(--deep-navy))',
-				'metallic-gold': 'hsl(var(--metallic-gold))',
-				'rich-gold': 'hsl(var(--rich-gold))',
-				'navy-light': 'hsl(var(--navy-light))',
-				'navy-muted': 'hsl(var(--navy-muted))',
-				'gold-accent': 'hsl(var(--gold-accent))',
-				'warm-cream': 'hsl(var(--warm-cream))',
+				// Prisma Brand Colors
+				'midnight-navy': 'hsl(var(--midnight-navy))',
+				'prism-blue': 'hsl(var(--prism-blue))',
+				'spectrum-teal': 'hsl(var(--spectrum-teal))',
+				'accent-amber': 'hsl(var(--accent-amber))',
+				'warm-grey': 'hsl(var(--warm-grey))',
 				
 				primary: {
 					DEFAULT: 'hsl(var(--primary))',

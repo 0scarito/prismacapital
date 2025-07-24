@@ -24,6 +24,14 @@ export default {
 				ring: 'hsl(var(--ring))',
 				background: 'hsl(var(--background))',
 				foreground: 'hsl(var(--foreground))',
+				
+				// Prisma Brand Colors
+				'midnight-navy': 'hsl(var(--midnight-navy))',
+				'prism-blue': 'hsl(var(--prism-blue))',
+				'spectrum-teal': 'hsl(var(--spectrum-teal))',
+				'accent-amber': 'hsl(var(--accent-amber))',
+				'warm-grey': 'hsl(var(--warm-grey))',
+				
 				primary: {
 					DEFAULT: 'hsl(var(--primary))',
 					foreground: 'hsl(var(--primary-foreground))'
@@ -62,6 +70,20 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				}
+			},
+			backgroundImage: {
+				'gradient-prisma': 'var(--gradient-primary)',
+				'gradient-hero': 'var(--gradient-hero)',
+				'gradient-card': 'var(--gradient-card)',
+				'gradient-subtle': 'var(--gradient-subtle)',
+			},
+			fontFamily: {
+				'sans': ['Inter', 'sans-serif'],
+			},
+			boxShadow: {
+				'prisma-card': 'var(--shadow-card)',
+				'prisma-button': 'var(--shadow-button)',
+				'prisma-glow': 'var(--shadow-glow)',
 			},
 			borderRadius: {
 				lg: 'var(--radius)',

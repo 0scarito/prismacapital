@@ -1,12 +1,89 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useEffect } from 'react';
+import Navigation from '@/components/Navigation';
+import HeroSection from '@/components/HeroSection';
+import HowItWorksSection from '@/components/HowItWorksSection';
+import BenefitsSection from '@/components/BenefitsSection';
+import PartnersSection from '@/components/PartnersSection';
+import SecuritySection from '@/components/SecuritySection';
+import FAQSection from '@/components/FAQSection';
+import CTASection from '@/components/CTASection';
+import Footer from '@/components/Footer';
 
 const Index = () => {
+  useEffect(() => {
+    // Add smooth scroll behavior to html element
+    document.documentElement.classList.add('smooth-scroll');
+    
+    // SEO Meta tags
+    document.title = 'Prisma Capital Cards | Gift Private-Markets Access';
+    
+    const metaDescription = document.querySelector('meta[name="description"]');
+    if (metaDescription) {
+      metaDescription.setAttribute('content', 
+        'Démocratisez l\'accès au private equity avec les Cartes Prisma Capital. Cartes-cadeaux NFC physiques pour investir dans les marchés privés. AMF agréé.'
+      );
+    }
+
+    // OpenGraph tags
+    const ogTitle = document.querySelector('meta[property="og:title"]');
+    if (ogTitle) {
+      ogTitle.setAttribute('content', 'Prisma Capital Cards | Gift Private-Markets Access');
+    }
+
+    const ogDescription = document.querySelector('meta[property="og:description"]');
+    if (ogDescription) {
+      ogDescription.setAttribute('content', 
+        'Démocratisez l\'accès au private equity avec les Cartes Prisma Capital. Cartes-cadeaux NFC physiques pour investir dans les marchés privés.'
+      );
+    }
+
+    // Add analytics event tracking
+    const handleCTAClick = (section: string) => {
+      // Google Tag Manager event
+      if (typeof window !== 'undefined' && (window as any).dataLayer) {
+        (window as any).dataLayer.push({
+          event: 'cta_click',
+          section: section,
+          timestamp: Date.now()
+        });
+      }
+    };
+
+    // Attach event listeners to CTA buttons
+    const ctaButtons = document.querySelectorAll('[data-cta]');
+    ctaButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const section = button.getAttribute('data-cta');
+        if (section) handleCTAClick(section);
+      });
+    });
+
+    return () => {
+      document.documentElement.classList.remove('smooth-scroll');
+      ctaButtons.forEach(button => {
+        button.removeEventListener('click', () => {});
+      });
+    };
+  }, []);
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
-      </div>
+    <div className="min-h-screen bg-background font-sans">
+      {/* Navigation */}
+      <Navigation />
+      
+      {/* Main Content */}
+      <main>
+        <HeroSection />
+        <HowItWorksSection />
+        <BenefitsSection />
+        <PartnersSection />
+        <SecuritySection />
+        <FAQSection />
+        <CTASection />
+      </main>
+      
+      {/* Footer */}
+      <Footer />
     </div>
   );
 };

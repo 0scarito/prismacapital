@@ -8,13 +8,13 @@
 
 @layer base {
   :root {
-    /* Cap&CO Brand Colors - Endex Inspired */
-    --deep-navy: 216 42% 8%;        /* #0F1520 */
-    --electric-blue: 216 100% 50%;  /* #0055FF */
+    /* Cap&CO Brand Colors - Coherent Palette */
+    --deep-navy: 215 52% 11%;       /* #0F1520 */
+    --electric-blue: 214 100% 50%;  /* #0055FF */
     --metallic-gold: 39 42% 69%;    /* #C9A970 */
     --warm-white: 0 0% 100%;        /* #FFFFFF */
-    --light-gray: 213 27% 84%;      /* #E5E7EB */
-    --dark-navy: 215 33% 6%;        /* #09101A */
+    --light-gray: 214 27% 89%;      /* #E5E7EB */
+    --dark-navy: 215 60% 6%;        /* #09101A */
     
     /* Semantic Design Tokens */
     --background: var(--deep-navy);
@@ -48,10 +48,11 @@
     --radius: 0.75rem;
     
     /* Cap&CO Gradients */
-    --gradient-hero: radial-gradient(ellipse at top left, hsl(var(--deep-navy)), hsl(var(--dark-navy)));
-    --gradient-primary: linear-gradient(135deg, hsl(var(--electric-blue)), hsl(var(--metallic-gold)));
-    --gradient-card: linear-gradient(145deg, hsl(var(--warm-white)), hsl(var(--light-gray)));
-    --gradient-subtle: linear-gradient(180deg, hsl(var(--warm-white)), hsl(var(--light-gray)));
+    --gradient-hero: radial-gradient(ellipse at center, hsl(var(--deep-navy)) 0%, hsl(var(--dark-navy)) 100%);
+    --gradient-primary: linear-gradient(135deg, hsl(var(--electric-blue)) 0%, hsl(var(--metallic-gold)) 100%);
+    --gradient-card: linear-gradient(145deg, hsl(var(--warm-white)) 0%, hsl(var(--light-gray)) 100%);
+    --gradient-subtle: linear-gradient(180deg, hsl(var(--warm-white)) 0%, hsl(var(--light-gray)) 100%);
+    --gradient-warm: linear-gradient(135deg, hsl(var(--deep-navy)) 0%, hsl(215 45% 15%) 100%);
     
     /* Shadows */
     --shadow-card: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
@@ -116,20 +117,21 @@
 }
 
 @layer components {
-  /* Cap&CO Button System - Endex Inspired */
+  /* Cap&CO Button System - Premium Gift Focus */
   .btn-primary {
-    @apply bg-primary text-primary-foreground font-medium py-3 px-8 rounded-lg 
-           shadow-[var(--shadow-button)] hover:scale-[1.04] transition-all duration-300
+    @apply bg-gradient-to-r from-electric-blue to-metallic-gold text-white font-medium py-4 px-8 rounded-lg 
+           shadow-prisma-button hover:scale-[1.04] transition-all duration-300
            relative overflow-hidden;
   }
   
   .btn-primary:hover {
-    box-shadow: var(--shadow-glow);
+    @apply shadow-prisma-glow;
+    background: linear-gradient(135deg, hsl(var(--electric-blue)) 0%, hsl(var(--metallic-gold)) 100%);
   }
   
   .btn-ghost {
-    @apply border-2 border-foreground text-foreground bg-transparent font-medium py-3 px-8 rounded-lg 
-           hover:bg-foreground hover:text-background transition-all duration-300 hover:scale-[1.04];
+    @apply border-2 border-warm-white/60 text-warm-white bg-transparent font-medium py-4 px-8 rounded-lg 
+           hover:bg-warm-white hover:text-deep-navy transition-all duration-300 hover:scale-[1.04];
   }
   
   /* Typewriter Effect */

@@ -1,12 +1,12 @@
 import { useEffect } from 'react';
 import Navigation from '@/components/Navigation';
 import HeroSection from '@/components/HeroSection';
-import SocialProofSection from '@/components/SocialProofSection';
+import CredibilityBar from '@/components/CredibilityBar';
 import HowItWorksSection from '@/components/HowItWorksSection';
 import WhyChooseSection from '@/components/WhyChooseSection';
 import TestimonialsSection from '@/components/TestimonialsSection';
+import GiftConfiguratorSection from '@/components/GiftConfiguratorSection';
 import ComplianceSection from '@/components/ComplianceSection';
-import CTASection from '@/components/CTASection';
 import Footer from '@/components/Footer';
 
 const Index = () => {
@@ -74,12 +74,12 @@ const Index = () => {
       {/* Main Content */}
       <main>
         <HeroSection />
-        <SocialProofSection />
+        <CredibilityBar />
         <HowItWorksSection />
         <WhyChooseSection />
         <TestimonialsSection />
+        <GiftConfiguratorSection />
         <ComplianceSection />
-        <CTASection />
       </main>
       
       {/* Footer */}

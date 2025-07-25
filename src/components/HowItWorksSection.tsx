@@ -1,115 +1,101 @@
-import { ShoppingCart, Smartphone, TrendingUp } from 'lucide-react';
+import { useState } from 'react';
+import { Target, Gift, Users } from 'lucide-react';
 
 const HowItWorksSection = () => {
+  const [hoveredStep, setHoveredStep] = useState<number | null>(null);
+  
   const steps = [
     {
-      number: "01",
-      title: "Achetez",
-      description: "Choisissez une carte Prisma de €50, €100, €250 ou €500 dans n'importe quelle Maison de la Presse.",
-      icon: ShoppingCart,
-      color: "navy-light"
+      number: "1",
+      title: "Pick a sector",
+      description: "Choose from Clean-Tech, Food-Innovation, AI, and more—each portfolio vetted with our AMF-registered partner.",
+      icon: Target,
+      interaction: "Hover reveals real start-up thumbnails."
     },
     {
-      number: "02", 
-      title: "Tapez & KYC",
-      description: "Le bénéficiaire tape la puce NFC et complète un contrôle de risque de 3 minutes.",
-      icon: Smartphone,
-      color: "metallic-gold"
+      number: "2", 
+      title: "Personalise the gift",
+      description: "Add the recipient's name and a message. We print it on archival-grade card stock with gold-foil edge.",
+      icon: Gift,
+      interaction: "Live text input updates a coupon mock-up."
     },
     {
-      number: "03",
-      title: "Possédez",
-      description: "Une fois la poche de €500k fermée, les parts d'un ELTIF/FCPR éligible sont émises. Suivez la valeur en ligne.",
-      icon: TrendingUp,
-      color: "rich-gold"
+      number: "3",
+      title: "They redeem & learn",
+      description: "Recipient scans the QR, completes KYC with a guardian if under 18, and tracks their investment in our app—while taking bite-size finance lessons.",
+      icon: Users,
+      interaction: "Animated phone mock slides in."
     }
   ];
 
   return (
-    <section id="how-it-works" className="py-20 bg-gradient-subtle">
-      <div className="section-container">
+    <section id="how-it-works" className="py-20 bg-card">
+      <div className="container mx-auto px-6 max-w-7xl">
         {/* Section Header */}
         <div className="text-center mb-16">
-          <h2 className="font-heading text-3xl lg:text-5xl text-foreground mb-6">
-            Comment ça fonctionne
+          <h2 className="font-serif font-bold text-4xl lg:text-6xl text-card-foreground mb-6">
+            How It Works
           </h2>
-          <p className="font-body text-xl text-muted-foreground max-w-3xl mx-auto">
-            Un processus simple en trois étapes pour démocratiser l'accès aux marchés privés
+          <p className="font-sans text-xl text-muted-foreground max-w-3xl mx-auto">
+            Three simple steps to transform savings into equity ownership
           </p>
         </div>
 
-        {/* Steps Timeline */}
+        {/* Steps Grid */}
         <div className="grid md:grid-cols-3 gap-8 lg:gap-12">
           {steps.map((step, index) => (
-            <div key={step.number} className="relative">
+            <div 
+              key={step.number} 
+              className="relative group"
+              onMouseEnter={() => setHoveredStep(index)}
+              onMouseLeave={() => setHoveredStep(null)}
+            >
               {/* Connection Line */}
               {index < steps.length - 1 && (
-                <div className="hidden md:block absolute top-20 left-full w-full h-0.5 bg-gradient-to-r from-border to-transparent z-0"></div>
+                <div className="hidden md:block absolute top-20 left-full w-full h-[2px] bg-gradient-to-r from-border to-transparent z-0"></div>
               )}
               
               {/* Step Card */}
-              <div className="relative bg-card rounded-2xl p-8 shadow-prisma-card hover:shadow-prisma-glow transition-all duration-300 z-10">
+              <div className="relative bg-gradient-subtle rounded-2xl p-8 shadow-card hover:shadow-glow transition-all duration-500 z-10 border border-border/20">
                 {/* Step Number */}
-                <div className={`w-16 h-16 rounded-full bg-${step.color} bg-opacity-10 border-2 border-${step.color} flex items-center justify-center mb-6 mx-auto`}>
-                  <span className={`font-numbers text-2xl font-bold text-${step.color}`}>
+                <div className="w-16 h-16 rounded-full bg-primary/10 border-2 border-primary flex items-center justify-center mb-6 mx-auto group-hover:scale-110 transition-transform duration-300">
+                  <span className="font-sans font-bold text-2xl text-primary">
                     {step.number}
                   </span>
                 </div>
 
                 {/* Icon */}
                 <div className="flex justify-center mb-6">
-                  <div className={`w-12 h-12 rounded-lg bg-${step.color} bg-opacity-10 flex items-center justify-center`}>
-                    <step.icon className={`w-6 h-6 text-${step.color}`} strokeWidth={2} />
+                  <div className="w-12 h-12 rounded-lg bg-secondary/10 flex items-center justify-center group-hover:bg-secondary/20 transition-colors duration-300">
+                    <step.icon className="w-6 h-6 text-secondary" strokeWidth={2} />
                   </div>
                 </div>
 
                 {/* Content */}
                 <div className="text-center">
-                  <h3 className="font-heading text-2xl text-foreground mb-4">
+                  <h3 className="font-serif font-bold text-2xl text-card-foreground mb-4">
                     {step.title}
                   </h3>
-                  <p className="font-body text-muted-foreground leading-relaxed">
+                  <p className="font-sans text-muted-foreground leading-relaxed mb-4">
                     {step.description}
+                  </p>
+                  
+                  {/* Interaction hint */}
+                  <p className="font-sans text-sm text-primary/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    {step.interaction}
                   </p>
                 </div>
 
                 {/* Decorative Element */}
-                <div className={`absolute -top-2 -right-2 w-6 h-6 bg-${step.color} bg-opacity-20 rounded-full`}></div>
+                <div className="absolute -top-2 -right-2 w-6 h-6 bg-secondary/20 rounded-full group-hover:scale-125 transition-transform duration-300"></div>
+                
+                {/* Hover effect overlay */}
+                {hoveredStep === index && (
+                  <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-secondary/5 rounded-2xl pointer-events-none"></div>
+                )}
               </div>
             </div>
           ))}
-        </div>
-
-        {/* Process Flow Visualization */}
-        <div className="mt-16 bg-card rounded-2xl p-8 shadow-prisma-card">
-          <div className="text-center mb-8">
-            <h3 className="font-heading text-2xl text-foreground mb-4">
-              Flux de capital transparent
-            </h3>
-            <p className="font-body text-muted-foreground">
-              Votre investissement suit un parcours sécurisé et régulé
-            </p>
-          </div>
-
-          {/* Flow Diagram */}
-          <div className="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-8">
-            <div className="flex items-center space-x-4">
-              <div className="w-3 h-3 bg-navy-light rounded-full animate-pulse"></div>
-              <span className="font-body text-sm text-muted-foreground">Achat Carte</span>
-            </div>
-            <div className="w-8 h-0.5 bg-gradient-to-r from-navy-light to-metallic-gold hidden md:block"></div>
-            
-            <div className="flex items-center space-x-4">
-              <div className="w-3 h-3 bg-metallic-gold rounded-full animate-pulse animation-delay-300"></div>
-              <span className="font-body text-sm text-muted-foreground">Poche €500k</span>
-            </div>
-            <div className="w-8 h-0.5 bg-gradient-to-r from-metallic-gold to-rich-gold hidden md:block"></div>
-            
-            <div className="flex items-center space-x-4">
-              <div className="w-3 h-3 bg-rich-gold rounded-full animate-pulse animation-delay-500"></div>
-              <span className="font-body text-sm text-muted-foreground">Parts ELTIF/FCPR</span>
-            </div>
-          </div>
         </div>
       </div>
     </section>

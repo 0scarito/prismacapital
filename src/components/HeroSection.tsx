@@ -1,6 +1,14 @@
-import heroImage from '@/assets/hero-nfc-cards.jpg';
+import { useState, useEffect } from 'react';
 
 const HeroSection = () => {
+  const [currentCard, setCurrentCard] = useState(0);
+  
+  const giftScenarios = [
+    "Send €200 of French clean-tech equity to Clara",
+    "Support Brittany's agritech start-ups for Jules' 18th birthday", 
+    "Back the French economy, one gift at a time"
+  ];
+
   const scrollToSection = (href: string) => {
     const element = document.querySelector(href);
     if (element) {
@@ -8,94 +16,108 @@ const HeroSection = () => {
     }
   };
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentCard((prev) => (prev + 1) % giftScenarios.length);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
-    <section id="hero" className="min-h-screen relative overflow-hidden">
-      {/* Background Gradient */}
-      <div className="absolute inset-0 hero-gradient"></div>
+    <section id="hero" className="min-h-screen relative overflow-hidden bg-gradient-hero">
+      {/* Blur mask for depth */}
+      <div className="absolute bottom-0 left-0 w-1/2 h-1/2 bg-gradient-to-tr from-dark-navy/20 to-transparent blur-3xl"></div>
       
       {/* Content */}
-      <div className="relative z-10 section-container flex items-center min-h-screen">
-        <div className="grid lg:grid-cols-2 gap-12 items-center w-full py-20">
-          {/* Left Column - Text Content */}
-          <div className="text-center lg:text-left">
-            <h1 className="font-heading text-4xl lg:text-6xl text-white mb-6 leading-tight">
-              Transformez €50 en 
-              <span className="text-gradient block mt-2">
-                part de champions de demain
-              </span>
-            </h1>
-            
-            <p className="font-body text-xl text-white/90 mb-8 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
-              Les Cartes Prisma Capital permettent d'offrir un accès au private equity 
-              d'un simple geste NFC.
-            </p>
-
-            {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-              <button
-                onClick={() => scrollToSection('#benefits')}
-                className="btn-prisma text-lg px-8 py-4"
-              >
-                Découvrir nos Cartes
-              </button>
-              <button
-                onClick={() => scrollToSection('#partners')}
-                className="btn-prisma-outline text-lg px-8 py-4 text-white border-white hover:bg-white hover:text-deep-navy"
-              >
-                Je suis Asset Manager
-              </button>
-            </div>
-
-            {/* Trust Indicators */}
-            <div className="mt-12 flex flex-wrap justify-center lg:justify-start gap-6 text-white/70">
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-metallic-gold rounded-full"></div>
-                <span className="font-body text-sm">AMF Agréé</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-rich-gold rounded-full"></div>
-                <span className="font-body text-sm">PSD2 Conforme</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-metallic-gold rounded-full"></div>
-                <span className="font-body text-sm">RGPD Sécurisé</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Right Column - Hero Visual */}
-          <div className="relative">
-            <div className="relative w-full h-96 lg:h-[500px] rounded-2xl overflow-hidden nfc-glow">
-              <img
-                src={heroImage}
-                alt="Cartes NFC Prisma Capital avec effets lumineux"
-                className="w-full h-full object-cover"
-              />
+      <div className="relative z-10 container mx-auto px-6 flex items-center min-h-screen">
+        <div className="max-w-7xl mx-auto w-full">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            {/* Left Column - Text Content */}
+            <div className="text-center lg:text-left">
+              <h1 className="font-serif font-bold text-6xl lg:text-8xl text-foreground mb-6 leading-[0.9] tracking-tight">
+                Gift a stake in tomorrow.
+              </h1>
               
-              {/* Floating Animation Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-navy-light/20 to-transparent"></div>
-              
-              {/* NFC Ripple Effect */}
-              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                <div className="w-20 h-20 border-2 border-white/30 rounded-full animate-ping"></div>
-                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-12 h-12 border-2 border-white/50 rounded-full animate-ping animation-delay-150"></div>
-                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-6 h-6 bg-white/80 rounded-full animate-pulse"></div>
+              <p className="font-sans text-xl text-light-gray mb-10 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
+                A premium €200 coupon that turns into real equity in curated French start-ups.
+              </p>
+
+              {/* CTA Buttons */}
+              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-16">
+                <button
+                  onClick={() => scrollToSection('#how-it-works')}
+                  className="btn-primary text-lg"
+                >
+                  Choose a Gift
+                </button>
+                <button
+                  onClick={() => scrollToSection('#how-it-works')}
+                  className="btn-ghost text-lg"
+                >
+                  How it Works
+                </button>
+              </div>
+
+              {/* Trust Indicators */}
+              <div className="flex flex-wrap justify-center lg:justify-start gap-6 text-light-gray/70">
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-metallic-gold rounded-full"></div>
+                  <span className="font-sans text-sm">AMF Regulated</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-electric-blue rounded-full"></div>
+                  <span className="font-sans text-sm">PSD2 Compliant</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-metallic-gold rounded-full"></div>
+                  <span className="font-sans text-sm">GDPR Secure</span>
+                </div>
               </div>
             </div>
 
-            {/* Floating Cards Visual Elements */}
-            <div className="absolute -top-4 -right-4 w-24 h-16 bg-gradient-card rounded-lg shadow-prisma-glow opacity-80 animate-bounce animation-delay-300"></div>
-            <div className="absolute -bottom-6 -left-6 w-20 h-14 bg-gradient-to-r from-metallic-gold to-rich-gold rounded-lg shadow-prisma-glow opacity-60 animate-bounce animation-delay-500"></div>
+            {/* Right Column - Task Cards Animation */}
+            <div className="relative">
+              <div className="bg-card rounded-2xl p-8 shadow-prisma-card border border-border/20">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-6 h-6 bg-primary rounded flex items-center justify-center">
+                    <div className="w-3 h-3 rounded-full bg-white"></div>
+                  </div>
+                  <span className="font-sans text-sm text-muted-foreground">Cap&CO Gift Builder</span>
+                </div>
+                
+                <div className="min-h-[3rem] flex items-center">
+                  <p className="font-sans text-lg text-card-foreground typewriter">
+                    {giftScenarios[currentCard]}
+                  </p>
+                </div>
+                
+                {/* Progress indicator */}
+                <div className="flex gap-2 mt-6">
+                  {giftScenarios.map((_, index) => (
+                    <div 
+                      key={index}
+                      className={`h-1 rounded-full transition-all duration-300 ${
+                        index === currentCard ? 'bg-primary w-8' : 'bg-border w-2'
+                      }`}
+                    />
+                  ))}
+                </div>
+              </div>
+
+              {/* Floating elements */}
+              <div className="absolute -top-4 -right-4 w-16 h-16 bg-metallic-gold/20 rounded-full animate-pulse"></div>
+              <div className="absolute -bottom-6 -left-6 w-12 h-12 bg-electric-blue/20 rounded-full animate-pulse delay-300"></div>
+            </div>
           </div>
         </div>
       </div>
 
       {/* Scroll Indicator */}
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white/60 animate-bounce">
+      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-light-gray/60 animate-bounce">
         <div className="flex flex-col items-center gap-2">
-          <span className="font-body text-sm">Découvrez comment</span>
-          <div className="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center">
-            <div className="w-1 h-3 bg-white/60 rounded-full mt-2 animate-pulse"></div>
+          <span className="font-sans text-sm">Scroll to explore</span>
+          <div className="w-6 h-10 border-2 border-light-gray/30 rounded-full flex justify-center">
+            <div className="w-1 h-3 bg-light-gray/60 rounded-full mt-2 animate-pulse"></div>
           </div>
         </div>
       </div>

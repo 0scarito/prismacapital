@@ -25,14 +25,13 @@ export default {
 				background: 'hsl(var(--background))',
 				foreground: 'hsl(var(--foreground))',
 				
-				// New Brand Colors
+				// Cap&CO Brand Colors
 				'deep-navy': 'hsl(var(--deep-navy))',
+				'electric-blue': 'hsl(var(--electric-blue))',
 				'metallic-gold': 'hsl(var(--metallic-gold))',
-				'rich-gold': 'hsl(var(--rich-gold))',
-				'navy-light': 'hsl(var(--navy-light))',
-				'navy-muted': 'hsl(var(--navy-muted))',
-				'gold-accent': 'hsl(var(--gold-accent))',
-				'warm-cream': 'hsl(var(--warm-cream))',
+				'warm-white': 'hsl(var(--warm-white))',
+				'light-gray': 'hsl(var(--light-gray))',
+				'dark-navy': 'hsl(var(--dark-navy))',
 				
 				primary: {
 					DEFAULT: 'hsl(var(--primary))',
@@ -81,6 +80,7 @@ export default {
 			},
 			fontFamily: {
 				'sans': ['Inter', 'sans-serif'],
+				'serif': ['Playfair Display', 'serif'],
 			},
 			boxShadow: {
 				'prisma-card': 'var(--shadow-card)',

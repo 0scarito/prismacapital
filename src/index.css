@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@400;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -8,60 +8,59 @@
 
 @layer base {
   :root {
-    /* New Brand Colors */
-    --deep-navy: 207 60% 11%;
-    --metallic-gold: 37 20% 58%;
-    --rich-gold: 43 45% 68%;
-    --navy-light: 207 45% 25%;
-    --navy-muted: 207 25% 45%;
-    --gold-accent: 43 35% 75%;
-    --warm-cream: 45 25% 95%;
+    /* Cap&CO Brand Colors - Endex Inspired */
+    --deep-navy: 216 42% 8%;        /* #0F1520 */
+    --electric-blue: 216 100% 50%;  /* #0055FF */
+    --metallic-gold: 39 42% 69%;    /* #C9A970 */
+    --warm-white: 0 0% 100%;        /* #FFFFFF */
+    --light-gray: 213 27% 84%;      /* #E5E7EB */
+    --dark-navy: 215 33% 6%;        /* #09101A */
     
     /* Semantic Design Tokens */
-    --background: 0 0% 100%;
-    --foreground: 207 60% 11%;
+    --background: var(--deep-navy);
+    --foreground: var(--warm-white);
     
-    --card: 0 0% 100%;
-    --card-foreground: 207 60% 11%;
+    --card: var(--warm-white);
+    --card-foreground: var(--deep-navy);
     
-    --popover: 0 0% 100%;
-    --popover-foreground: 207 60% 11%;
+    --popover: var(--warm-white);
+    --popover-foreground: var(--deep-navy);
     
-    --primary: 207 45% 25%;
-    --primary-foreground: 43 35% 75%;
+    --primary: var(--electric-blue);
+    --primary-foreground: var(--warm-white);
     
-    --secondary: 45 25% 95%;
-    --secondary-foreground: 207 60% 11%;
+    --secondary: var(--metallic-gold);
+    --secondary-foreground: var(--deep-navy);
     
-    --muted: 45 25% 95%;
-    --muted-foreground: 207 25% 45%;
+    --muted: var(--light-gray);
+    --muted-foreground: var(--deep-navy);
     
-    --accent: 37 20% 58%;
-    --accent-foreground: 0 0% 100%;
+    --accent: var(--metallic-gold);
+    --accent-foreground: var(--deep-navy);
     
     --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 100%;
+    --destructive-foreground: var(--warm-white);
     
-    --border: 207 20% 85%;
-    --input: 207 20% 85%;
-    --ring: 37 20% 58%;
+    --border: var(--light-gray);
+    --input: var(--light-gray);
+    --ring: var(--electric-blue);
     
     --radius: 0.75rem;
     
-    /* New Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(var(--navy-light)), hsl(var(--metallic-gold)));
-    --gradient-hero: linear-gradient(135deg, hsl(var(--deep-navy)), hsl(var(--navy-light)));
-    --gradient-card: linear-gradient(145deg, hsl(var(--navy-light)), hsl(var(--metallic-gold)), hsl(var(--rich-gold)));
-    --gradient-subtle: linear-gradient(180deg, hsl(var(--background)), hsl(var(--warm-cream)));
+    /* Cap&CO Gradients */
+    --gradient-hero: radial-gradient(ellipse at top left, hsl(var(--deep-navy)), hsl(var(--dark-navy)));
+    --gradient-primary: linear-gradient(135deg, hsl(var(--electric-blue)), hsl(var(--metallic-gold)));
+    --gradient-card: linear-gradient(145deg, hsl(var(--warm-white)), hsl(var(--light-gray)));
+    --gradient-subtle: linear-gradient(180deg, hsl(var(--warm-white)), hsl(var(--light-gray)));
     
-    /* New Shadows */
-    --shadow-card: 0 10px 40px -10px hsl(var(--navy-light) / 0.2);
-    --shadow-button: 0 4px 20px -4px hsl(var(--navy-light) / 0.3);
-    --shadow-glow: 0 0 40px hsl(var(--metallic-gold) / 0.4);
+    /* Shadows */
+    --shadow-card: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    --shadow-button: 0 10px 25px -5px rgba(0, 85, 255, 0.3);
+    --shadow-glow: 0 0 40px rgba(201, 169, 112, 0.4);
     
     /* Animations */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    --transition-spring: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    --transition-spring: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 
     --sidebar-background: 0 0% 98%;
 
@@ -117,29 +116,30 @@
 }
 
 @layer components {
-  /* Enhanced Button Styles with Advanced Animations */
-  .btn-prisma {
-    @apply bg-gradient-to-r from-navy-light to-metallic-gold text-white font-semibold py-3 px-6 rounded-lg 
-           shadow-[var(--shadow-button)] hover:scale-105 transition-all duration-300 hover:shadow-[var(--shadow-glow)]
-           hover:from-metallic-gold hover:to-rich-gold relative overflow-hidden;
-    
-    /* Add glow effect on hover */
-    background-size: 200% 100%;
-    animation: gradient-shift 3s ease infinite;
+  /* Cap&CO Button System - Endex Inspired */
+  .btn-primary {
+    @apply bg-primary text-primary-foreground font-medium py-3 px-8 rounded-lg 
+           shadow-[var(--shadow-button)] hover:scale-[1.04] transition-all duration-300
+           relative overflow-hidden;
   }
   
-  .btn-prisma:hover {
-    animation: gradient-shift 1s ease infinite, pulse-glow 2s ease infinite;
+  .btn-primary:hover {
+    box-shadow: var(--shadow-glow);
   }
   
-  .btn-prisma-outline {
-    @apply border-2 border-metallic-gold text-metallic-gold bg-transparent font-semibold py-3 px-6 rounded-lg 
-           hover:bg-metallic-gold hover:text-deep-navy transition-all duration-300 hover:scale-105
-           hover:shadow-[var(--shadow-glow)] relative overflow-hidden;
+  .btn-ghost {
+    @apply border-2 border-foreground text-foreground bg-transparent font-medium py-3 px-8 rounded-lg 
+           hover:bg-foreground hover:text-background transition-all duration-300 hover:scale-[1.04];
   }
   
-  .btn-prisma-outline:hover {
-    animation: pulse-glow 2s ease infinite;
+  /* Typewriter Effect */
+  .typewriter {
+    @apply relative;
+  }
+  
+  .typewriter::after {
+    content: '|';
+    @apply absolute animate-pulse text-secondary;
   }
   
   .section-container {
@@ -213,6 +213,19 @@
   50% {
     background-position: 100% 50%;
   }
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0%) }
+  100% { transform: translateX(-50%) }
+}
+
+.animate-marquee {
+  animation: marquee 30s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
 }
 
 @layer base {

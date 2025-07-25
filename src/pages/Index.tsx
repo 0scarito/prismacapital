@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
 import Navigation from '@/components/Navigation';
 import HeroSection from '@/components/HeroSection';
+import SocialProofSection from '@/components/SocialProofSection';
 import HowItWorksSection from '@/components/HowItWorksSection';
-import BenefitsSection from '@/components/BenefitsSection';
-import PartnersSection from '@/components/PartnersSection';
-import SecuritySection from '@/components/SecuritySection';
-import FAQSection from '@/components/FAQSection';
+import WhyChooseSection from '@/components/WhyChooseSection';
+import TestimonialsSection from '@/components/TestimonialsSection';
+import ComplianceSection from '@/components/ComplianceSection';
 import CTASection from '@/components/CTASection';
 import Footer from '@/components/Footer';
 
@@ -15,7 +15,7 @@ const Index = () => {
     document.documentElement.classList.add('smooth-scroll');
     
     // SEO Meta tags
-    document.title = 'Prisma Capital Cards | Gift Private-Markets Access';
+    document.title = 'Cap&CO | Gift a stake in tomorrow';
     
     const metaDescription = document.querySelector('meta[name="description"]');
     if (metaDescription) {
@@ -74,11 +74,11 @@ const Index = () => {
       {/* Main Content */}
       <main>
         <HeroSection />
+        <SocialProofSection />
         <HowItWorksSection />
-        <BenefitsSection />
-        <PartnersSection />
-        <SecuritySection />
-        <FAQSection />
+        <WhyChooseSection />
+        <TestimonialsSection />
+        <ComplianceSection />
         <CTASection />
       </main>
       

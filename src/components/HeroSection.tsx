@@ -34,16 +34,16 @@ const HeroSection = () => {
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             {/* Left Column - Text Content */}
             <div className="text-center lg:text-left">
-              <h1 className="font-serif font-bold text-6xl lg:text-8xl text-warm-white mb-6 leading-[0.9] tracking-tight" style={{ textWrap: 'balance' }}>
+              <h1 className="font-serif font-bold text-6xl lg:text-8xl text-warm-white mb-12 leading-[0.9] tracking-tight" style={{ textWrap: 'balance' }}>
                 Gift a stake in tomorrow.
               </h1>
               
-              <p className="font-sans text-xl text-light-gray mb-10 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
+              <p className="font-sans text-xl text-light-gray mb-16 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
                 Turn €200 into real equity in French start‑ups—beautifully boxed, ready to inspire.
               </p>
 
               {/* CTA Buttons */}
-              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-16">
+              <div className="flex flex-col sm:flex-row gap-6 justify-center lg:justify-start mb-20">
                 <button
                   onClick={() => scrollToSection('#how-it-works')}
                   className="btn-primary text-lg"

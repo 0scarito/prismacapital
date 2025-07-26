@@ -29,7 +29,7 @@ const HeroSection = () => {
       <div className="absolute bottom-0 left-0 w-1/2 h-1/2 bg-gradient-to-tr from-dark-navy/20 to-transparent blur-3xl"></div>
       
       {/* Content */}
-      <div className="relative z-10 container mx-auto px-6 flex items-center min-h-screen">
+      <div className="relative z-10 container mx-auto px-6 flex items-center min-h-screen pt-32">
         <div className="max-w-7xl mx-auto w-full">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             {/* Left Column - Text Content */}
@@ -65,7 +65,7 @@ const HeroSection = () => {
                   <span className="font-sans text-sm">AMF Regulated</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-electric-blue rounded-full"></div>
+                  <div className="w-2 h-2 bg-darker-navy rounded-full"></div>
                   <span className="font-sans text-sm">PSD2 Compliant</span>
                 </div>
                 <div className="flex items-center gap-2">
@@ -106,7 +106,7 @@ const HeroSection = () => {
 
               {/* Floating elements */}
               <div className="absolute -top-4 -right-4 w-16 h-16 bg-metallic-gold/20 rounded-full animate-pulse"></div>
-              <div className="absolute -bottom-6 -left-6 w-12 h-12 bg-electric-blue/20 rounded-full animate-pulse delay-300"></div>
+              <div className="absolute -bottom-6 -left-6 w-12 h-12 bg-darker-navy/20 rounded-full animate-pulse delay-300"></div>
             </div>
           </div>
         </div>

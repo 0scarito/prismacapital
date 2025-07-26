@@ -26,12 +26,12 @@ export default {
 				foreground: 'hsl(var(--foreground))',
 				
 				// Cap&CO Brand Colors
-				'deep-navy': 'hsl(var(--deep-navy))',
-				'electric-blue': 'hsl(var(--electric-blue))',
-				'metallic-gold': 'hsl(var(--metallic-gold))',
-				'warm-white': 'hsl(var(--warm-white))',
-				'light-gray': 'hsl(var(--light-gray))',
-				'dark-navy': 'hsl(var(--dark-navy))',
+        'deep-navy': 'hsl(var(--deep-navy))',
+        'darker-navy': 'hsl(var(--darker-navy))',
+        'metallic-gold': 'hsl(var(--metallic-gold))',
+        'warm-white': 'hsl(var(--warm-white))',
+        'light-gray': 'hsl(var(--light-gray))',
+        'dark-navy': 'hsl(var(--dark-navy))',
 				
 				primary: {
 					DEFAULT: 'hsl(var(--primary))',

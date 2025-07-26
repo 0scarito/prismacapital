@@ -8,9 +8,9 @@
 
 @layer base {
   :root {
-    /* Cap&CO Brand Colors - Coherent Palette */
+    /* Cap&CO Brand Colors - Coherent Navy Palette */
     --deep-navy: 215 52% 11%;       /* #0F1520 */
-    --electric-blue: 214 100% 50%;  /* #0055FF */
+    --darker-navy: 215 60% 8%;      /* #0A0F1A */
     --metallic-gold: 39 42% 69%;    /* #C9A970 */
     --warm-white: 0 0% 100%;        /* #FFFFFF */
     --light-gray: 214 27% 89%;      /* #E5E7EB */
@@ -26,7 +26,7 @@
     --popover: var(--warm-white);
     --popover-foreground: var(--deep-navy);
     
-    --primary: var(--electric-blue);
+    --primary: var(--darker-navy);
     --primary-foreground: var(--warm-white);
     
     --secondary: var(--metallic-gold);
@@ -43,20 +43,20 @@
     
     --border: var(--light-gray);
     --input: var(--light-gray);
-    --ring: var(--electric-blue);
+    --ring: var(--darker-navy);
     
     --radius: 0.75rem;
     
     /* Cap&CO Gradients */
     --gradient-hero: radial-gradient(ellipse at center, hsl(var(--deep-navy)) 0%, hsl(var(--dark-navy)) 100%);
-    --gradient-primary: linear-gradient(135deg, hsl(var(--electric-blue)) 0%, hsl(var(--metallic-gold)) 100%);
+    --gradient-primary: linear-gradient(135deg, hsl(var(--darker-navy)) 0%, hsl(var(--metallic-gold)) 100%);
     --gradient-card: linear-gradient(145deg, hsl(var(--warm-white)) 0%, hsl(var(--light-gray)) 100%);
     --gradient-subtle: linear-gradient(180deg, hsl(var(--warm-white)) 0%, hsl(var(--light-gray)) 100%);
     --gradient-warm: linear-gradient(135deg, hsl(var(--deep-navy)) 0%, hsl(215 45% 15%) 100%);
     
     /* Shadows */
     --shadow-card: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-    --shadow-button: 0 10px 25px -5px rgba(0, 85, 255, 0.3);
+    --shadow-button: 0 10px 25px -5px rgba(15, 21, 32, 0.3);
     --shadow-glow: 0 0 40px rgba(201, 169, 112, 0.4);
     
     /* Animations */
@@ -119,14 +119,13 @@
 @layer components {
   /* Cap&CO Button System - Premium Gift Focus */
   .btn-primary {
-    @apply bg-gradient-to-r from-electric-blue to-metallic-gold text-white font-medium py-4 px-8 rounded-lg 
+    @apply bg-darker-navy text-warm-white font-medium py-4 px-8 rounded-lg 
            shadow-prisma-button hover:scale-[1.04] transition-all duration-300
-           relative overflow-hidden;
+           border border-metallic-gold/20 hover:border-metallic-gold/40;
   }
   
   .btn-primary:hover {
-    @apply shadow-prisma-glow;
-    background: linear-gradient(135deg, hsl(var(--electric-blue)) 0%, hsl(var(--metallic-gold)) 100%);
+    @apply bg-deep-navy shadow-prisma-glow;
   }
   
   .btn-ghost {

@@ -20,6 +20,7 @@ const Navigation = () => {
     { label: 'Partenaires', href: '/partners' },
     { label: 'Sécurité', href: '/security' },
     { label: 'FAQ', href: '/faq' },
+    { label: 'Mon Espace', href: '/auth' },
   ];
 
   const handleNavigation = (href: string) => {

@@ -3,10 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-import { LogOut, Gift, Calendar, Euro, QrCode } from 'lucide-react';
+import { LogOut, Gift, Calendar, Euro, QrCode, TrendingUp, TrendingDown } from 'lucide-react';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 interface Coupon {
   id: string;
@@ -20,6 +22,16 @@ interface Coupon {
   used_at: string | null;
 }
 
+interface Investment {
+  id: string;
+  name: string;
+  symbol: string;
+  currentPrice: number;
+  change24h: number;
+  changePercent24h: number;
+  historicalData: { date: string; price: number }[];
+}
+
 interface Profile {
   display_name: string;
   email: string;
@@ -29,6 +41,7 @@ const Dashboard = () => {
   const { user, signOut, loading } = useAuth();
   const [coupons, setCoupons] = useState<Coupon[]>([]);
   const [profile, setProfile] = useState<Profile | null>(null);
+  const [investments, setInvestments] = useState<Investment[]>([]);
   const [loadingData, setLoadingData] = useState(true);
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -42,6 +55,7 @@ const Dashboard = () => {
   useEffect(() => {
     if (user) {
       fetchUserData();
+      fetchInvestmentData();
     }
   }, [user]);
 
@@ -75,6 +89,65 @@ const Dashboard = () => {
     } finally {
       setLoadingData(false);
     }
+  };
+
+  const fetchInvestmentData = async () => {
+    // Simulation de données d'investissement (en réalité, on récupérerait ça d'une API)
+    const mockInvestments: Investment[] = [
+      {
+        id: '1',
+        name: 'Or',
+        symbol: 'GOLD',
+        currentPrice: 1987.50,
+        change24h: 12.50,
+        changePercent24h: 0.63,
+        historicalData: [
+          { date: '2024-01-01', price: 1950 },
+          { date: '2024-01-02', price: 1965 },
+          { date: '2024-01-03', price: 1955 },
+          { date: '2024-01-04', price: 1970 },
+          { date: '2024-01-05', price: 1975 },
+          { date: '2024-01-06', price: 1980 },
+          { date: '2024-01-07', price: 1987.50 },
+        ]
+      },
+      {
+        id: '2',
+        name: 'S&P 500 ETF',
+        symbol: 'SPY',
+        currentPrice: 485.23,
+        change24h: -2.15,
+        changePercent24h: -0.44,
+        historicalData: [
+          { date: '2024-01-01', price: 480 },
+          { date: '2024-01-02', price: 482 },
+          { date: '2024-01-03', price: 478 },
+          { date: '2024-01-04', price: 487 },
+          { date: '2024-01-05', price: 490 },
+          { date: '2024-01-06', price: 487.38 },
+          { date: '2024-01-07', price: 485.23 },
+        ]
+      },
+      {
+        id: '3',
+        name: 'Bitcoin ETF',
+        symbol: 'BTCETF',
+        currentPrice: 42850.00,
+        change24h: 1250.00,
+        changePercent24h: 3.01,
+        historicalData: [
+          { date: '2024-01-01', price: 41000 },
+          { date: '2024-01-02', price: 41500 },
+          { date: '2024-01-03', price: 40800 },
+          { date: '2024-01-04', price: 41800 },
+          { date: '2024-01-05', price: 41600 },
+          { date: '2024-01-06', price: 42200 },
+          { date: '2024-01-07', price: 42850 },
+        ]
+      }
+    ];
+    
+    setInvestments(mockInvestments);
   };
 
   const handleSignOut = async () => {
@@ -157,106 +230,189 @@ const Dashboard = () => {
           </p>
         </div>
 
-        {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Coupons Actifs</CardTitle>
-              <Gift className="h-4 w-4 text-green-500" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">
-                {coupons.filter(c => c.status === 'active').length}
-              </div>
-            </CardContent>
-          </Card>
-          
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Coupons Utilisés</CardTitle>
-              <Calendar className="h-4 w-4 text-gray-500" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">
-                {coupons.filter(c => c.status === 'used').length}
-              </div>
-            </CardContent>
-          </Card>
-          
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Valeur Totale</CardTitle>
-              <Euro className="h-4 w-4 text-primary" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">
-                {coupons.reduce((sum, c) => sum + (c.status === 'active' ? c.value : 0), 0).toFixed(2)}€
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+        {/* Main Content */}
+        <Tabs defaultValue="overview" className="space-y-6">
+          <TabsList className="grid w-full grid-cols-3">
+            <TabsTrigger value="overview">Vue d'ensemble</TabsTrigger>
+            <TabsTrigger value="coupons">Mes Coupons</TabsTrigger>
+            <TabsTrigger value="investments">Mes Investissements</TabsTrigger>
+          </TabsList>
 
-        {/* Coupons Section */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center">
-              <QrCode className="h-5 w-5 mr-2" />
-              Mes Coupons
-            </CardTitle>
-            <CardDescription>
-              Voici tous vos coupons disponibles et utilisés.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            {coupons.length === 0 ? (
-              <div className="text-center py-8">
-                <Gift className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                <h3 className="text-lg font-medium mb-2">Aucun coupon</h3>
-                <p className="text-muted-foreground">
-                  Vous n'avez pas encore de coupons. Revenez bientôt !
-                </p>
-              </div>
-            ) : (
-              <div className="space-y-4">
-                {coupons.map((coupon) => (
-                  <div key={coupon.id} className="border rounded-lg p-4 hover:bg-accent/50 transition-colors">
-                    <div className="flex justify-between items-start mb-2">
-                      <div>
-                        <h4 className="font-semibold">{coupon.title}</h4>
-                        {coupon.description && (
-                          <p className="text-sm text-muted-foreground">{coupon.description}</p>
-                        )}
-                      </div>
-                      <Badge className={getStatusColor(coupon.status)}>
-                        {getStatusText(coupon.status)}
-                      </Badge>
-                    </div>
-                    
-                    <div className="flex justify-between items-center">
-                      <div className="flex items-center space-x-4">
-                        <span className="text-lg font-bold text-primary">
-                          {coupon.value.toFixed(2)}€
-                        </span>
-                        <code className="bg-muted px-2 py-1 rounded text-sm">
-                          {coupon.code}
-                        </code>
-                      </div>
-                      
-                      <div className="text-xs text-muted-foreground">
-                        {coupon.expires_at && (
-                          <p>Expire le {new Date(coupon.expires_at).toLocaleDateString()}</p>
-                        )}
-                        {coupon.used_at && (
-                          <p>Utilisé le {new Date(coupon.used_at).toLocaleDateString()}</p>
-                        )}
-                      </div>
-                    </div>
+          <TabsContent value="overview" className="space-y-6">
+            {/* Stats Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">Coupons Actifs</CardTitle>
+                  <Gift className="h-4 w-4 text-green-500" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">
+                    {coupons.filter(c => c.status === 'active').length}
                   </div>
-                ))}
-              </div>
-            )}
-          </CardContent>
-        </Card>
+                </CardContent>
+              </Card>
+              
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">Coupons Utilisés</CardTitle>
+                  <Calendar className="h-4 w-4 text-gray-500" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">
+                    {coupons.filter(c => c.status === 'used').length}
+                  </div>
+                </CardContent>
+              </Card>
+              
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">Valeur Totale</CardTitle>
+                  <Euro className="h-4 w-4 text-primary" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">
+                    {coupons.reduce((sum, c) => sum + (c.status === 'active' ? c.value : 0), 0).toFixed(2)}€
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="coupons" className="space-y-6">
+            {/* Coupons Section */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <QrCode className="h-5 w-5 mr-2" />
+                  Mes Coupons
+                </CardTitle>
+                <CardDescription>
+                  Voici tous vos coupons disponibles et utilisés.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                {coupons.length === 0 ? (
+                  <div className="text-center py-8">
+                    <Gift className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                    <h3 className="text-lg font-medium mb-2">Aucun coupon</h3>
+                    <p className="text-muted-foreground">
+                      Vous n'avez pas encore de coupons. Revenez bientôt !
+                    </p>
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    {coupons.map((coupon) => (
+                      <div key={coupon.id} className="border rounded-lg p-4 hover:bg-accent/50 transition-colors">
+                        <div className="flex justify-between items-start mb-2">
+                          <div>
+                            <h4 className="font-semibold">{coupon.title}</h4>
+                            {coupon.description && (
+                              <p className="text-sm text-muted-foreground">{coupon.description}</p>
+                            )}
+                          </div>
+                          <Badge className={getStatusColor(coupon.status)}>
+                            {getStatusText(coupon.status)}
+                          </Badge>
+                        </div>
+                        
+                        <div className="flex justify-between items-center">
+                          <div className="flex items-center space-x-4">
+                            <span className="text-lg font-bold text-primary">
+                              {coupon.value.toFixed(2)}€
+                            </span>
+                            <code className="bg-muted px-2 py-1 rounded text-sm">
+                              {coupon.code}
+                            </code>
+                          </div>
+                          
+                          <div className="text-xs text-muted-foreground">
+                            {coupon.expires_at && (
+                              <p>Expire le {new Date(coupon.expires_at).toLocaleDateString()}</p>
+                            )}
+                            {coupon.used_at && (
+                              <p>Utilisé le {new Date(coupon.used_at).toLocaleDateString()}</p>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="investments" className="space-y-6">
+            {/* Investments Section */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {investments.map((investment) => (
+                <Card key={investment.id}>
+                  <CardHeader>
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <CardTitle className="text-lg">{investment.name}</CardTitle>
+                        <CardDescription>{investment.symbol}</CardDescription>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-2xl font-bold">
+                          {investment.symbol === 'GOLD' ? `${investment.currentPrice}$` : 
+                           investment.symbol === 'BTCETF' ? `${investment.currentPrice.toLocaleString()}$` :
+                           `${investment.currentPrice}$`}
+                        </div>
+                        <div className={`flex items-center text-sm ${
+                          investment.changePercent24h >= 0 ? 'text-green-500' : 'text-red-500'
+                        }`}>
+                          {investment.changePercent24h >= 0 ? (
+                            <TrendingUp className="h-4 w-4 mr-1" />
+                          ) : (
+                            <TrendingDown className="h-4 w-4 mr-1" />
+                          )}
+                          {investment.changePercent24h >= 0 ? '+' : ''}{investment.changePercent24h.toFixed(2)}%
+                        </div>
+                      </div>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="h-64">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <LineChart data={investment.historicalData}>
+                          <CartesianGrid strokeDasharray="3 3" className="opacity-30" />
+                          <XAxis 
+                            dataKey="date" 
+                            tick={{ fontSize: 12 }}
+                            tickFormatter={(value) => new Date(value).toLocaleDateString('fr-FR', { month: 'short', day: 'numeric' })}
+                          />
+                          <YAxis 
+                            tick={{ fontSize: 12 }}
+                            domain={['dataMin - 10', 'dataMax + 10']}
+                          />
+                          <Tooltip 
+                            formatter={(value: number) => [
+                              investment.symbol === 'GOLD' ? `${value}$` : 
+                              investment.symbol === 'BTCETF' ? `${value.toLocaleString()}$` :
+                              `${value}$`,
+                              'Prix'
+                            ]}
+                            labelFormatter={(label) => new Date(label).toLocaleDateString('fr-FR')}
+                          />
+                          <Line 
+                            type="monotone" 
+                            dataKey="price" 
+                            stroke={investment.changePercent24h >= 0 ? '#10b981' : '#ef4444'}
+                            strokeWidth={2}
+                            dot={false}
+                            activeDot={{ r: 4 }}
+                          />
+                        </LineChart>
+                      </ResponsiveContainer>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   );

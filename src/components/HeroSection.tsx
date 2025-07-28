@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const HeroSection = () => {
   const [currentCard, setCurrentCard] = useState(0);
+  const { t } = useLanguage();
   
   const giftScenarios = [
     "Send €200 of French clean-tech equity to Clara",
@@ -35,26 +37,26 @@ const HeroSection = () => {
             {/* Left Column - Text Content */}
             <div className="text-center lg:text-left">
               <h1 className="font-serif font-bold text-6xl lg:text-8xl text-warm-white mb-12 leading-[0.9] tracking-tight" style={{ textWrap: 'balance' }}>
-                Gift a stake in tomorrow.
+                {t('hero.title')}
               </h1>
               
               <p className="font-sans text-xl text-light-gray mb-16 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
-                Turn €200 into real equity in French start‑ups—beautifully boxed, ready to inspire.
+                {t('hero.subtitle')}
               </p>
 
               {/* CTA Buttons */}
               <div className="flex flex-col sm:flex-row gap-6 justify-center lg:justify-start mb-20">
                 <button
-                  onClick={() => scrollToSection('#how-it-works')}
+                  onClick={() => window.location.href = '/investments'}
                   className="btn-primary text-lg"
                 >
-                  Choose a Gift
+                  {t('hero.chooseGift')}
                 </button>
                 <button
                   onClick={() => scrollToSection('#how-it-works')}
                   className="btn-ghost text-lg"
                 >
-                  How it Works
+                  {t('hero.whatWeDo')}
                 </button>
               </div>
 
@@ -77,7 +79,7 @@ const HeroSection = () => {
 
             {/* Right Column - Task Cards Animation */}
             <div className="relative">
-              <div className="bg-card rounded-2xl p-8 shadow-prisma-card border border-border/20">
+              <div className="bg-card rounded-2xl p-6 shadow-prisma-card border border-border/20 max-w-md mx-auto">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="w-6 h-6 bg-primary rounded flex items-center justify-center">
                     <div className="w-3 h-3 rounded-full bg-white"></div>
@@ -85,7 +87,7 @@ const HeroSection = () => {
                   <span className="font-sans text-sm text-muted-foreground">Cap&CO Gift Builder</span>
                 </div>
                 
-                <div className="min-h-[3rem] flex items-center">
+                <div className="min-h-[4rem] flex items-center py-2">
                   <p className="font-sans text-lg text-card-foreground typewriter">
                     {giftScenarios[currentCard]}
                   </p>

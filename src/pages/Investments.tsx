@@ -1,44 +1,60 @@
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
-import { TrendingUp, Leaf, Cpu, Utensils, Building, ArrowRight } from 'lucide-react';
+import RiskWarningSlider from '@/components/RiskWarningSlider';
+import { TrendingUp, Leaf, Cpu, Utensils, Building, ArrowRight, Home, DollarSign, Bitcoin } from 'lucide-react';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const Investments = () => {
-  const investmentSectors = [
+  const { t, language } = useLanguage();
+  
+  const investmentCategories = [
     {
-      title: "Clean-Tech",
-      icon: <Leaf className="w-12 h-12 text-metallic-gold" />,
-      description: "Investissez dans l'avenir énergétique de la France avec des start-ups innovantes en technologies propres.",
-      companies: ["SolarTech Paris", "GreenEnergy Bretagne", "EcoInnovation Lyon"],
-      minInvestment: "€200",
-      expectedReturn: "8-15%",
-      riskLevel: "Modéré"
-    },
-    {
-      title: "Innovation Alimentaire",
-      icon: <Utensils className="w-12 h-12 text-metallic-gold" />,
-      description: "Soutenez la révolution alimentaire française avec des entreprises qui transforment notre façon de manger.",
-      companies: ["AgriTech Normandie", "FoodLab Marseille", "BioFarm Toulouse"],
-      minInvestment: "€200",
-      expectedReturn: "10-18%",
-      riskLevel: "Élevé"
-    },
-    {
-      title: "Intelligence Artificielle",
-      icon: <Cpu className="w-12 h-12 text-metallic-gold" />,
-      description: "Participez à la révolution IA française en investissant dans les start-ups technologiques les plus prometteuses.",
-      companies: ["AI Solutions Paris", "DeepTech Sophia", "RoboticsLab Grenoble"],
-      minInvestment: "€200",
-      expectedReturn: "15-25%",
-      riskLevel: "Élevé"
-    },
-    {
-      title: "FinTech",
+      title: language === 'fr' ? 'Capital-investissement' : 'Private Equity',
       icon: <Building className="w-12 h-12 text-metallic-gold" />,
-      description: "Investissez dans l'avenir financier avec des solutions innovantes qui démocratisent l'accès aux services financiers.",
-      companies: ["PayTech France", "CryptoSecure Paris", "NeoBank Lyon"],
-      minInvestment: "€200",
-      expectedReturn: "12-20%",
-      riskLevel: "Modéré à Élevé"
+      description: language === 'fr' 
+        ? 'Investissez dans des entreprises établies avec un potentiel de croissance élevé'
+        : 'Invest in established companies with high growth potential',
+      href: '/investments/private-equity'
+    },
+    {
+      title: 'Venture Capital',
+      icon: <TrendingUp className="w-12 h-12 text-metallic-gold" />,
+      description: language === 'fr'
+        ? 'Soutenez les start-ups innovantes dès leurs premiers stades de développement'
+        : 'Support innovative startups from their earliest stages of development',
+      href: '/investments/venture-capital'
+    },
+    {
+      title: language === 'fr' ? 'Crowdfunding Immobilier' : 'Real-estate Crowdfunding',
+      icon: <Home className="w-12 h-12 text-metallic-gold" />,
+      description: language === 'fr'
+        ? 'Participez à des projets immobiliers sélectionnés avec des rendements attractifs'
+        : 'Participate in selected real estate projects with attractive returns',
+      href: '/investments/real-estate'
+    },
+    {
+      title: language === 'fr' ? 'Matières Premières' : 'Commodities',
+      icon: <Leaf className="w-12 h-12 text-metallic-gold" />,
+      description: language === 'fr'
+        ? 'Diversifiez avec l\'or, l\'argent et autres matières premières stratégiques'
+        : 'Diversify with gold, silver and other strategic commodities',
+      href: '/investments/commodities'
+    },
+    {
+      title: language === 'fr' ? 'ETF Diversifiés' : 'Diversified ETFs',
+      icon: <DollarSign className="w-12 h-12 text-metallic-gold" />,
+      description: language === 'fr'
+        ? 'Accédez aux marchés mondiaux avec des fonds indiciels diversifiés'
+        : 'Access global markets with diversified index funds',
+      href: '/investments/etfs'
+    },
+    {
+      title: 'Crypto-assets',
+      icon: <Bitcoin className="w-12 h-12 text-metallic-gold" />,
+      description: language === 'fr'
+        ? 'Explorez l\'univers des crypto-monnaies avec une approche sécurisée'
+        : 'Explore the cryptocurrency universe with a secure approach',
+      href: '/investments/crypto'
     }
   ];
 
@@ -60,26 +76,43 @@ const Investments = () => {
           <div className="section-container">
             <div className="text-center max-w-4xl mx-auto">
               <h1 className="font-serif font-bold text-5xl lg:text-7xl text-warm-white mb-8 leading-tight">
-                Nos Investissements
+                {language === 'fr' ? 'Nos Investissements' : 'Our Investments'}
               </h1>
               <p className="font-sans text-xl text-light-gray mb-12 leading-relaxed">
-                Découvrez nos secteurs d'investissement soigneusement sélectionnés. 
-                Chaque start-up est vérifiée par notre partenaire agréé AMF.
+                {language === 'fr' 
+                  ? 'Découvrez six catégories d\'investissement soigneusement sélectionnées. Chaque opportunité est vérifiée par nos partenaires agréés.'
+                  : 'Discover six carefully selected investment categories. Each opportunity is verified by our licensed partners.'
+                }
               </p>
+              
+              {/* Partners & Securities Button */}
+              <button
+                onClick={() => window.location.href = '/partners'}
+                className="btn-ghost mb-8"
+              >
+                {language === 'fr' ? 'Partenaires & Sécurité' : 'Partners & Securities'}
+              </button>
+              
               <div className="flex justify-center">
                 <div className="bg-warm-white/10 backdrop-blur-sm rounded-xl p-6 border border-warm-white/20">
                   <div className="grid grid-cols-3 gap-8 text-center">
                     <div>
                       <div className="text-3xl font-bold text-metallic-gold">150+</div>
-                      <div className="text-sm text-light-gray">Start-ups vérifiées</div>
+                      <div className="text-sm text-light-gray">
+                        {language === 'fr' ? 'Opportunités vérifiées' : 'Verified opportunities'}
+                      </div>
                     </div>
                     <div>
                       <div className="text-3xl font-bold text-metallic-gold">€12M</div>
-                      <div className="text-sm text-light-gray">Investis à ce jour</div>
+                      <div className="text-sm text-light-gray">
+                        {language === 'fr' ? 'Investis à ce jour' : 'Invested to date'}
+                      </div>
                     </div>
                     <div>
                       <div className="text-3xl font-bold text-metallic-gold">4.8★</div>
-                      <div className="text-sm text-light-gray">Note moyenne</div>
+                      <div className="text-sm text-light-gray">
+                        {language === 'fr' ? 'Note moyenne' : 'Average rating'}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -88,63 +121,60 @@ const Investments = () => {
           </div>
         </section>
 
-        {/* Investment Sectors */}
+        {/* Risk Warning */}
+        <section className="py-12 bg-warm-white">
+          <div className="section-container">
+            <div className="text-center mb-8">
+              <p className="text-lg text-red-600 font-medium">
+                {language === 'fr' 
+                  ? 'Les investissements dans les start-ups sont illiquides et peuvent entraîner une perte totale du capital.'
+                  : 'Investments in start-ups are illiquid and may result in total loss of capital.'
+                }
+              </p>
+            </div>
+            <RiskWarningSlider />
+          </div>
+        </section>
+
+        {/* Investment Categories */}
         <section className="py-20 bg-warm-white">
           <div className="section-container">
             <div className="text-center mb-16">
               <h2 className="font-serif font-bold text-4xl text-deep-navy mb-6">
-                Secteurs d'Investissement
+                {language === 'fr' ? 'Catégories d\'Investissement' : 'Investment Categories'}
               </h2>
               <p className="font-sans text-lg text-deep-navy/80 max-w-3xl mx-auto">
-                Chaque secteur est soigneusement curé pour offrir le meilleur potentiel de croissance 
-                tout en soutenant l'innovation française.
+                {language === 'fr'
+                  ? 'Six catégories d\'investissement diversifiées pour répondre à tous les profils d\'investisseurs.'
+                  : 'Six diversified investment categories to meet all investor profiles.'
+                }
               </p>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-8">
-              {investmentSectors.map((sector, index) => (
-                <div key={index} className="bg-gradient-subtle rounded-2xl p-8 border border-border/20 hover:shadow-lg transition-all duration-300">
-                  <div className="flex items-center gap-4 mb-6">
-                    {sector.icon}
-                    <h3 className="font-serif font-bold text-2xl text-deep-navy">
-                      {sector.title}
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {investmentCategories.map((category, index) => (
+                <div 
+                  key={index} 
+                  className="bg-gradient-subtle rounded-2xl p-8 border border-border/20 hover:shadow-lg transition-all duration-300 cursor-pointer group"
+                  onClick={() => window.location.href = category.href}
+                >
+                  <div className="text-center">
+                    <div className="mb-6 flex justify-center">
+                      {category.icon}
+                    </div>
+                    
+                    <h3 className="font-serif font-bold text-xl text-deep-navy mb-4 group-hover:text-metallic-gold transition-colors">
+                      {category.title}
                     </h3>
-                  </div>
-                  
-                  <p className="font-sans text-deep-navy/80 mb-6 leading-relaxed">
-                    {sector.description}
-                  </p>
+                    
+                    <p className="font-sans text-deep-navy/80 mb-6 leading-relaxed">
+                      {category.description}
+                    </p>
 
-                  <div className="grid grid-cols-3 gap-4 mb-6 p-4 bg-warm-white rounded-lg">
-                    <div className="text-center">
-                      <div className="text-lg font-bold text-metallic-gold">{sector.minInvestment}</div>
-                      <div className="text-xs text-deep-navy/60">Minimum</div>
-                    </div>
-                    <div className="text-center">
-                      <div className="text-lg font-bold text-metallic-gold">{sector.expectedReturn}</div>
-                      <div className="text-xs text-deep-navy/60">Retour estimé</div>
-                    </div>
-                    <div className="text-center">
-                      <div className="text-lg font-bold text-metallic-gold">{sector.riskLevel}</div>
-                      <div className="text-xs text-deep-navy/60">Risque</div>
-                    </div>
+                    <button className="w-full btn-primary">
+                      {language === 'fr' ? 'Explorer' : 'Explore'}
+                    </button>
                   </div>
-
-                  <div className="mb-6">
-                    <h4 className="font-sans font-medium text-deep-navy mb-3">Exemples d'entreprises :</h4>
-                    <div className="space-y-2">
-                      {sector.companies.map((company, i) => (
-                        <div key={i} className="flex items-center gap-2 text-sm text-deep-navy/70">
-                          <TrendingUp className="w-4 h-4 text-metallic-gold" />
-                          {company}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  <button className="w-full btn-primary">
-                    Investir dans {sector.title}
-                  </button>
                 </div>
               ))}
             </div>

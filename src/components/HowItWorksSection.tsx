@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { Target, Gift, Users } from 'lucide-react';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const HowItWorksSection = () => {
   const [hoveredStep, setHoveredStep] = useState<number | null>(null);
+  const { t } = useLanguage();
   
   const steps = [
     {
@@ -34,11 +36,19 @@ const HowItWorksSection = () => {
         {/* Section Header */}
         <div className="text-center mb-16">
           <h2 className="font-serif font-bold text-4xl lg:text-6xl text-card-foreground mb-6">
-            How It Works
+            {t('howItWorks.title')}
           </h2>
-          <p className="font-sans text-xl text-muted-foreground max-w-3xl mx-auto">
-            Three simple steps to transform savings into equity ownership
+          <p className="font-sans text-xl text-muted-foreground max-w-3xl mx-auto mb-8">
+            {t('howItWorks.subtitle')}
           </p>
+          
+          {/* CTA Button to How It Works page */}
+          <button
+            onClick={() => window.location.href = '/how-it-works'}
+            className="btn-primary"
+          >
+            {t('howItWorks.seeHow')}
+          </button>
         </div>
 
         {/* Steps Grid */}

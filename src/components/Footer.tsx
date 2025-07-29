@@ -120,34 +120,9 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Bottom Bar */}
+        {/* Risk Warning Slider */}
         <div className="border-t border-white/20 pt-8 mb-8">
-          <div className="bg-orange-900/30 rounded-xl p-6 border border-orange-500/30">
-            <h4 className="font-heading text-lg text-orange-200 mb-3 flex items-center">
-              <span className="mr-2">⚠️</span>
-              Avertissement Important sur les Risques
-            </h4>
-            <div className="grid md:grid-cols-2 gap-4 font-body text-sm text-orange-100/90">
-              <div>
-                <p className="mb-2">
-                  <strong>Niveau de risque : 6/7 (Private Equity)</strong>
-                </p>
-                <p>
-                  Les investissements en private equity présentent un risque élevé de perte en capital. 
-                  Votre capital n'est pas garanti et peut diminuer significativement.
-                </p>
-              </div>
-              <div>
-                <p className="mb-2">
-                  <strong>Horizon d'investissement long terme requis</strong>
-                </p>
-                <p>
-                  Investissements illiquides avec horizon recommandé de 5-10 ans minimum. 
-                  Les rendements passés ne préjugent pas des performances futures.
-                </p>
-              </div>
-            </div>
-          </div>
+          <RiskWarningSlider />
         </div>
 
         {/* Bottom Footer Bar */}
@@ -167,9 +142,6 @@ const Footer = () => {
             </div>
           </div>
         </div>
-        
-        {/* Risk Warning Slider */}
-        <RiskWarningSlider />
 
         {/* Schema.org JSON-LD */}
         <script

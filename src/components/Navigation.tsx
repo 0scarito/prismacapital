@@ -19,12 +19,11 @@ const Navigation = () => {
   }, []);
 
   const navItems = [
-    { label: t('nav.howItWorks'), href: '/how-it-works' },
+    { label: t('nav.whatWeDo'), href: '/how-it-works' },
     { label: t('nav.investments'), href: '/investments' },
     { label: t('nav.partners'), href: '/partners' },
     { label: t('nav.security'), href: '/security' },
     { label: t('nav.faq'), href: '/faq' },
-    { label: t('nav.payment'), href: '/payment' },
     { label: t('nav.joinUs'), href: '/auth' },
   ];
 
@@ -65,7 +64,7 @@ const Navigation = () => {
           </button>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-6">
+          <div className="hidden md:flex items-center space-x-8">
             {navItems.map((item) => (
               <button
                 key={item.href}
@@ -88,26 +87,27 @@ const Navigation = () => {
             ))}
 
             {/* Language Toggle */}
-            <div className="flex items-center border border-border rounded-lg overflow-hidden">
+            <div className="flex items-center bg-muted rounded-full p-1">
               <button
                 onClick={() => setLanguage('fr')}
-                className={`px-3 py-2 text-sm font-medium transition-colors ${
+                className={`px-3 py-1 text-sm font-medium rounded-full transition-colors ${
                   language === 'fr' 
                     ? 'bg-primary text-primary-foreground' 
                     : 'text-muted-foreground hover:text-foreground'
                 }`}
               >
-                🇫🇷 FR
+                FR
               </button>
+              <span className="text-muted-foreground px-1">|</span>
               <button
                 onClick={() => setLanguage('en')}
-                className={`px-3 py-2 text-sm font-medium transition-colors ${
+                className={`px-3 py-1 text-sm font-medium rounded-full transition-colors ${
                   language === 'en' 
                     ? 'bg-primary text-primary-foreground' 
                     : 'text-muted-foreground hover:text-foreground'
                 }`}
               >
-                🇬🇧 EN
+                EN
               </button>
             </div>
           </div>
@@ -147,26 +147,27 @@ const Navigation = () => {
               ))}
 
               {/* Mobile Language Toggle */}
-              <div className="flex items-center border border-border rounded-lg overflow-hidden">
+              <div className="flex items-center bg-muted rounded-full p-1">
                 <button
                   onClick={() => setLanguage('fr')}
-                  className={`flex-1 px-3 py-2 text-sm font-medium transition-colors ${
+                  className={`flex-1 px-3 py-1 text-sm font-medium rounded-full transition-colors ${
                     language === 'fr' 
                       ? 'bg-primary text-primary-foreground' 
                       : 'text-muted-foreground hover:text-foreground'
                   }`}
                 >
-                  🇫🇷 FR
+                  FR
                 </button>
+                <span className="text-muted-foreground px-1">|</span>
                 <button
                   onClick={() => setLanguage('en')}
-                  className={`flex-1 px-3 py-2 text-sm font-medium transition-colors ${
+                  className={`flex-1 px-3 py-1 text-sm font-medium rounded-full transition-colors ${
                     language === 'en' 
                       ? 'bg-primary text-primary-foreground' 
                       : 'text-muted-foreground hover:text-foreground'
                   }`}
                 >
-                  🇬🇧 EN
+                  EN
                 </button>
               </div>
             </div>

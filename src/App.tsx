@@ -15,6 +15,14 @@ import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
 import Payment from "./pages/Payment";
 import NotFound from "./pages/NotFound";
+import LegalNotices from "./pages/LegalNotices";
+import RiskDisclosure from "./pages/RiskDisclosure";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import CookieSettings from "./pages/CookieSettings";
+import HelpCenter from "./pages/HelpCenter";
+import ContactSupport from "./pages/ContactSupport";
+import DiciDocumentation from "./pages/DiciDocumentation";
+import EsgReports from "./pages/EsgReports";
 
 const queryClient = new QueryClient();
 
@@ -36,6 +44,14 @@ const App = () => (
               <Route path="/payment" element={<Payment />} />
               <Route path="/auth" element={<Auth />} />
               <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/legal-notices" element={<LegalNotices />} />
+              <Route path="/risk-disclosure" element={<RiskDisclosure />} />
+              <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+              <Route path="/cookie-settings" element={<CookieSettings />} />
+              <Route path="/help-center" element={<HelpCenter />} />
+              <Route path="/contact-support" element={<ContactSupport />} />
+              <Route path="/dici-documentation" element={<DiciDocumentation />} />
+              <Route path="/esg-reports" element={<EsgReports />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>

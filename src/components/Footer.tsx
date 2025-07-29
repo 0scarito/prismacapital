@@ -1,20 +1,23 @@
 import { Linkedin, Shield, FileText, Cookie, Eye } from 'lucide-react';
+import { useLanguage } from '@/contexts/LanguageContext';
+import RiskWarningSlider from './RiskWarningSlider';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
+  const { t } = useLanguage();
 
   const footerLinks = {
     legal: [
-      { label: 'Mentions Légales', href: '/legal' },
-      { label: 'Divulgation des Risques', href: '/risk-disclosure' },
-      { label: 'Politique de Confidentialité', href: '/privacy' },
-      { label: 'Paramètres Cookies', href: '/cookies' }
+      { label: t('footer.legalNotices'), href: '/legal-notices' },
+      { label: t('footer.riskDisclosure'), href: '/risk-disclosure' },
+      { label: t('footer.privacy'), href: '/privacy-policy' },
+      { label: t('footer.cookies'), href: '/cookie-settings' }
     ],
     support: [
-      { label: 'Centre d\'Aide', href: '/help' },
-      { label: 'Contact Support', href: 'mailto:support@prismacapital.com' },
-      { label: 'Documentation DICI', href: '/dici' },
-      { label: 'Rapports ESG', href: '/esg' }
+      { label: t('footer.helpCenter'), href: '/help-center' },
+      { label: t('footer.contactSupport'), href: '/contact-support' },
+      { label: t('footer.dici'), href: '/dici-documentation' },
+      { label: t('footer.esg'), href: '/esg-reports' }
     ]
   };
 
@@ -73,7 +76,7 @@ const Footer = () => {
           {/* Legal Links */}
           <div>
             <h3 className="font-heading text-lg text-white mb-6">
-              Légal & Conformité
+              {t('footer.legal')}
             </h3>
             <div className="space-y-3">
               {footerLinks.legal.map((link) => (
@@ -91,7 +94,7 @@ const Footer = () => {
           {/* Support Links */}
           <div>
             <h3 className="font-heading text-lg text-white mb-6">
-              Support & Documentation
+              {t('footer.support')}
             </h3>
             <div className="space-y-3">
               {footerLinks.support.map((link) => (
@@ -117,7 +120,7 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Risk Warning */}
+        {/* Bottom Bar */}
         <div className="border-t border-white/20 pt-8 mb-8">
           <div className="bg-orange-900/30 rounded-xl p-6 border border-orange-500/30">
             <h4 className="font-heading text-lg text-orange-200 mb-3 flex items-center">
@@ -147,7 +150,7 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Bottom Bar */}
+        {/* Bottom Footer Bar */}
         <div className="border-t border-white/20 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <div className="font-body text-sm text-white/60">
@@ -164,6 +167,9 @@ const Footer = () => {
             </div>
           </div>
         </div>
+        
+        {/* Risk Warning Slider */}
+        <RiskWarningSlider />
 
         {/* Schema.org JSON-LD */}
         <script

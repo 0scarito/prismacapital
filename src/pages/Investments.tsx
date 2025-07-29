@@ -1,6 +1,6 @@
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
-import RiskWarningSlider from '@/components/RiskWarningSlider';
+
 import { TrendingUp, Leaf, Cpu, Utensils, Building, ArrowRight, Home, DollarSign, Bitcoin } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 
@@ -124,7 +124,7 @@ const Investments = () => {
         {/* Risk Warning */}
         <section className="py-12 bg-warm-white">
           <div className="section-container">
-            <div className="text-center mb-8">
+            <div className="text-center">
               <p className="text-lg text-red-600 font-medium">
                 {language === 'fr' 
                   ? 'Les investissements dans les start-ups sont illiquides et peuvent entraîner une perte totale du capital.'
@@ -132,7 +132,6 @@ const Investments = () => {
                 }
               </p>
             </div>
-            <RiskWarningSlider />
           </div>
         </section>
 

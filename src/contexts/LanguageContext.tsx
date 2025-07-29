@@ -13,9 +13,9 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 // Translation dictionary
 const translations = {
   // Navigation
-  'nav.howItWorks': {
-    fr: 'Comment ça marche',
-    en: 'How it works'
+  'nav.whatWeDo': {
+    fr: 'Notre mission',
+    en: 'What we do'
   },
   'nav.investments': {
     fr: 'Investissements',
@@ -36,10 +36,6 @@ const translations = {
   'nav.mySpace': {
     fr: 'Mon Espace',
     en: 'My Space'
-  },
-  'nav.payment': {
-    fr: 'Paiement',
-    en: 'Payment'
   },
   'nav.joinUs': {
     fr: 'Se connecter',
@@ -66,8 +62,8 @@ const translations = {
   
   // How It Works
   'howItWorks.title': {
-    fr: 'Comment ça marche',
-    en: 'How It Works'
+    fr: 'Notre mission',
+    en: 'What we do'
   },
   'howItWorks.subtitle': {
     fr: 'Trois étapes simples pour transformer l\'épargne en propriété d\'actions',
@@ -80,28 +76,70 @@ const translations = {
   
   // Risk Warnings
   'risk.privateEquity': {
-    fr: 'Le capital-investissement présente des risques élevés de perte en capital et une liquidité limitée. Investissement recommandé pour investisseurs expérimentés uniquement.',
-    en: 'Private equity presents high risks of capital loss and limited liquidity. Investment recommended for experienced investors only.'
+    fr: '⚠️ Avertissement Important sur les Risques\nNiveau de risque : 6/7 (Private Equity)\nLes investissements en private equity présentent un risque élevé de perte en capital.\nVotre capital n\'est pas garanti et peut diminuer significativement.\nHorizon d\'investissement : 5 à 10 ans minimum recommandé.\nFaible liquidité : revente avant terme souvent impossible ou fortement décotée.\nLes performances passées ne préjugent pas des performances futures.',
+    en: '⚠️ Important Risk Warning\nRisk level : 6 / 7 (Private Equity)\nPrivate-equity investments carry a high risk of capital loss.\nYour capital is not guaranteed and may fall significantly in value.\nRecommended holding period : at least five to ten years.\nLow liquidity : early resale is often impossible or may incur a heavy discount.\nPast performance is not a guide to future returns.'
   },
   'risk.crypto': {
-    fr: 'Les crypto-actifs sont des investissements extrêmement volatils et non réglementés. Risque de perte totale du capital investi.',
-    en: 'Crypto-assets are extremely volatile and unregulated investments. Risk of total loss of invested capital.'
+    fr: '⚠️ Avertissement Important sur les Risques\nNiveau de risque : 7/7 (Crypto-actifs)\nLes crypto-actifs sont extrêmement volatils et exposés aux risques technologiques, réglementaires et de marché.\nVotre capital entier peut être perdu.\nHorizon recommandé : très long terme ou purement spéculatif.\nLa liquidité varie et des risques opérationnels existent (piratage, défaillance de plateforme).\nLes performances passées ne préjugent pas des performances futures.',
+    en: '⚠️ Important Risk Warning\nRisk level : 7 / 7 (Crypto Assets)\nCrypto assets are extremely volatile and exposed to technological, regulatory and market risks.\nYour entire capital may be lost.\nRecommended horizon : very long-term or purely speculative.\nLiquidity varies and operational risks exist (hacking, platform failure).\nPast performance is not a guide to future returns.'
   },
   'risk.realEstate': {
-    fr: 'Le crowdfunding immobilier présente des risques de liquidité et de marché. Les rendements passés ne préjugent pas des rendements futurs.',
-    en: 'Real estate crowdfunding presents liquidity and market risks. Past returns do not predict future returns.'
+    fr: '⚠️ Avertissement Important sur les Risques\nNiveau de risque : 5/7 (Immobilier en crowdfunding)\nL\'immobilier en crowdfunding implique un risque de perte partielle ou totale du capital et d\'illiquidité.\nHorizon recommandé : trois à sept ans.\nLa liquidité est limitée ; les remboursements dépendent du succès du projet.\nLes performances passées ne préjugent pas des performances futures.',
+    en: '⚠️ Important Risk Warning\nRisk level : 5 / 7 (Real-Estate Crowdfunding)\nReal-estate crowdfunding involves a risk of partial or total capital loss and illiquidity.\nRecommended horizon : three to seven years.\nLiquidity is limited; repayments depend on project success.\nPast performance is not a guide to future returns.'
   },
   'risk.ventureCapital': {
-    fr: 'Le capital-risque est un investissement à haut risque avec une probabilité élevée de perte totale. Horizon d\'investissement de 5-10 ans minimum.',
-    en: 'Venture capital is a high-risk investment with high probability of total loss. Minimum investment horizon of 5-10 years.'
+    fr: '⚠️ Avertissement Important sur les Risques\nNiveau de risque : 7/7 (Venture Capital)\nLes investissements en capital-risque comportent un risque très élevé de perte en capital ; la plupart des entreprises peuvent ne jamais générer de liquidité.\nHorizon recommandé : au moins sept à douze ans.\nIlliquidité complète jusqu\'à la sortie (vente ou IPO).\nLes performances passées ne préjugent pas des performances futures.',
+    en: '⚠️ Important Risk Warning\nRisk level : 7 / 7 (Venture Capital)\nVenture-capital investments entail a very high risk of capital loss; most companies may never generate liquidity.\nRecommended horizon : at least seven to twelve years.\nComplete illiquidity until exit (sale or IPO).\nPast performance is not a guide to future returns.'
   },
   'risk.commodities': {
-    fr: 'Les matières premières sont soumises à une forte volatilité liée aux facteurs géopolitiques et climatiques. Diversification recommandée.',
-    en: 'Commodities are subject to high volatility related to geopolitical and climate factors. Diversification recommended.'
+    fr: '⚠️ Avertissement Important sur les Risques\nNiveau de risque : 5/7 (Matières premières)\nLes investissements en matières premières sont volatils et influencés par des facteurs géopolitiques et climatiques ; les valeurs du capital peuvent fluctuer fortement.\nHorizon recommandé : moyen à long terme (≥ 5 ans).\nLa liquidité varie selon l\'instrument (futures, ETC, fonds, etc.).\nLes performances passées ne préjugent pas des performances futures.',
+    en: '⚠️ Important Risk Warning\nRisk level : 5 / 7 (Commodities)\nCommodity investments are volatile and influenced by geopolitical and climatic factors; capital values can fluctuate sharply.\nRecommended horizon : medium to long term (≥ 5 years).\nLiquidity varies by instrument (futures, ETCs, funds, etc.).\nPast performance is not a guide to future returns.'
   },
   'risk.etf': {
-    fr: 'Les ETF diversifiés présentent un risque modéré lié aux fluctuations des marchés financiers. Investissement à moyen-long terme recommandé.',
-    en: 'Diversified ETFs present moderate risk related to financial market fluctuations. Medium-long term investment recommended.'
+    fr: '⚠️ Avertissement Important sur les Risques\nNiveau de risque : 3/7 (ETF diversifiés)\nMême les ETF qui suivent des indices larges restent soumis aux fluctuations des marchés d\'actions et d\'obligations ; la valeur de votre capital peut chuter.\nHorizon recommandé : moyen à long terme (≥ 5 ans).\nLa liquidité est généralement élevée, mais les prix peuvent être volatils à court terme.\nLes performances passées ne préjugent pas des performances futures.',
+    en: '⚠️ Important Risk Warning\nRisk level : 3 / 7 (Diversified ETFs)\nEven ETFs that track broad indices remain subject to equity and bond-market swings; the value of your capital may fall.\nRecommended horizon : medium to long term (≥ 5 years).\nLiquidity is generally high, but prices can be volatile in the short term.\nPast performance is not a guide to future returns.'
+  },
+  
+  // Footer Links
+  'footer.legal': {
+    fr: 'Légal & Conformité',
+    en: 'Legal & Compliance'
+  },
+  'footer.legalNotices': {
+    fr: 'Mentions Légales',
+    en: 'Legal Notices'
+  },
+  'footer.riskDisclosure': {
+    fr: 'Divulgation des Risques',
+    en: 'Risk Disclosure'
+  },
+  'footer.privacy': {
+    fr: 'Politique de Confidentialité',
+    en: 'Privacy Policy'
+  },
+  'footer.cookies': {
+    fr: 'Paramètres Cookies',
+    en: 'Cookie Settings'
+  },
+  'footer.support': {
+    fr: 'Support & Documentation',
+    en: 'Support & Documentation'
+  },
+  'footer.helpCenter': {
+    fr: 'Centre d\'Aide',
+    en: 'Help Centre'
+  },
+  'footer.contactSupport': {
+    fr: 'Contact Support',
+    en: 'Contact Support'
+  },
+  'footer.dici': {
+    fr: 'Documentation DICI',
+    en: 'DICI Documentation'
+  },
+  'footer.esg': {
+    fr: 'Rapports ESG',
+    en: 'ESG Reports'
   }
 };
 

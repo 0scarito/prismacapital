@@ -104,9 +104,9 @@ const RiskWarningSlider = () => {
             </span>
           </div>
           
-          <p className="text-muted-foreground leading-relaxed">
+          <div className="text-muted-foreground leading-relaxed whitespace-pre-line text-sm">
             {t(riskWarnings[currentSlide].key)}
-          </p>
+          </div>
         </div>
       </div>
 

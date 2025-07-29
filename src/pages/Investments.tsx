@@ -158,22 +158,7 @@ const Investments = () => {
         </section>
 
         {/* CTA Section */}
-        <section className="py-20 bg-gradient-warm">
-          <div className="section-container">
-            <div className="text-center">
-              <h2 className="font-serif font-bold text-4xl text-warm-white mb-6">
-                Commencez votre investissement
-              </h2>
-              <p className="font-sans text-xl text-light-gray mb-8 max-w-2xl mx-auto">
-                Rejoignez plus de 10 000 investisseurs qui font confiance à Cap&CO.
-              </p>
-              <button className="btn-primary inline-flex items-center gap-2">
-                Choisir mon secteur
-                <ArrowRight className="w-5 h-5" />
-              </button>
-            </div>
-          </div>
-        </section>
+        
       </main>
 
       <Footer />

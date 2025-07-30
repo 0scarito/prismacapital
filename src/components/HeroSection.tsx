@@ -1,32 +1,26 @@
 import { useState, useEffect } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
-
 const HeroSection = () => {
   const [currentCard, setCurrentCard] = useState(0);
-  const { t } = useLanguage();
-  
-  const giftScenarios = [
-    "Send €200 of French clean-tech equity to Clara",
-    "Support Brittany's agritech start-ups for Jules' 18th birthday", 
-    "Back the French economy, one gift at a time"
-  ];
-
+  const {
+    t
+  } = useLanguage();
+  const giftScenarios = ["Send €200 of French clean-tech equity to Clara", "Support Brittany's agritech start-ups for Jules' 18th birthday", "Back the French economy, one gift at a time"];
   const scrollToSection = (href: string) => {
     const element = document.querySelector(href);
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+      element.scrollIntoView({
+        behavior: 'smooth'
+      });
     }
   };
-
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentCard((prev) => (prev + 1) % giftScenarios.length);
+      setCurrentCard(prev => (prev + 1) % giftScenarios.length);
     }, 4000);
     return () => clearInterval(interval);
   }, []);
-
-  return (
-    <section id="hero" className="min-h-screen relative overflow-hidden bg-gradient-hero">
+  return <section id="hero" className="min-h-screen relative overflow-hidden bg-gradient-hero">
       {/* Blur mask for depth */}
       <div className="absolute bottom-0 left-0 w-1/2 h-1/2 bg-gradient-to-tr from-dark-navy/20 to-transparent blur-3xl"></div>
       
@@ -36,7 +30,9 @@ const HeroSection = () => {
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             {/* Left Column - Text Content */}
             <div className="text-center lg:text-left">
-              <h1 className="font-serif font-bold text-6xl lg:text-8xl text-warm-white mb-12 leading-[0.9] tracking-tight" style={{ textWrap: 'balance' }}>
+              <h1 className="font-serif font-bold text-6xl lg:text-8xl text-warm-white mb-12 leading-[0.9] tracking-tight" style={{
+              textWrap: 'balance'
+            }}>
                 {t('hero.title')}
               </h1>
               
@@ -46,22 +42,16 @@ const HeroSection = () => {
 
               {/* CTA Buttons */}
               <div className="flex flex-col sm:flex-row gap-6 justify-center lg:justify-start mb-20">
-                <button
-                  onClick={() => window.location.href = '/investments'}
-                  className="btn-primary text-lg"
-                >
+                <button onClick={() => window.location.href = '/investments'} className="btn-primary text-lg">
                   {t('hero.chooseGift')}
                 </button>
-                <button
-                  onClick={() => scrollToSection('#how-it-works')}
-                  className="btn-ghost text-lg"
-                >
+                <button onClick={() => scrollToSection('#how-it-works')} className="btn-ghost text-lg">
                   {t('hero.whatWeDo')}
                 </button>
               </div>
 
               {/* Trust Indicators */}
-              <div className="flex flex-wrap justify-center lg:justify-start gap-6 text-light-gray/70">
+              <div className="flex flex-wrap justify-center lg:justify-start gap-6 text-light-gray/70 my-[20px]">
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 bg-metallic-gold rounded-full"></div>
                   <span className="font-sans text-sm">AMF Regulated</span>
@@ -95,14 +85,7 @@ const HeroSection = () => {
                 
                 {/* Progress indicator */}
                 <div className="flex gap-2 mt-6">
-                  {giftScenarios.map((_, index) => (
-                    <div 
-                      key={index}
-                      className={`h-1 rounded-full transition-all duration-300 ${
-                        index === currentCard ? 'bg-primary w-8' : 'bg-border w-2'
-                      }`}
-                    />
-                  ))}
+                  {giftScenarios.map((_, index) => <div key={index} className={`h-1 rounded-full transition-all duration-300 ${index === currentCard ? 'bg-primary w-8' : 'bg-border w-2'}`} />)}
                 </div>
               </div>
 
@@ -123,8 +106,6 @@ const HeroSection = () => {
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default HeroSection;

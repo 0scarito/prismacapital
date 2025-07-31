@@ -9,7 +9,6 @@ import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { LogOut, Gift, Calendar, Euro, QrCode, TrendingUp, TrendingDown } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-
 interface Coupon {
   id: string;
   title: string;
@@ -21,7 +20,6 @@ interface Coupon {
   created_at: string;
   used_at: string | null;
 }
-
 interface Investment {
   id: string;
   name: string;
@@ -29,132 +27,165 @@ interface Investment {
   currentPrice: number;
   change24h: number;
   changePercent24h: number;
-  historicalData: { date: string; price: number }[];
+  historicalData: {
+    date: string;
+    price: number;
+  }[];
 }
-
 interface Profile {
   display_name: string;
   email: string;
 }
-
 const Dashboard = () => {
-  const { user, signOut, loading } = useAuth();
+  const {
+    user,
+    signOut,
+    loading
+  } = useAuth();
   const [coupons, setCoupons] = useState<Coupon[]>([]);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [investments, setInvestments] = useState<Investment[]>([]);
   const [loadingData, setLoadingData] = useState(true);
   const navigate = useNavigate();
-  const { toast } = useToast();
-
+  const {
+    toast
+  } = useToast();
   useEffect(() => {
     if (!loading && !user) {
       navigate('/auth');
     }
   }, [user, loading, navigate]);
-
   useEffect(() => {
     if (user) {
       fetchUserData();
       fetchInvestmentData();
     }
   }, [user]);
-
   const fetchUserData = async () => {
     try {
       // Fetch profile
-      const { data: profileData, error: profileError } = await supabase
-        .from('profiles')
-        .select('display_name, email')
-        .eq('user_id', user?.id)
-        .single();
-
+      const {
+        data: profileData,
+        error: profileError
+      } = await supabase.from('profiles').select('display_name, email').eq('user_id', user?.id).single();
       if (profileError) throw profileError;
       setProfile(profileData);
 
       // Fetch coupons
-      const { data: couponsData, error: couponsError } = await supabase
-        .from('coupons')
-        .select('*')
-        .eq('user_id', user?.id)
-        .order('created_at', { ascending: false });
-
+      const {
+        data: couponsData,
+        error: couponsError
+      } = await supabase.from('coupons').select('*').eq('user_id', user?.id).order('created_at', {
+        ascending: false
+      });
       if (couponsError) throw couponsError;
       setCoupons((couponsData || []) as Coupon[]);
     } catch (error: any) {
       toast({
         title: "Erreur",
         description: "Impossible de charger vos données.",
-        variant: "destructive",
+        variant: "destructive"
       });
     } finally {
       setLoadingData(false);
     }
   };
-
   const fetchInvestmentData = async () => {
     // Simulation de données d'investissement (en réalité, on récupérerait ça d'une API)
-    const mockInvestments: Investment[] = [
-      {
-        id: '1',
-        name: 'Or',
-        symbol: 'GOLD',
-        currentPrice: 1987.50,
-        change24h: 12.50,
-        changePercent24h: 0.63,
-        historicalData: [
-          { date: '2024-01-01', price: 1950 },
-          { date: '2024-01-02', price: 1965 },
-          { date: '2024-01-03', price: 1955 },
-          { date: '2024-01-04', price: 1970 },
-          { date: '2024-01-05', price: 1975 },
-          { date: '2024-01-06', price: 1980 },
-          { date: '2024-01-07', price: 1987.50 },
-        ]
-      },
-      {
-        id: '2',
-        name: 'S&P 500 ETF',
-        symbol: 'SPY',
-        currentPrice: 485.23,
-        change24h: -2.15,
-        changePercent24h: -0.44,
-        historicalData: [
-          { date: '2024-01-01', price: 480 },
-          { date: '2024-01-02', price: 482 },
-          { date: '2024-01-03', price: 478 },
-          { date: '2024-01-04', price: 487 },
-          { date: '2024-01-05', price: 490 },
-          { date: '2024-01-06', price: 487.38 },
-          { date: '2024-01-07', price: 485.23 },
-        ]
-      },
-      {
-        id: '3',
-        name: 'Bitcoin ETF',
-        symbol: 'BTCETF',
-        currentPrice: 42850.00,
-        change24h: 1250.00,
-        changePercent24h: 3.01,
-        historicalData: [
-          { date: '2024-01-01', price: 41000 },
-          { date: '2024-01-02', price: 41500 },
-          { date: '2024-01-03', price: 40800 },
-          { date: '2024-01-04', price: 41800 },
-          { date: '2024-01-05', price: 41600 },
-          { date: '2024-01-06', price: 42200 },
-          { date: '2024-01-07', price: 42850 },
-        ]
-      }
-    ];
-    
+    const mockInvestments: Investment[] = [{
+      id: '1',
+      name: 'Or',
+      symbol: 'GOLD',
+      currentPrice: 1987.50,
+      change24h: 12.50,
+      changePercent24h: 0.63,
+      historicalData: [{
+        date: '2024-01-01',
+        price: 1950
+      }, {
+        date: '2024-01-02',
+        price: 1965
+      }, {
+        date: '2024-01-03',
+        price: 1955
+      }, {
+        date: '2024-01-04',
+        price: 1970
+      }, {
+        date: '2024-01-05',
+        price: 1975
+      }, {
+        date: '2024-01-06',
+        price: 1980
+      }, {
+        date: '2024-01-07',
+        price: 1987.50
+      }]
+    }, {
+      id: '2',
+      name: 'S&P 500 ETF',
+      symbol: 'SPY',
+      currentPrice: 485.23,
+      change24h: -2.15,
+      changePercent24h: -0.44,
+      historicalData: [{
+        date: '2024-01-01',
+        price: 480
+      }, {
+        date: '2024-01-02',
+        price: 482
+      }, {
+        date: '2024-01-03',
+        price: 478
+      }, {
+        date: '2024-01-04',
+        price: 487
+      }, {
+        date: '2024-01-05',
+        price: 490
+      }, {
+        date: '2024-01-06',
+        price: 487.38
+      }, {
+        date: '2024-01-07',
+        price: 485.23
+      }]
+    }, {
+      id: '3',
+      name: 'Bitcoin ETF',
+      symbol: 'BTCETF',
+      currentPrice: 42850.00,
+      change24h: 1250.00,
+      changePercent24h: 3.01,
+      historicalData: [{
+        date: '2024-01-01',
+        price: 41000
+      }, {
+        date: '2024-01-02',
+        price: 41500
+      }, {
+        date: '2024-01-03',
+        price: 40800
+      }, {
+        date: '2024-01-04',
+        price: 41800
+      }, {
+        date: '2024-01-05',
+        price: 41600
+      }, {
+        date: '2024-01-06',
+        price: 42200
+      }, {
+        date: '2024-01-07',
+        price: 42850
+      }]
+    }];
     setInvestments(mockInvestments);
   };
-
   const handleSignOut = async () => {
     await signOut();
     navigate('/');
   };
-
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'active':
@@ -167,7 +198,6 @@ const Dashboard = () => {
         return 'bg-primary/10 text-primary border-primary/20';
     }
   };
-
   const getStatusText = (status: string) => {
     switch (status) {
       case 'active':
@@ -180,35 +210,29 @@ const Dashboard = () => {
         return status;
     }
   };
-
   if (loading || loadingData) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
+    return <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
           <p className="text-muted-foreground">Chargement...</p>
         </div>
-      </div>
-    );
+      </div>;
   }
-
   if (!user) {
     return null;
   }
-
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-background to-background/80">
+  return <div className="min-h-screen bg-gradient-to-br from-background to-background/80">
       {/* Header */}
       <header className="bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <div className="flex items-center space-x-4">
-            <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
+            <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-slate-50">
               Cap&Co
             </h1>
-            <span className="text-muted-foreground">Espace Personnel</span>
+            <span className="text-slate-50">Espace Personnel</span>
           </div>
           <div className="flex items-center space-x-4">
-            <span className="text-sm text-muted-foreground">
+            <span className="text-sm text-gray-50">
               Bonjour, {profile?.display_name || 'Utilisateur'}
             </span>
             <Button variant="outline" size="sm" onClick={handleSignOut}>
@@ -225,7 +249,7 @@ const Dashboard = () => {
           <h2 className="text-3xl font-bold mb-2">
             Bienvenue, {profile?.display_name || 'Utilisateur'} !
           </h2>
-          <p className="text-muted-foreground">
+          <p className="text-slate-50">
             Gérez vos coupons et découvrez vos avantages exclusifs.
           </p>
         </div>
@@ -292,24 +316,18 @@ const Dashboard = () => {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                {coupons.length === 0 ? (
-                  <div className="text-center py-8">
+                {coupons.length === 0 ? <div className="text-center py-8">
                     <Gift className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
                     <h3 className="text-lg font-medium mb-2">Aucun coupon</h3>
                     <p className="text-muted-foreground">
                       Vous n'avez pas encore de coupons. Revenez bientôt !
                     </p>
-                  </div>
-                ) : (
-                  <div className="space-y-4">
-                    {coupons.map((coupon) => (
-                      <div key={coupon.id} className="border rounded-lg p-4 hover:bg-accent/50 transition-colors">
+                  </div> : <div className="space-y-4">
+                    {coupons.map(coupon => <div key={coupon.id} className="border rounded-lg p-4 hover:bg-accent/50 transition-colors">
                         <div className="flex justify-between items-start mb-2">
                           <div>
                             <h4 className="font-semibold">{coupon.title}</h4>
-                            {coupon.description && (
-                              <p className="text-sm text-muted-foreground">{coupon.description}</p>
-                            )}
+                            {coupon.description && <p className="text-sm text-muted-foreground">{coupon.description}</p>}
                           </div>
                           <Badge className={getStatusColor(coupon.status)}>
                             {getStatusText(coupon.status)}
@@ -327,18 +345,12 @@ const Dashboard = () => {
                           </div>
                           
                           <div className="text-xs text-muted-foreground">
-                            {coupon.expires_at && (
-                              <p>Expire le {new Date(coupon.expires_at).toLocaleDateString()}</p>
-                            )}
-                            {coupon.used_at && (
-                              <p>Utilisé le {new Date(coupon.used_at).toLocaleDateString()}</p>
-                            )}
+                            {coupon.expires_at && <p>Expire le {new Date(coupon.expires_at).toLocaleDateString()}</p>}
+                            {coupon.used_at && <p>Utilisé le {new Date(coupon.used_at).toLocaleDateString()}</p>}
                           </div>
                         </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
+                      </div>)}
+                  </div>}
               </CardContent>
             </Card>
           </TabsContent>
@@ -346,8 +358,7 @@ const Dashboard = () => {
           <TabsContent value="investments" className="space-y-6">
             {/* Investments Section */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {investments.map((investment) => (
-                <Card key={investment.id}>
+              {investments.map(investment => <Card key={investment.id}>
                   <CardHeader>
                     <div className="flex justify-between items-start">
                       <div>
@@ -356,18 +367,10 @@ const Dashboard = () => {
                       </div>
                       <div className="text-right">
                         <div className="text-2xl font-bold">
-                          {investment.symbol === 'GOLD' ? `${investment.currentPrice}$` : 
-                           investment.symbol === 'BTCETF' ? `${investment.currentPrice.toLocaleString()}$` :
-                           `${investment.currentPrice}$`}
+                          {investment.symbol === 'GOLD' ? `${investment.currentPrice}$` : investment.symbol === 'BTCETF' ? `${investment.currentPrice.toLocaleString()}$` : `${investment.currentPrice}$`}
                         </div>
-                        <div className={`flex items-center text-sm ${
-                          investment.changePercent24h >= 0 ? 'text-green-500' : 'text-red-500'
-                        }`}>
-                          {investment.changePercent24h >= 0 ? (
-                            <TrendingUp className="h-4 w-4 mr-1" />
-                          ) : (
-                            <TrendingDown className="h-4 w-4 mr-1" />
-                          )}
+                        <div className={`flex items-center text-sm ${investment.changePercent24h >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                          {investment.changePercent24h >= 0 ? <TrendingUp className="h-4 w-4 mr-1" /> : <TrendingDown className="h-4 w-4 mr-1" />}
                           {investment.changePercent24h >= 0 ? '+' : ''}{investment.changePercent24h.toFixed(2)}%
                         </div>
                       </div>
@@ -378,44 +381,28 @@ const Dashboard = () => {
                       <ResponsiveContainer width="100%" height="100%">
                         <LineChart data={investment.historicalData}>
                           <CartesianGrid strokeDasharray="3 3" className="opacity-30" />
-                          <XAxis 
-                            dataKey="date" 
-                            tick={{ fontSize: 12 }}
-                            tickFormatter={(value) => new Date(value).toLocaleDateString('fr-FR', { month: 'short', day: 'numeric' })}
-                          />
-                          <YAxis 
-                            tick={{ fontSize: 12 }}
-                            domain={['dataMin - 10', 'dataMax + 10']}
-                          />
-                          <Tooltip 
-                            formatter={(value: number) => [
-                              investment.symbol === 'GOLD' ? `${value}$` : 
-                              investment.symbol === 'BTCETF' ? `${value.toLocaleString()}$` :
-                              `${value}$`,
-                              'Prix'
-                            ]}
-                            labelFormatter={(label) => new Date(label).toLocaleDateString('fr-FR')}
-                          />
-                          <Line 
-                            type="monotone" 
-                            dataKey="price" 
-                            stroke={investment.changePercent24h >= 0 ? '#10b981' : '#ef4444'}
-                            strokeWidth={2}
-                            dot={false}
-                            activeDot={{ r: 4 }}
-                          />
+                          <XAxis dataKey="date" tick={{
+                        fontSize: 12
+                      }} tickFormatter={value => new Date(value).toLocaleDateString('fr-FR', {
+                        month: 'short',
+                        day: 'numeric'
+                      })} />
+                          <YAxis tick={{
+                        fontSize: 12
+                      }} domain={['dataMin - 10', 'dataMax + 10']} />
+                          <Tooltip formatter={(value: number) => [investment.symbol === 'GOLD' ? `${value}$` : investment.symbol === 'BTCETF' ? `${value.toLocaleString()}$` : `${value}$`, 'Prix']} labelFormatter={label => new Date(label).toLocaleDateString('fr-FR')} />
+                          <Line type="monotone" dataKey="price" stroke={investment.changePercent24h >= 0 ? '#10b981' : '#ef4444'} strokeWidth={2} dot={false} activeDot={{
+                        r: 4
+                      }} />
                         </LineChart>
                       </ResponsiveContainer>
                     </div>
                   </CardContent>
-                </Card>
-              ))}
+                </Card>)}
             </div>
           </TabsContent>
         </Tabs>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default Dashboard;

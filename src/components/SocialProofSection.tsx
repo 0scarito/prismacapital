@@ -1,14 +1,23 @@
+import { useLanguage } from '@/contexts/LanguageContext';
+
 const SocialProofSection = () => {
+  const { t } = useLanguage();
   const partners = [
-    "AMF", "BNP Paribas", "Société Générale", "Crédit Agricole", 
-    "LVMH", "L'Oréal", "Total Energies", "Michelin"
+    'AMF',
+    'BNP Paribas',
+    'Société Générale',
+    'Crédit Agricole',
+    'LVMH',
+    "L'Oréal",
+    'Total Energies',
+    'Michelin'
   ];
 
   return (
     <section className="py-12 bg-background border-b border-border/20">
       <div className="container mx-auto px-6">
         <p className="text-center text-light-gray/60 text-sm mb-8 font-sans">
-          Trusted by regulated partners
+          {t('socialProof.trustedBy')}
         </p>
         
         <div className="relative overflow-hidden">

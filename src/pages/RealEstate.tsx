@@ -1,23 +1,24 @@
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
+import Building from '@/components/Building';
 
 const RealEstate = () => {
   const examples = [
     {
-      title: 'Lyon Residential Fund',
-      description: 'Short-term development of eco‑friendly apartments in Lyon.'
+      title: 'Co-finance Premium Buildings',
+      description: 'Join premium real estate deals from just €500.'
     },
     {
-      title: 'Paris Office Renovation',
-      description: 'Refurbishment of historical buildings into modern workspaces.'
+      title: 'Monthly Rent to Wallet',
+      description: 'Receive rental income automatically every month.'
     },
     {
-      title: 'Student Housing Pool',
-      description: 'Crowdfunded residences for universities across France.'
+      title: 'Geographic Diversification',
+      description: 'Spread investments across Europe and the US.'
     },
     {
-      title: 'Healthcare Facilities',
-      description: 'Invest in clinics and senior housing with stable rental yields.'
+      title: 'Inflation-protected Rents',
+      description: 'Benefit from rent indexation against inflation.'
     }
   ];
 
@@ -28,6 +29,9 @@ const RealEstate = () => {
         <div className="section-container">
           <div className="max-w-4xl mx-auto">
             <h1 className="text-4xl font-bold text-foreground mb-8">Real-estate Crowdfunding</h1>
+            <div className="mb-8">
+              <Building />
+            </div>
             <div className="grid sm:grid-cols-2 gap-6">
               {examples.map((ex, idx) => (
                 <div

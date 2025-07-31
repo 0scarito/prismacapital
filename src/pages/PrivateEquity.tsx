@@ -1,23 +1,26 @@
+import { useState } from 'react';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
+import Sparkline from '@/components/Sparkline';
 
 const PrivateEquity = () => {
+  const [hovered, setHovered] = useState(-1);
   const examples = [
     {
-      title: 'Growth Fund Alpha',
-      description: 'Invest in established European SMEs with strong expansion plans.'
+      title: 'European SME Growth',
+      description: 'Invest in established European SMEs with high growth potential.'
     },
     {
-      title: 'Buyout Fund Beta',
-      description: 'Participate in the acquisition of market leaders with proven cash flow.'
+      title: 'Market Leader Buyouts',
+      description: 'Take part in acquiring leading companies with solid cash flow.'
     },
     {
-      title: 'Income Fund Gamma',
-      description: 'Focus on mature businesses delivering regular dividends to investors.'
+      title: 'Dividend Strategies',
+      description: 'Diversify with mature businesses paying regular dividends.'
     },
     {
-      title: 'Impact Fund Delta',
-      description: 'Support companies creating positive social and environmental change.'
+      title: 'Positive Impact Deals',
+      description: 'Support firms creating measurable social and environmental value.'
     }
   ];
 
@@ -32,6 +35,8 @@ const PrivateEquity = () => {
               {examples.map((ex, idx) => (
                 <div
                   key={idx}
+                  onMouseEnter={() => setHovered(idx)}
+                  onMouseLeave={() => setHovered(-1)}
                   className="bg-card rounded-lg p-6 border border-border shadow-prisma-card"
                 >
                   <h3 className="font-serif text-lg text-foreground mb-2 font-bold">
@@ -40,6 +45,7 @@ const PrivateEquity = () => {
                   <p className="text-sm text-muted-foreground leading-relaxed">
                     {ex.description}
                   </p>
+                  <Sparkline animate={hovered === idx} />
                 </div>
               ))}
             </div>

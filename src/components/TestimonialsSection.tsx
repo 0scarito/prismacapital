@@ -9,7 +9,7 @@ const TestimonialsSection = () => {
       name: "Marie Dubois",
       age: 68,
       location: "Lyon",
-      quote: "I gave my grandson Thomas a Cap&CO card for his 16th birthday. Now he calls me every week to tell me about the clean-tech companies he's backing. It's brought us closer together.",
+      quote: "I gave my grandson Thomas a Prisma Capital card for his 16th birthday. Now he calls me every week to tell me about the clean-tech companies he's backing. It's brought us closer together.",
       image: "/api/placeholder/80/80"
     },
     {

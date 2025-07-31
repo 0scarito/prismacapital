@@ -61,7 +61,7 @@ const Navigation = () => {
               <span className="text-white font-bold text-sm">C</span>
             </div>
             <span className="font-heading text-xl text-foreground">
-              Cap&CO
+              Prisma Capital
             </span>
           </button>
 

@@ -8,7 +8,7 @@
 
 @layer base {
   :root {
-    /* Cap&CO Brand Colors - Coherent Navy Palette */
+    /* Prisma Capital Brand Colors - Coherent Navy Palette */
     --deep-navy: 215 52% 11%;       /* #0F1520 */
     --darker-navy: 215 60% 8%;      /* #0A0F1A */
     --metallic-gold: 39 42% 69%;    /* #C9A970 */
@@ -47,7 +47,7 @@
     
     --radius: 0.75rem;
     
-    /* Cap&CO Gradients */
+    /* Prisma Capital Gradients */
     --gradient-hero: radial-gradient(ellipse at center, hsl(var(--deep-navy)) 0%, hsl(var(--dark-navy)) 100%);
     --gradient-primary: linear-gradient(135deg, hsl(var(--darker-navy)) 0%, hsl(var(--metallic-gold)) 100%);
     --gradient-card: linear-gradient(145deg, hsl(var(--warm-white)) 0%, hsl(var(--light-gray)) 100%);
@@ -117,7 +117,7 @@
 }
 
 @layer components {
-  /* Cap&CO Button System - Premium Gift Focus */
+  /* Prisma Capital Button System - Premium Gift Focus */
   .btn-primary {
     @apply bg-darker-navy text-warm-white font-medium py-4 px-8 rounded-lg 
            shadow-prisma-button hover:scale-[1.04] transition-all duration-300

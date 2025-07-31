@@ -13,7 +13,7 @@ const Index = () => {
     document.documentElement.classList.add('smooth-scroll');
     
     // SEO Meta tags
-    document.title = 'Cap&CO | Gift a stake in tomorrow';
+    document.title = 'Prisma Capital | Gift a stake in tomorrow';
     
     const metaDescription = document.querySelector('meta[name="description"]');
     if (metaDescription) {

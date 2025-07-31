@@ -25,7 +25,7 @@ export default {
 				background: 'hsl(var(--background))',
 				foreground: 'hsl(var(--foreground))',
 				
-				// Cap&CO Brand Colors
+				// Prisma Capital Brand Colors
         'deep-navy': 'hsl(var(--deep-navy))',
         'darker-navy': 'hsl(var(--darker-navy))',
         'metallic-gold': 'hsl(var(--metallic-gold))',

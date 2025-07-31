@@ -23,13 +23,10 @@ const Navigation = () => {
     { label: t('nav.investments'), href: '/investments' },
     { label: t('nav.partners'), href: '/partners' },
     { label: t('nav.security'), href: '/security' },
-    { label: t('nav.joinUs'), href: '/auth' },
+    user
+      ? { label: t('nav.mySpace'), href: '/dashboard' }
+      : { label: t('nav.joinUs'), href: '/auth' },
   ];
-
-  // Add authenticated user items
-  const authenticatedItems = user ? [
-    { label: t('nav.mySpace'), href: '/dashboard' }
-  ] : [];
 
   const handleNavigation = (href: string) => {
     if (href.startsWith('#')) {
@@ -65,17 +62,6 @@ const Navigation = () => {
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
             {navItems.map((item) => (
-              <button
-                key={item.href}
-                onClick={() => handleNavigation(item.href)}
-                className="font-body text-foreground hover:text-primary transition-colors duration-200"
-              >
-                {item.label}
-              </button>
-            ))}
-            
-            {/* Show My Space only when authenticated */}
-            {authenticatedItems.map((item) => (
               <button
                 key={item.href}
                 onClick={() => handleNavigation(item.href)}
@@ -125,17 +111,6 @@ const Navigation = () => {
           <div className="md:hidden bg-background border-t border-border">
             <div className="py-4 space-y-4">
               {navItems.map((item) => (
-                <button
-                  key={item.href}
-                  onClick={() => handleNavigation(item.href)}
-                  className="block w-full text-left font-body text-foreground hover:text-primary transition-colors duration-200 py-2"
-                >
-                  {item.label}
-                </button>
-              ))}
-              
-              {/* Show My Space only when authenticated */}
-              {authenticatedItems.map((item) => (
                 <button
                   key={item.href}
                   onClick={() => handleNavigation(item.href)}

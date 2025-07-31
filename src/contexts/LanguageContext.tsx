@@ -145,6 +145,12 @@ const translations = {
   'footer.esg': {
     fr: 'Rapports ESG',
     en: 'ESG Reports'
+  },
+
+  // Social Proof Section
+  'socialProof.trustedBy': {
+    fr: 'Partenaires r\u00e9glement\u00e9s de confiance',
+    en: 'Trusted by regulated partners'
   }
 };
 

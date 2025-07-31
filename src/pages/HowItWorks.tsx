@@ -100,7 +100,10 @@ const HowItWorks = () => {
               <p className="font-sans text-xl text-light-gray mb-8 max-w-2xl mx-auto">
                 Commencez dès maintenant et offrez un cadeau qui a du sens.
               </p>
-              <button className="btn-primary inline-flex items-center gap-2">
+              <button
+                onClick={() => (window.location.href = '/investments')}
+                className="btn-primary inline-flex items-center gap-2"
+              >
                 Choisir un cadeau
                 <ArrowRight className="w-5 h-5" />
               </button>

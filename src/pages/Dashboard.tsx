@@ -43,7 +43,9 @@ const Dashboard = () => {
     signOut,
     loading
   } = useAuth();
-  const { t } = useLanguage();
+  const {
+    t
+  } = useLanguage();
   const [coupons, setCoupons] = useState<Coupon[]>([]);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [investments, setInvestments] = useState<Investment[]>([]);
@@ -237,9 +239,7 @@ const Dashboard = () => {
             <span className="text-slate-50">Espace Personnel</span>
           </div>
           <div className="flex items-center space-x-4">
-            <span className="text-sm text-gray-50">
-              Bonjour, {profile?.display_name || 'Utilisateur'}
-            </span>
+            
             <Button variant="outline" size="sm" onClick={handleGoHome}>
               {t('nav.home')}
             </Button>

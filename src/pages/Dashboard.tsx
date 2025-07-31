@@ -8,6 +8,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { LogOut, Gift, Calendar, Euro, QrCode, TrendingUp, TrendingDown } from 'lucide-react';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 interface Coupon {
   id: string;
@@ -42,6 +43,7 @@ const Dashboard = () => {
     signOut,
     loading
   } = useAuth();
+  const { t } = useLanguage();
   const [coupons, setCoupons] = useState<Coupon[]>([]);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [investments, setInvestments] = useState<Investment[]>([]);
@@ -186,6 +188,9 @@ const Dashboard = () => {
     await signOut();
     navigate('/');
   };
+  const handleGoHome = () => {
+    navigate('/');
+  };
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'active':
@@ -235,6 +240,9 @@ const Dashboard = () => {
             <span className="text-sm text-gray-50">
               Bonjour, {profile?.display_name || 'Utilisateur'}
             </span>
+            <Button variant="outline" size="sm" onClick={handleGoHome}>
+              {t('nav.home')}
+            </Button>
             <Button variant="outline" size="sm" onClick={handleSignOut}>
               <LogOut className="h-4 w-4 mr-2" />
               Déconnexion

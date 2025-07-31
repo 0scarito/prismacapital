@@ -14,7 +14,7 @@ const Crypto = () => (
         </div>
       </div>
     </main>
-    <Footer />
+    <Footer riskCategory="risk.crypto" />
   </div>
 );
 

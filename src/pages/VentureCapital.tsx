@@ -14,7 +14,7 @@ const VentureCapital = () => (
         </div>
       </div>
     </main>
-    <Footer />
+    <Footer riskCategory="risk.ventureCapital" />
   </div>
 );
 

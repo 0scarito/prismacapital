@@ -14,7 +14,7 @@ const Etfs = () => (
         </div>
       </div>
     </main>
-    <Footer />
+    <Footer riskCategory="risk.etf" />
   </div>
 );
 

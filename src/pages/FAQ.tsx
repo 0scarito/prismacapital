@@ -4,6 +4,41 @@ import { useState } from 'react';
 import { ChevronDown, MessageCircle, Phone, Mail } from 'lucide-react';
 const FAQ = () => {
   const [openItems, setOpenItems] = useState<number[]>([]);
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const findBestMatch = (query: string) => {
+    if (!query) return null;
+    const tokens = query.toLowerCase().split(/\s+/);
+    let best: { cat: number; idx: number; score: number } | null = null;
+
+    faqCategories.forEach((cat, c) => {
+      cat.questions.forEach((q, i) => {
+        const text = (q.q + ' ' + q.a).toLowerCase();
+        const score = tokens.reduce(
+          (acc, t) => acc + (text.includes(t) ? 1 : 0),
+          0,
+        );
+        if (!best || score > best.score) {
+          best = { cat: c, idx: i, score };
+        }
+      });
+    });
+    return best && best.score > 0 ? best : null;
+  };
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    const match = findBestMatch(searchTerm);
+    if (match) {
+      const globalIndex = match.cat * 100 + match.idx;
+      setOpenItems([globalIndex]);
+      setTimeout(() => {
+        document
+          .getElementById(`faq-item-${globalIndex}`)
+          ?.scrollIntoView({ behavior: 'smooth' });
+      }, 0);
+    }
+  };
   const toggleItem = (index: number) => {
     setOpenItems(prev => prev.includes(index) ? prev.filter(i => i !== index) : [...prev, index]);
   };
@@ -85,14 +120,25 @@ const FAQ = () => {
         <section className="py-12 bg-warm-white border-b border-border/20">
           <div className="section-container">
             <div className="max-w-2xl mx-auto">
-              <div className="relative">
-                <input type="text" placeholder="Rechercher dans la FAQ..." className="w-full px-6 py-4 rounded-xl border border-border/20 bg-gradient-subtle focus:outline-none focus:ring-2 focus:ring-metallic-gold/50 bg-slate-950" />
-                <button className="absolute right-3 top-1/2 transform -translate-y-1/2 text-deep-navy/60">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="m21 21-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                  </svg>
-                </button>
-              </div>
+              <form onSubmit={handleSearch}>
+                <div className="relative">
+                  <input
+                    type="text"
+                    value={searchTerm}
+                    onChange={e => setSearchTerm(e.target.value)}
+                    placeholder="Rechercher dans la FAQ..."
+                    className="w-full px-6 py-4 rounded-xl border border-border/20 bg-gradient-subtle focus:outline-none focus:ring-2 focus:ring-metallic-gold/50 text-deep-navy placeholder:text-deep-navy/60"
+                  />
+                  <button
+                    type="submit"
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-deep-navy/60"
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="m21 21-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
         </section>
@@ -110,7 +156,7 @@ const FAQ = () => {
                     {category.questions.map((item, itemIndex) => {
                   const globalIndex = categoryIndex * 100 + itemIndex;
                   const isOpen = openItems.includes(globalIndex);
-                  return <div key={itemIndex} className="bg-gradient-subtle rounded-xl border border-border/20 overflow-hidden">
+                  return <div id={`faq-item-${globalIndex}`} key={itemIndex} className="bg-gradient-subtle rounded-xl border border-border/20 overflow-hidden">
                           <button onClick={() => toggleItem(globalIndex)} className="w-full px-8 py-6 text-left flex items-center justify-between hover:bg-deep-navy/5 transition-colors">
                             <h3 className="font-sans font-medium text-lg text-deep-navy pr-4">
                               {item.q}

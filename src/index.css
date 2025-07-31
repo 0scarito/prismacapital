@@ -229,6 +229,19 @@
   animation-play-state: paused;
 }
 
+.shadow-neon {
+  box-shadow: 0 0 10px rgba(57, 255, 20, 0.8), 0 0 20px rgba(57, 255, 20, 0.6);
+}
+
+@keyframes heartbeat {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+.animate-heartbeat {
+  animation: heartbeat 1s infinite;
+}
+
 @layer base {
   * {
     @apply border-border;

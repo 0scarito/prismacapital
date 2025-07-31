@@ -1,23 +1,28 @@
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
+import { useState } from 'react';
+import { Slider } from '@/components/ui/slider';
+import { Progress } from '@/components/ui/progress';
 
 const Etfs = () => {
+  const [years, setYears] = useState(10);
+  const projected = (100 * Math.pow(1.07, years)).toFixed(0);
   const examples = [
     {
-      title: 'Global Equity ETF',
-      description: 'Tracks a worldwide index of large and mid-cap companies.'
+      title: 'Diversified Baskets',
+      description: 'Access stock and bond baskets in one click.'
     },
     {
-      title: 'Green Energy ETF',
-      description: 'Invests in clean-tech leaders across solar, wind and storage.'
+      title: 'Ultra-low Fees',
+      description: 'Benefit from highly competitive fees and full transparency.'
     },
     {
-      title: 'Dividend Aristocrats ETF',
-      description: 'Focus on companies with a long history of rising dividends.'
+      title: 'Strong Themes',
+      description: 'Choose focused themes: AI, climate, health, cybersecurity…'
     },
     {
-      title: 'Bond Aggregate ETF',
-      description: 'Broad exposure to investment-grade government and corporate bonds.'
+      title: 'Auto-Reinvested',
+      description: 'Dividends are reinvested automatically for long-term growth.'
     }
   ];
 
@@ -27,7 +32,15 @@ const Etfs = () => {
       <main className="pt-24 pb-16">
         <div className="section-container">
           <div className="max-w-4xl mx-auto">
-            <h1 className="text-4xl font-bold text-foreground mb-8">Diversified ETFs</h1>
+            <h1 className="text-4xl font-bold text-foreground mb-8">ETF & Indices</h1>
+            <div className="mb-8">
+              <div className="flex items-center mb-2">
+                <span className="mr-4 font-medium">Projection {years}y</span>
+                <span className="font-bold text-metallic-gold">{projected}€</span>
+              </div>
+              <Slider min={1} max={20} step={1} value={[years]} onValueChange={v => setYears(v[0])} />
+              <Progress value={(years / 20) * 100} className="mt-2" />
+            </div>
             <div className="grid sm:grid-cols-2 gap-6">
               {examples.map((ex, idx) => (
                 <div

@@ -24,6 +24,9 @@ const Footer = () => {
   return (
     <footer className="bg-midnight-navy text-white py-16">
       <div className="section-container">
+        <div className="mb-8 border-b border-white/20 pb-8">
+          <RiskWarningSlider />
+        </div>
         <div className="grid lg:grid-cols-4 gap-8 mb-12">
           {/* Brand Column */}
           <div className="lg:col-span-2">
@@ -118,11 +121,6 @@ const Footer = () => {
               </div>
             </div>
           </div>
-        </div>
-
-        {/* Risk Warning Slider */}
-        <div className="border-t border-white/20 pt-8 mb-8">
-          <RiskWarningSlider />
         </div>
 
         {/* Bottom Footer Bar */}

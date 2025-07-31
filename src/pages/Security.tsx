@@ -235,9 +235,9 @@ const Security = () => {
                   <Shield className="w-5 h-5" />
                   Contacter la Sécurité
                 </button>
-                <button className="btn-ghost inline-flex items-center gap-2">
+                <button className="btn-ghost inline-flex items-center gap-2" onClick={() => window.location.href = '/faq'}>
                   <FileCheck className="w-5 h-5" />
-                  Centre d'Aide
+                  FAQ
                 </button>
               </div>
             </div>

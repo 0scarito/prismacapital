@@ -13,6 +13,12 @@ import Security from "./pages/Security";
 import FAQ from "./pages/FAQ";
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
+import PrivateEquity from "./pages/PrivateEquity";
+import VentureCapital from "./pages/VentureCapital";
+import RealEstate from "./pages/RealEstate";
+import Commodities from "./pages/Commodities";
+import Etfs from "./pages/Etfs";
+import Crypto from "./pages/Crypto";
 import Payment from "./pages/Payment";
 import NotFound from "./pages/NotFound";
 import LegalNotices from "./pages/LegalNotices";
@@ -38,6 +44,12 @@ const App = () => (
               <Route path="/" element={<Index />} />
               <Route path="/how-it-works" element={<HowItWorks />} />
               <Route path="/investments" element={<Investments />} />
+              <Route path="/investments/private-equity" element={<PrivateEquity />} />
+              <Route path="/investments/venture-capital" element={<VentureCapital />} />
+              <Route path="/investments/real-estate" element={<RealEstate />} />
+              <Route path="/investments/commodities" element={<Commodities />} />
+              <Route path="/investments/etfs" element={<Etfs />} />
+              <Route path="/investments/crypto" element={<Crypto />} />
               <Route path="/partners" element={<Partners />} />
               <Route path="/security" element={<Security />} />
               <Route path="/faq" element={<FAQ />} />

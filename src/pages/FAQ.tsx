@@ -52,8 +52,8 @@ const FAQ = () => {
   const faqCategories = [{
     title: "Généralités",
     questions: [{
-      q: "Qu'est-ce que Cap&CO exactement ?",
-      a: "Cap&CO est une plateforme qui démocratise l'accès au capital-risque en proposant des cadeaux d'investissement. Nous permettons d'offrir des parts dans des start-ups françaises vérifiées sous forme de cartes-cadeaux physiques de €200."
+      q: "Qu'est-ce que Prisma Capital exactement ?",
+      a: "Prisma Capital est une plateforme qui démocratise l'accès au capital-risque en proposant des cadeaux d'investissement. Nous permettons d'offrir des parts dans des start-ups françaises vérifiées sous forme de cartes-cadeaux physiques de €200."
     }, {
       q: "Comment fonctionne le système de cartes-cadeaux ?",
       a: "Vous achetez une carte-cadeau physique de €200 que vous offrez. Le bénéficiaire scanne le QR code, complète son profil d'investisseur, et choisit le secteur dans lequel investir parmi nos portefeuilles diversifiés."
@@ -100,13 +100,13 @@ const FAQ = () => {
       q: "Qui est propriétaire des parts ?",
       a: "Le bénéficiaire de la carte-cadeau devient propriétaire des parts dès leur acquisition. Pour les mineurs, un compte de garde est ouvert avec le parent/tuteur comme mandataire jusqu'à la majorité."
     }, {
-      q: "Que se passe-t-il si Cap&CO ferme ?",
-      a: "Vos investissements sont détenus par notre partenaire dépositaire agréé, indépendamment de Cap&CO. En cas de fermeture, un autre gestionnaire agréé prendrait le relais pour assurer la continuité."
+      q: "Que se passe-t-il si Prisma Capital ferme ?",
+      a: "Vos investissements sont détenus par notre partenaire dépositaire agréé, indépendamment de Prisma Capital. En cas de fermeture, un autre gestionnaire agréé prendrait le relais pour assurer la continuité."
     }]
   }];
   return <div className="min-h-screen bg-background font-sans">
       <Navigation />
-      
+
       <main className="pt-24">
         {/* Hero Section */}
         <section className="py-20 bg-gradient-hero">
@@ -116,7 +116,7 @@ const FAQ = () => {
                 Questions Fréquentes
               </h1>
               <p className="font-sans text-xl text-light-gray mb-12 leading-relaxed">
-                Trouvez rapidement les réponses à vos questions sur Cap&CO, 
+                Trouvez rapidement les réponses à vos questions sur Prisma Capital,
                 nos investissements et notre processus.
               </p>
             </div>
@@ -158,7 +158,7 @@ const FAQ = () => {
                   <h2 className="font-serif font-bold text-3xl text-deep-navy mb-8 text-center">
                     {category.title}
                   </h2>
-                  
+
                   <div className="space-y-4">
                     {category.questions.map((item, itemIndex) => {
                   const globalIndex = categoryIndex * 100 + itemIndex;
@@ -170,7 +170,7 @@ const FAQ = () => {
                             </h3>
                             <ChevronDown className={`w-5 h-5 text-metallic-gold transition-transform ${isOpen ? 'rotate-180' : ''}`} />
                           </button>
-                          
+
                           {isOpen && <div className="px-8 pb-6">
                               <div className="border-t border-border/20 pt-6">
                                 <p className="font-sans text-deep-navy/80 leading-relaxed">

@@ -11,7 +11,7 @@ const Partners = () => {
         {
           name: "Autorité des Marchés Financiers (AMF)",
           role: "Régulateur principal",
-          description: "Cap&CO opère sous la supervision de l'AMF avec l'agrément FR-2024-15.",
+          description: "Prisma Capital opère sous la supervision de l'AMF avec l'agrément FR-2024-15.",
           logo: "🏛️",
           status: "Agréé"
         },
@@ -76,7 +76,7 @@ const Partners = () => {
   return (
     <div className="min-h-screen bg-background font-sans">
       <Navigation />
-      
+
       <main className="pt-24">
         {/* Hero Section */}
         <section className="py-20 bg-gradient-hero">
@@ -86,7 +86,7 @@ const Partners = () => {
                 Nos Partenaires
               </h1>
               <p className="font-sans text-xl text-light-gray mb-12 leading-relaxed">
-                Cap&CO s'appuie sur un écosystème de partenaires de confiance pour vous offrir 
+                Prisma Capital s'appuie sur un écosystème de partenaires de confiance pour vous offrir
                 la meilleure expérience d'investissement, en toute sécurité.
               </p>
             </div>

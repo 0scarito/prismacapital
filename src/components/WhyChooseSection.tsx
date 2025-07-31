@@ -55,7 +55,7 @@ const WhyChooseSection = () => {
       <div className="container mx-auto px-6 max-w-7xl">
         <div className="text-center mb-16">
           <h2 className="font-serif font-bold text-4xl lg:text-6xl text-foreground mb-6">
-            {language === 'fr' ? 'Pourquoi choisir Cap&CO ?' : 'Why Choose Cap&CO?'}
+            {language === 'fr' ? 'Pourquoi choisir Prisma Capital ?' : 'Why Choose Prisma Capital?'}
           </h2>
         </div>
 

@@ -72,7 +72,7 @@ const Auth = () => {
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl font-bold bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
-            Cap&Co
+            Prisma Capital
           </CardTitle>
           <CardDescription>
             Accédez à votre espace personnel

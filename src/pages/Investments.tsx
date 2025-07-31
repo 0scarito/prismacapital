@@ -132,7 +132,7 @@ const Investments = () => {
             <div className="grid lg:grid-cols-2 gap-12 items-center">
               <div>
                 <h2 className="font-serif font-bold text-4xl text-warm-white mb-8">
-                  Pourquoi investir avec Cap&CO ?
+                  Pourquoi investir avec Prisma Capital ?
                 </h2>
                 <div className="space-y-4">
                   {investmentBenefits.map((benefit, index) => <div key={index} className="flex items-start gap-3">

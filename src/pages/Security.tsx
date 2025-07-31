@@ -56,7 +56,7 @@ const Security = () => {
   }];
   return <div className="min-h-screen bg-background font-sans">
       <Navigation />
-      
+
       <main className="pt-24">
         {/* Hero Section */}
         <section className="py-20 bg-gradient-hero">
@@ -66,7 +66,7 @@ const Security = () => {
                 Sécurité & Conformité
               </h1>
               <p className="font-sans text-xl text-light-gray mb-12 leading-relaxed">
-                Votre sécurité est notre priorité absolue. Découvrez comment nous protégeons 
+                Votre sécurité est notre priorité absolue. Découvrez comment nous protégeons
                 vos données et vos investissements avec les plus hauts standards de l'industrie.
               </p>
               <div className="flex justify-center">
@@ -89,7 +89,7 @@ const Security = () => {
                 Protection Multi-Niveaux
               </h2>
               <p className="font-sans text-lg text-deep-navy/80 max-w-3xl mx-auto">
-                Chaque aspect de notre plateforme est conçu avec la sécurité comme priorité, 
+                Chaque aspect de notre plateforme est conçu avec la sécurité comme priorité,
                 de la collecte des données à l'exécution des investissements.
               </p>
             </div>
@@ -118,7 +118,7 @@ const Security = () => {
                 Conformité Réglementaire
               </h2>
               <p className="font-sans text-lg text-light-gray max-w-3xl mx-auto">
-                Cap&CO respecte toutes les réglementations en vigueur et maintient 
+                Prisma Capital respecte toutes les réglementations en vigueur et maintient
                 les plus hauts standards de conformité.
               </p>
             </div>
@@ -149,7 +149,7 @@ const Security = () => {
                 Notre Processus de Sécurité
               </h2>
               <p className="font-sans text-lg text-deep-navy/80 max-w-3xl mx-auto">
-                Découvrez les étapes que nous suivons pour garantir la sécurité 
+                Découvrez les étapes que nous suivons pour garantir la sécurité
                 de vos investissements à chaque moment.
               </p>
             </div>
@@ -171,7 +171,7 @@ const Security = () => {
         </section>
 
         {/* Risk Notice */}
-        
+
 
         {/* Contact Security Team */}
         <section className="py-20 bg-gradient-warm">

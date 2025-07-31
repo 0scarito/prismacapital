@@ -74,7 +74,7 @@ const HeroSection = () => {
                   <div className="w-6 h-6 bg-primary rounded flex items-center justify-center">
                     <div className="w-3 h-3 rounded-full bg-white"></div>
                   </div>
-                  <span className="font-sans text-sm text-muted-foreground">Cap&CO Gift Builder</span>
+                  <span className="font-sans text-sm text-muted-foreground">Prisma Capital Gift Builder</span>
                 </div>
                 
                 <div className="min-h-[4rem] flex items-center py-2">

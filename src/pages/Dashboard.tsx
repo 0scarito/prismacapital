@@ -234,7 +234,7 @@ const Dashboard = () => {
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <div className="flex items-center space-x-4">
             <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-slate-50">
-              Cap&Co
+              Prisma Capital
             </h1>
             <span className="text-slate-50">Espace Personnel</span>
           </div>

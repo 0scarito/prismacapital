@@ -66,7 +66,7 @@ const HowItWorksSection = () => {
               )}
               
               {/* Step Card */}
-              <div className="relative bg-gradient-subtle rounded-2xl p-8 shadow-card hover:shadow-glow transition-all duration-500 z-10 border border-border/20">
+              <div className="relative bg-gradient-subtle rounded-2xl p-8 shadow-card hover:shadow-glow transition-all duration-500 z-10 border border-border/20 h-full">
                 {/* Step Number */}
                 <div className="w-16 h-16 rounded-full bg-primary/10 border-2 border-primary flex items-center justify-center mb-6 mx-auto group-hover:scale-110 transition-transform duration-300">
                   <span className="font-sans font-bold text-2xl text-primary">

@@ -70,8 +70,8 @@ const RiskWarningSlider = () => {
   };
 
   return (
-    <div 
-      className="relative bg-orange-900/30 rounded-xl p-6 border border-orange-500/30 my-8"
+    <div
+      className="relative bg-red-900/30 rounded-xl p-6 border border-red-700 my-8 text-red-100"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
     >
@@ -81,7 +81,7 @@ const RiskWarningSlider = () => {
         className="absolute left-2 top-1/2 transform -translate-y-1/2 p-2 hover:bg-orange-500/20 rounded-full transition-colors z-10"
         aria-label="Previous warning"
       >
-        <ChevronLeft className="w-5 h-5 text-orange-200" />
+        <ChevronLeft className="w-5 h-5 text-red-200" />
       </button>
       
       <button
@@ -89,26 +89,26 @@ const RiskWarningSlider = () => {
         className="absolute right-2 top-1/2 transform -translate-y-1/2 p-2 hover:bg-orange-500/20 rounded-full transition-colors z-10"
         aria-label="Next warning"
       >
-        <ChevronRight className="w-5 h-5 text-orange-200" />
+        <ChevronRight className="w-5 h-5 text-red-200" />
       </button>
 
       {/* Content */}
       <div className="px-12">
-        <h4 className="font-heading text-lg text-orange-200 mb-3 flex items-center justify-center">
+        <h4 className="font-heading text-lg text-red-200 mb-3 flex items-center justify-center gap-2">
           <span className="mr-2">⚠️</span>
           {t('footer.riskWarning.title')}
         </h4>
         <div className="text-center">
           <div className="flex items-center justify-center gap-4 mb-4">
-            <h5 className="font-semibold text-orange-100">
+            <h5 className="font-semibold text-red-100">
               {riskWarnings[currentSlide].category}
             </h5>
-            <span className="font-bold text-sm px-2 py-1 rounded bg-orange-500/30 text-orange-200">
+            <span className="font-bold text-sm px-2 py-1 rounded bg-red-500/30 text-red-200">
               Risk {riskWarnings[currentSlide].risk}
             </span>
           </div>
           
-          <div className="text-orange-100/90 leading-relaxed whitespace-pre-line text-sm">
+          <div className="text-red-100/90 leading-relaxed whitespace-pre-line text-sm">
             {t(riskWarnings[currentSlide].key)}
           </div>
         </div>

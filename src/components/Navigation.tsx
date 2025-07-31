@@ -23,7 +23,6 @@ const Navigation = () => {
     { label: t('nav.investments'), href: '/investments' },
     { label: t('nav.partners'), href: '/partners' },
     { label: t('nav.security'), href: '/security' },
-    { label: t('nav.faq'), href: '/faq' },
     { label: t('nav.joinUs'), href: '/auth' },
   ];
 

@@ -14,7 +14,7 @@ const PrivateEquity = () => (
         </div>
       </div>
     </main>
-    <Footer />
+    <Footer riskCategory="risk.privateEquity" />
   </div>
 );
 

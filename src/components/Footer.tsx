@@ -2,7 +2,10 @@ import { Linkedin, Shield, FileText, Cookie, Eye } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import RiskWarningSlider from './RiskWarningSlider';
 
-const Footer = () => {
+interface FooterProps {
+  riskCategory?: string;
+}
+const Footer = ({ riskCategory }: FooterProps) => {
   const currentYear = new Date().getFullYear();
   const { t } = useLanguage();
 
@@ -25,7 +28,7 @@ const Footer = () => {
     <footer className="bg-midnight-navy text-white py-16">
       <div className="section-container">
         <div className="mb-8 border-b border-white/20 pb-8">
-          <RiskWarningSlider />
+          <RiskWarningSlider categoryKey={riskCategory} />
         </div>
         <div className="grid lg:grid-cols-4 gap-8 mb-12">
           {/* Brand Column */}

@@ -14,7 +14,7 @@ const RealEstate = () => (
         </div>
       </div>
     </main>
-    <Footer />
+    <Footer riskCategory="risk.realEstate" />
   </div>
 );
 

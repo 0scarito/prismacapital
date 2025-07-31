@@ -14,7 +14,7 @@ const Commodities = () => (
         </div>
       </div>
     </main>
-    <Footer />
+    <Footer riskCategory="risk.commodities" />
   </div>
 );
 

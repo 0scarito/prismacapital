@@ -1,8 +1,48 @@
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import { useState } from 'react';
-import { Slider } from '@/components/ui/slider';
-import { Progress } from '@/components/ui/progress';
+
+const PieChart = () => (
+  <svg
+    role="img"
+    aria-label="Illustration of diversified ETF allocation"
+    width="120"
+    height="120"
+    viewBox="0 0 32 32"
+  >
+    <circle cx="16" cy="16" r="16" fill="#0b121a" />
+    <path d="M16 16 L16 0 A16 16 0 0 1 31.2 9.4 Z" fill="#14b8a6" />
+    <path d="M16 16 L31.2 9.4 A16 16 0 0 1 28 28 Z" fill="#0ea5e9" />
+    <path d="M16 16 L28 28 A16 16 0 0 1 16 32 Z" fill="#c9a970" />
+  </svg>
+);
+
+const GrowthChart = ({ years }: { years: number }) => {
+  const maxYears = 20;
+  const cagr = 0.07;
+  const maxY = Math.pow(1 + cagr, maxYears);
+  const points = Array.from({ length: years + 1 }).map((_, i) => {
+    const x = (i / maxYears) * 300;
+    const y = 160 - (Math.pow(1 + cagr, i) / maxY) * 160;
+    return `${x},${y}`;
+  });
+  return (
+    <svg
+      role="img"
+      aria-label="Historical CAGR projection"
+      width="300"
+      height="160"
+      viewBox="0 0 300 160"
+    >
+      <polyline
+        fill="none"
+        stroke="#14b8a6"
+        strokeWidth="2"
+        points={points.join(' ')}
+      />
+    </svg>
+  );
+};
 
 const Etfs = () => {
   const [years, setYears] = useState(10);
@@ -27,37 +67,51 @@ const Etfs = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-[#18202C] text-warm-white">
       <Navigation />
-      <main className="pt-24 pb-16">
-        <div className="section-container">
-          <div className="max-w-4xl mx-auto">
-            <h1 className="text-4xl font-bold text-foreground mb-8">ETF & Indices</h1>
-            <div className="mb-8">
-              <div className="flex items-center mb-2">
-                <span className="mr-4 font-medium">Projection {years}y</span>
-                <span className="font-bold text-metallic-gold">{projected}€</span>
+      <main className="pt-24 pb-16 space-y-16">
+        <section className="section-container h-[20rem] flex items-center justify-between">
+          <h1 className="text-4xl md:text-5xl font-bold">ETF &amp; Indices</h1>
+          <PieChart />
+        </section>
+
+        <section className="section-container">
+          <div className="flex flex-wrap justify-center gap-6">
+            {examples.map((ex, idx) => (
+              <div
+                key={idx}
+                className="w-[28rem] h-[12rem] bg-[#1b2532] border border-teal-800 rounded-lg p-6 flex flex-col justify-between shadow-prisma-card"
+              >
+                <h3 className="font-serif text-xl text-teal-100 mb-2 font-bold">
+                  {ex.title}
+                </h3>
+                <p className="text-teal-50 leading-relaxed text-sm">{ex.description}</p>
               </div>
-              <Slider min={1} max={20} step={1} value={[years]} onValueChange={v => setYears(v[0])} />
-              <Progress value={(years / 20) * 100} className="mt-2" />
+            ))}
+          </div>
+        </section>
+
+        <section className="section-container">
+          <div className="bg-[#0b0f14] rounded-lg p-6 md:flex items-center gap-6">
+            <div className="md:w-1/3 w-full mb-6 md:mb-0">
+              <label htmlFor="years" className="block mb-2 text-teal-100 font-medium">
+                Projection {years}y → {projected}€
+              </label>
+              <input
+                id="years"
+                type="range"
+                min="1"
+                max="20"
+                value={years}
+                onChange={e => setYears(parseInt(e.target.value))}
+                className="w-full accent-teal-500"
+              />
             </div>
-            <div className="grid sm:grid-cols-2 gap-6">
-              {examples.map((ex, idx) => (
-                <div
-                  key={idx}
-                  className="bg-card rounded-lg p-6 border border-border shadow-prisma-card"
-                >
-                  <h3 className="font-serif text-lg text-foreground mb-2 font-bold">
-                    {ex.title}
-                  </h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    {ex.description}
-                  </p>
-                </div>
-              ))}
+            <div className="md:w-2/3 w-full flex justify-center">
+              <GrowthChart years={years} />
             </div>
           </div>
-        </div>
+        </section>
       </main>
       <Footer riskCategory="risk.etf" />
     </div>

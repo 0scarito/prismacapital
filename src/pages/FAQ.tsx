@@ -2,29 +2,30 @@ import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import { useState } from 'react';
 import { ChevronDown, MessageCircle, Phone, Mail } from 'lucide-react';
+import Fuse from 'fuse.js';
+import { useToast } from '@/hooks/use-toast';
 const FAQ = () => {
   const [openItems, setOpenItems] = useState<number[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
 
   const findBestMatch = (query: string) => {
     if (!query) return null;
-    const tokens = query.toLowerCase().split(/\s+/);
-    let best: { cat: number; idx: number; score: number } | null = null;
-
+    const list: { cat: number; idx: number; q: string; a: string }[] = [];
     faqCategories.forEach((cat, c) => {
       cat.questions.forEach((q, i) => {
-        const text = (q.q + ' ' + q.a).toLowerCase();
-        const score = tokens.reduce(
-          (acc, t) => acc + (text.includes(t) ? 1 : 0),
-          0,
-        );
-        if (!best || score > best.score) {
-          best = { cat: c, idx: i, score };
-        }
+        list.push({ cat: c, idx: i, q: q.q, a: q.a });
       });
     });
-    return best && best.score > 0 ? best : null;
+    const fuse = new Fuse(list, {
+      keys: ['q', 'a'],
+      includeScore: true,
+      threshold: 0.4,
+    });
+    const result = fuse.search(query);
+    return result.length > 0 ? result[0].item : null;
   };
+
+  const { toast } = useToast();
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,8 +36,14 @@ const FAQ = () => {
       setTimeout(() => {
         document
           .getElementById(`faq-item-${globalIndex}`)
-          ?.scrollIntoView({ behavior: 'smooth' });
+          ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }, 0);
+    } else {
+      toast({
+        title: 'Aucun résultat',
+        description:
+          "Nous n'avons trouvé aucune question similaire. N'hésitez pas à contacter notre équipe.",
+      });
     }
   };
   const toggleItem = (index: number) => {

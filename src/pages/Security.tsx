@@ -1,5 +1,6 @@
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
+import { Link } from 'react-router-dom';
 import { Shield, Lock, Eye, FileCheck, Server, Users, AlertTriangle, CheckCircle } from 'lucide-react';
 const Security = () => {
   const securityFeatures = [{
@@ -187,10 +188,10 @@ const Security = () => {
                   <Shield className="w-5 h-5" />
                   Contacter la Sécurité
                 </button>
-                <button className="btn-ghost inline-flex items-center gap-2" onClick={() => window.location.href = '/faq'}>
+                <Link to="/faq" className="btn-ghost inline-flex items-center gap-2">
                   <FileCheck className="w-5 h-5" />
                   FAQ
-                </button>
+                </Link>
               </div>
             </div>
           </div>

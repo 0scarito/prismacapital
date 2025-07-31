@@ -37,6 +37,10 @@ const translations = {
     fr: 'Mon Espace',
     en: 'My Space'
   },
+  'nav.home': {
+    fr: 'Accueil',
+    en: 'Home'
+  },
   'nav.joinUs': {
     fr: 'Se connecter',
     en: 'Join us'

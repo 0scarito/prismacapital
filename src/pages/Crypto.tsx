@@ -1,6 +1,6 @@
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
-import { Coins, Zap, ParkingCircle, Bell } from 'lucide-react';
+import { ArrowLeft, Coins, Zap, ParkingCircle, Bell } from 'lucide-react';
 
 const Crypto = () => {
   const prices = ['BTC $65,000', 'ETH $3,400', 'SOL $180', 'ADA $0.60'];
@@ -31,6 +31,15 @@ const Crypto = () => {
     <div className="min-h-screen bg-background">
       <Navigation />
       <main className="pt-24 pb-16">
+        <div className="section-container">
+          <button
+            onClick={() => window.history.back()}
+            className="flex items-center gap-2 text-muted-foreground hover:text-foreground mb-8"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Back to investments
+          </button>
+        </div>
         <section className="relative h-[20rem] bg-[#0F1427] flex items-center overflow-hidden">
           <h1 className="text-4xl font-bold text-cyan-100 pl-6 z-10">Crypto-assets</h1>
           <Coins className="absolute right-8 bottom-6 w-40 h-40 text-cyan-300/80" />

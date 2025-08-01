@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
-import { TrendingUp, ArrowRight, DollarSign, BarChart3, Target, Briefcase } from 'lucide-react';
+import { ArrowLeft, TrendingUp, ArrowRight, DollarSign, BarChart3, Target, Briefcase } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 
 const PrivateEquity = () => {
@@ -69,6 +69,16 @@ const PrivateEquity = () => {
       </div>
 
       <main className="pt-24 pb-16">
+        <div className="section-container">
+          <button
+            onClick={() => window.history.back()}
+            className="flex items-center gap-2 text-muted-foreground hover:text-foreground mb-8"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            {language === 'fr' ? 'Retour aux investissements' : 'Back to investments'}
+          </button>
+        </div>
+
         {/* Hero */}
         <section className="py-20 bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900">
           <div className="section-container">

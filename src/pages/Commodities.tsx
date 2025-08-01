@@ -2,7 +2,7 @@ import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import WorldMap from '@/components/WorldMap';
 import { useState } from 'react';
-import { Coins, Wheat, Zap, Link as Chain } from 'lucide-react';
+import { ArrowLeft, Coins, Wheat, Zap, Link as Chain } from 'lucide-react';
 
 const Commodities = () => {
   const [highlight, setHighlight] = useState<string | undefined>(undefined);
@@ -44,6 +44,15 @@ const Commodities = () => {
     <div className="min-h-screen bg-background">
       <Navigation />
       <main className="pt-24 pb-16">
+        <div className="section-container">
+          <button
+            onClick={() => window.history.back()}
+            className="flex items-center gap-2 text-muted-foreground hover:text-foreground mb-8"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Back to investments
+          </button>
+        </div>
         {/* Hero Banner */}
         <section
           className="relative h-72 flex items-center justify-center text-white mb-12"

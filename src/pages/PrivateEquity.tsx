@@ -212,20 +212,21 @@ const PrivateEquity = () => {
       </main>
 
       {/* Portfolio Drawer */}
-      {isDrawerOpen && (
-        <div className="fixed inset-0 z-50 bg-black/50 flex justify-end">
-          <div className="bg-white w-96 h-full p-8 overflow-y-auto">
-            <div className="flex justify-between items-center mb-8">
-              <h3 className="text-2xl font-bold text-slate-800">
-                {language === 'fr' ? 'Portfolio' : 'Portfolio'}
-              </h3>
-              <button
-                onClick={() => setIsDrawerOpen(false)}
-                className="p-2 hover:bg-slate-100 rounded-full"
-              >
-                ✕
-              </button>
-            </div>
+        {isDrawerOpen && (
+          <div className="fixed inset-0 z-50 bg-black/50 flex justify-end">
+            <div className="bg-white w-96 h-full p-8 overflow-y-auto">
+              <div className="flex items-center gap-3 mb-8">
+                <button
+                  onClick={() => setIsDrawerOpen(false)}
+                  className="flex items-center text-slate-600 hover:text-slate-800"
+                >
+                  <ArrowLeft className="w-6 h-6" />
+                  <span className="ml-1">Return</span>
+                </button>
+                <h3 className="text-2xl font-bold text-slate-800">
+                  {language === 'fr' ? 'Portfolio' : 'Portfolio'}
+                </h3>
+              </div>
             
             <div className="space-y-6">
               <div className="bg-slate-50 p-6 rounded-lg">

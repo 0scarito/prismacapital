@@ -54,8 +54,11 @@ const Commodities = () => {
       <Navigation />
 
       <div className="fixed top-32 right-8 z-50">
-        <button onClick={() => setShowPortfolio(true)} className="bg-orange-400 text-slate-900 w-10 h-10 rounded-full flex items-center justify-center shadow-lg">
-          <Briefcase className="w-4 h-4" />
+        <button
+          onClick={() => setShowPortfolio(true)}
+          className="bg-metallic-gold text-deep-navy w-12 h-12 rounded-full flex items-center justify-center shadow-lg"
+        >
+          <Briefcase className="w-6 h-6" />
         </button>
       </div>
       <main className="pt-24 pb-16">

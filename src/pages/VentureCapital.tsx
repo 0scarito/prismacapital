@@ -3,14 +3,34 @@ import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import { ArrowLeft, Rocket, Play, TrendingUp, Calendar, Target, Users } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
+
+interface Deal {
+  id: number;
+  name: string;
+  stage: string;
+  funding: string;
+  valuation: string;
+  milestones: string[];
+  video: string;
+}
+
+interface Platform {
+  id: number;
+  theme: string;
+  color: string;
+  height: string;
+  deals: Deal[];
+}
 const VentureCapital = () => {
   const {
     language
   } = useLanguage();
   const [scrollY, setScrollY] = useState(0);
   const [activePlatform, setActivePlatform] = useState<number | null>(null);
-  const [selectedDeal, setSelectedDeal] = useState<any | null>(null);
-  const platforms = [{
+  const [selectedDeal, setSelectedDeal] = useState<Deal | null>(null);
+  const [spinFast, setSpinFast] = useState(false);
+  const [towerOffset, setTowerOffset] = useState(0);
+  const platforms: Platform[] = [{
     id: 1,
     theme: 'DeepTech',
     color: 'from-purple-600 to-purple-800',
@@ -87,12 +107,20 @@ const VentureCapital = () => {
     const handleScroll = () => {
       setScrollY(window.scrollY);
     };
+    const handleWheel = (e: WheelEvent) => {
+      setTowerOffset(prev => Math.max(prev + (e.deltaY > 0 ? 40 : -40), 0));
+    };
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener('wheel', handleWheel);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('wheel', handleWheel);
+    };
   }, []);
   const allDeals = platforms.flatMap(p => p.deals);
   const avgIRR = '28.5';
-  return <div className="min-h-screen bg-slate-950 text-white">
+  return (
+    <div className="min-h-screen bg-slate-950 text-white">
       <Navigation />
       
       <main className="pt-24">
@@ -104,7 +132,7 @@ const VentureCapital = () => {
         </div>
 
         {/* Hero with Rocket Nosecone */}
-        <section className="py-20 bg-gradient-to-b from-slate-900 to-slate-950 relative">
+        <section className="py-20 bg-gradient-to-b from-slate-900 to-slate-950 relative" style={{ backgroundPositionY: `-${towerOffset}px` }}>
           <div className="section-container">
             <div className="text-center">
               <h1 className="text-6xl font-bold mb-6">
@@ -117,7 +145,15 @@ const VentureCapital = () => {
 
             {/* Rocket Nosecone with Portfolio Performance */}
             <div className="flex justify-center">
-              <div className="relative bg-gradient-to-t from-slate-700 to-slate-600 w-32 h-48 rounded-t-full border-4 border-orange-400 hover:scale-105 transition-transform cursor-pointer group" onMouseEnter={() => setActivePlatform(0)}>
+              <div
+                className="relative bg-gradient-to-t from-slate-700 to-slate-600 w-32 h-48 rounded-t-full border-4 border-orange-400 hover:scale-105 transition-transform cursor-pointer group"
+                style={{ animation: `spin ${spinFast ? 2 : 60}s linear infinite` }}
+                onMouseEnter={() => {
+                  setSpinFast(true);
+                  setActivePlatform(0);
+                  setTimeout(() => setSpinFast(false), 2000);
+                }}
+              >
                 <Rocket className="w-8 h-8 text-orange-400 absolute top-4 left-1/2 transform -translate-x-1/2" />
                 <div className="absolute inset-0 flex flex-col justify-center items-center text-center px-4">
                   <div className="text-sm text-slate-300 mb-1">Portfolio IRR</div>
@@ -141,10 +177,24 @@ const VentureCapital = () => {
             <div className="relative">
               {/* Tower Structure */}
               <div className="flex flex-col-reverse gap-8 max-w-4xl mx-auto">
-                {platforms.map((platform, index) => <div key={platform.id} className={`relative bg-gradient-to-r ${platform.color} rounded-2xl p-8 transform transition-all duration-500`} style={{
-                transform: `translateY(${-scrollY * 0.1 * (index + 1)}px)`,
-                minHeight: '200px'
-              }}>
+                {platforms.map((platform, index) => (
+                  <div
+                    key={platform.id}
+                    className={`relative overflow-hidden rounded-2xl p-8 bg-gradient-to-r ${platform.color} transform transition-all duration-500`}
+                    style={{
+                      transform: `translateY(${-(scrollY * 0.1 * (index + 1)) - towerOffset}px)`,
+                      minHeight: '200px'
+                    }}
+                  >
+                    <div
+                      className="absolute inset-0 opacity-10 pointer-events-none"
+                      style={{
+                        backgroundImage:
+                          "repeating-linear-gradient(45deg, rgba(255,255,255,0.1) 0 2px, transparent 2px 10px), repeating-linear-gradient(-45deg, rgba(255,255,255,0.1) 0 2px, transparent 2px 10px)",
+                        backgroundSize: '20px 20px',
+                        transform: `translateY(${scrollY * 0.05 * (index + 1)}px)`
+                      }}
+                    />
                     <div className="flex justify-between items-start mb-6">
                       <h3 className="text-3xl font-bold text-white">{platform.theme}</h3>
                       <div className="text-sm bg-white/20 px-3 py-1 rounded-full">
@@ -154,34 +204,37 @@ const VentureCapital = () => {
 
                     {/* Launch Pads (Deal Cards) */}
                     <div className="grid md:grid-cols-2 gap-6">
-                      {platform.deals.map(deal => <div key={deal.id} className="bg-white/10 backdrop-blur-sm rounded-xl p-6 hover:bg-white/20 transition-all duration-300 cursor-pointer relative group" onClick={() => setSelectedDeal(deal)}>
-                          {/* Pulse animation */}
-                          <div className="absolute -inset-1 bg-white/20 rounded-xl animate-pulse opacity-0 group-hover:opacity-100 transition-opacity" />
-                          
-                          <div className="relative">
-                            <div className="flex justify-between items-start mb-4">
-                              <h4 className="text-xl font-bold text-white">{deal.name}</h4>
-                              <Play className="w-6 h-6 text-white/60 group-hover:text-white transition-colors" />
+                      {platform.deals.map((deal) => (
+                        <div
+                          key={deal.id}
+                          className="relative w-64 h-64 mx-auto group"
+                          onClick={() => setSelectedDeal(deal)}
+                        >
+                          <div className="absolute inset-0 rounded-full border border-orange-400 opacity-30 animate-spin-slow" />
+                          <div className="relative bg-white/10 backdrop-blur-sm rounded-full p-6 hover:bg-white/20 transition-all duration-300 cursor-pointer group-hover:-translate-y-1" style={{ top: '-3px' }}>
+                            <div className="flex justify-between items-start mb-2">
+                              <h4 className="text-lg font-bold text-white truncate">{deal.name}</h4>
+                              <Play className="w-5 h-5 text-white/60 group-hover:text-white transition-colors" />
                             </div>
-
-                            <div className="grid grid-cols-2 gap-4 mb-4">
+                            <div className="grid grid-cols-2 gap-2 text-sm mb-2">
                               <div>
-                                <div className="text-sm text-white/60">{language === 'fr' ? 'Étape' : 'Stage'}</div>
+                                <div className="text-white/60">{language === 'fr' ? 'Étape' : 'Stage'}</div>
                                 <div className="font-medium text-white">{deal.stage}</div>
                               </div>
                               <div>
-                                <div className="text-sm text-white/60">{language === 'fr' ? 'Financement' : 'Funding'}</div>
+                                <div className="text-white/60">{language === 'fr' ? 'Financement' : 'Funding'}</div>
                                 <div className="font-medium text-white">{deal.funding}</div>
                               </div>
                             </div>
-
                             <div className="text-sm text-white/80">
                               {language === 'fr' ? 'Valorisation' : 'Valuation'}: <span className="font-medium">{deal.valuation}</span>
                             </div>
                           </div>
-                        </div>)}
+                        </div>
+                      ))}
                     </div>
-                  </div>)}
+                  </div>
+                ))}
               </div>
 
               {/* Tower Support Structure */}
@@ -216,8 +269,13 @@ const VentureCapital = () => {
       </main>
 
       {/* Mission Control Modal */}
-      {selectedDeal && <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-8">
-          <div className="bg-slate-900 rounded-2xl p-8 max-w-4xl w-full max-h-[90vh] overflow-y-auto border border-slate-700">
+      {selectedDeal && (
+        <div className="fixed inset-0 z-50">
+          <div
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            onClick={() => setSelectedDeal(null)}
+          />
+          <div className="absolute right-0 top-0 h-full w-full md:max-w-xl bg-slate-900 border-l border-slate-700 p-8 overflow-y-auto animate-slide-in-right">
             <div className="flex justify-between items-start mb-8">
               <h3 className="text-3xl font-bold text-white">{selectedDeal.name}</h3>
               <button onClick={() => setSelectedDeal(null)} className="text-slate-400 hover:text-white text-2xl">
@@ -275,9 +333,11 @@ const VentureCapital = () => {
               </div>
             </div>
           </div>
-        </div>}
+        </div>
+      )}
 
       <Footer />
-    </div>;
+    </div>
+  );
 };
 export default VentureCapital;

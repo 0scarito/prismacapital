@@ -1,6 +1,7 @@
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import { useState } from 'react';
+import { ArrowLeft } from 'lucide-react';
 
 const PieChart = () => (
   <svg
@@ -70,6 +71,15 @@ const Etfs = () => {
     <div className="min-h-screen bg-[#18202C] text-warm-white">
       <Navigation />
       <main className="pt-24 pb-16 space-y-16">
+        <div className="section-container">
+          <button
+            onClick={() => window.history.back()}
+            className="flex items-center gap-2 text-teal-200 hover:text-white mb-8"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Back to investments
+          </button>
+        </div>
         <section className="section-container h-[20rem] flex items-center justify-between">
           <h1 className="text-4xl md:text-5xl font-bold">ETF &amp; Indices</h1>
           <PieChart />

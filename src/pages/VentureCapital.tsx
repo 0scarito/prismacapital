@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
-import { Rocket, Play, TrendingUp, Calendar, Target, Users } from 'lucide-react';
+import { ArrowLeft, Rocket, Play, TrendingUp, Calendar, Target, Users } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 
 const VentureCapital = () => {
@@ -115,6 +115,16 @@ const VentureCapital = () => {
       <Navigation />
       
       <main className="pt-24">
+        <div className="section-container">
+          <button
+            onClick={() => window.history.back()}
+            className="flex items-center gap-2 text-muted-foreground hover:text-foreground mb-8"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            {language === 'fr' ? 'Retour aux investissements' : 'Back to investments'}
+          </button>
+        </div>
+
         {/* Hero with Rocket Nosecone */}
         <section className="py-20 bg-gradient-to-b from-slate-900 to-slate-950 relative">
           <div className="section-container">

@@ -3,103 +3,89 @@ import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import { ArrowLeft, Building, Home, Zap, TrendingUp, Play, MapPin, DollarSign, Calendar, Users } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
-
 const RealEstate = () => {
-  const { language } = useLanguage();
+  const {
+    language
+  } = useLanguage();
   const [rotation, setRotation] = useState(0);
   const [selectedRoom, setSelectedRoom] = useState<any | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState(0);
-
-  const floors = [
-    {
-      id: 'rooftop',
-      name: language === 'fr' ? 'Toit - Énergies' : 'Rooftop - Energy',
-      level: 3,
-      color: 'from-green-500 to-green-700',
-      projects: [
-        {
-          id: 1,
-          name: 'Solar Park Berlin',
-          type: 'Green Energy',
-          yield: '8.2%',
-          occupancy: '100%',
-          financing: 85,
-          value: '€2.4M',
-          photos: ['solar1.jpg', 'solar2.jpg'],
-          description: language === 'fr' ? 'Parc solaire urbain premium' : 'Premium urban solar park'
-        }
-      ]
-    },
-    {
-      id: 'upper',
-      name: language === 'fr' ? 'Étage - Résidentiel' : 'Upper Floor - Residential',
-      level: 2,
-      color: 'from-blue-500 to-blue-700',
-      projects: [
-        {
-          id: 2,
-          name: 'Luxury Apartments Munich',
-          type: 'Residential',
-          yield: '6.8%',
-          occupancy: '95%',
-          financing: 78,
-          value: '€8.7M',
-          photos: ['apt1.jpg', 'apt2.jpg', 'apt3.jpg'],
-          description: language === 'fr' ? 'Appartements de luxe centre-ville' : 'Luxury downtown apartments'
-        },
-        {
-          id: 3,
-          name: 'Student Housing Frankfurt',
-          type: 'Residential',
-          yield: '7.4%',
-          occupancy: '100%',
-          financing: 92,
-          value: '€5.2M',
-          photos: ['student1.jpg', 'student2.jpg'],
-          description: language === 'fr' ? 'Résidence étudiante moderne' : 'Modern student residence'
-        }
-      ]
-    },
-    {
-      id: 'ground',
-      name: language === 'fr' ? 'Rez-de-chaussée - Commercial' : 'Ground Floor - Commercial',
-      level: 1,
-      color: 'from-purple-500 to-purple-700',
-      projects: [
-        {
-          id: 4,
-          name: 'Retail Center Hamburg',
-          type: 'Commercial',
-          yield: '9.1%',
-          occupancy: '88%',
-          financing: 67,
-          value: '€12.3M',
-          photos: ['retail1.jpg', 'retail2.jpg'],
-          description: language === 'fr' ? 'Centre commercial premium' : 'Premium shopping center'
-        },
-        {
-          id: 5,
-          name: 'Office Complex Düsseldorf',
-          type: 'Office',
-          yield: '7.9%',
-          occupancy: '92%',
-          financing: 73,
-          value: '€15.6M',
-          photos: ['office1.jpg', 'office2.jpg', 'office3.jpg'],
-          description: language === 'fr' ? 'Complexe de bureaux moderne' : 'Modern office complex'
-        }
-      ]
-    }
-  ];
-
+  const floors = [{
+    id: 'rooftop',
+    name: language === 'fr' ? 'Toit - Énergies' : 'Rooftop - Energy',
+    level: 3,
+    color: 'from-green-500 to-green-700',
+    projects: [{
+      id: 1,
+      name: 'Solar Park Berlin',
+      type: 'Green Energy',
+      yield: '8.2%',
+      occupancy: '100%',
+      financing: 85,
+      value: '€2.4M',
+      photos: ['solar1.jpg', 'solar2.jpg'],
+      description: language === 'fr' ? 'Parc solaire urbain premium' : 'Premium urban solar park'
+    }]
+  }, {
+    id: 'upper',
+    name: language === 'fr' ? 'Étage - Résidentiel' : 'Upper Floor - Residential',
+    level: 2,
+    color: 'from-blue-500 to-blue-700',
+    projects: [{
+      id: 2,
+      name: 'Luxury Apartments Munich',
+      type: 'Residential',
+      yield: '6.8%',
+      occupancy: '95%',
+      financing: 78,
+      value: '€8.7M',
+      photos: ['apt1.jpg', 'apt2.jpg', 'apt3.jpg'],
+      description: language === 'fr' ? 'Appartements de luxe centre-ville' : 'Luxury downtown apartments'
+    }, {
+      id: 3,
+      name: 'Student Housing Frankfurt',
+      type: 'Residential',
+      yield: '7.4%',
+      occupancy: '100%',
+      financing: 92,
+      value: '€5.2M',
+      photos: ['student1.jpg', 'student2.jpg'],
+      description: language === 'fr' ? 'Résidence étudiante moderne' : 'Modern student residence'
+    }]
+  }, {
+    id: 'ground',
+    name: language === 'fr' ? 'Rez-de-chaussée - Commercial' : 'Ground Floor - Commercial',
+    level: 1,
+    color: 'from-purple-500 to-purple-700',
+    projects: [{
+      id: 4,
+      name: 'Retail Center Hamburg',
+      type: 'Commercial',
+      yield: '9.1%',
+      occupancy: '88%',
+      financing: 67,
+      value: '€12.3M',
+      photos: ['retail1.jpg', 'retail2.jpg'],
+      description: language === 'fr' ? 'Centre commercial premium' : 'Premium shopping center'
+    }, {
+      id: 5,
+      name: 'Office Complex Düsseldorf',
+      type: 'Office',
+      yield: '7.9%',
+      occupancy: '92%',
+      financing: 73,
+      value: '€15.6M',
+      photos: ['office1.jpg', 'office2.jpg', 'office3.jpg'],
+      description: language === 'fr' ? 'Complexe de bureaux moderne' : 'Modern office complex'
+    }]
+  }];
   const allProjects = floors.flatMap(floor => floor.projects);
   const totalRent = allProjects.reduce((sum, project) => {
     const value = parseFloat(project.value.replace('€', '').replace('M', ''));
     const yield_ = parseFloat(project.yield.replace('%', ''));
-    return sum + (value * yield_ / 100);
+    return sum + value * yield_ / 100;
   }, 0);
-
   useEffect(() => {
     const interval = setInterval(() => {
       if (!isDragging && !selectedRoom) {
@@ -108,12 +94,10 @@ const RealEstate = () => {
     }, 50);
     return () => clearInterval(interval);
   }, [isDragging, selectedRoom]);
-
   const handleMouseDown = (e: React.MouseEvent) => {
     setIsDragging(true);
     setDragStart(e.clientX);
   };
-
   const handleMouseMove = (e: React.MouseEvent) => {
     if (isDragging) {
       const deltaX = e.clientX - dragStart;
@@ -121,21 +105,15 @@ const RealEstate = () => {
       setDragStart(e.clientX);
     }
   };
-
   const handleMouseUp = () => {
     setIsDragging(false);
   };
-
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-700">
+  return <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-700">
       <Navigation />
       
       <main className="pt-24">
         <div className="section-container">
-          <button
-            onClick={() => window.history.back()}
-            className="flex items-center gap-2 text-muted-foreground hover:text-foreground mb-8"
-          >
+          <button onClick={() => window.history.back()} className="flex items-center gap-2 mb-8 text-slate-50">
             <ArrowLeft className="w-4 h-4" />
             {language === 'fr' ? 'Retour aux investissements' : 'Back to investments'}
           </button>
@@ -149,10 +127,7 @@ const RealEstate = () => {
                 {language === 'fr' ? 'Crowdfunding Immobilier' : 'Real-estate Crowdfunding'}
               </h1>
               <p className="text-xl text-slate-300 max-w-3xl mx-auto">
-                {language === 'fr' 
-                  ? 'Explorez notre villa d\'investissement interactive. Chaque pièce représente un projet immobilier en cours.'
-                  : 'Explore our interactive investment villa. Each room represents an active real estate project.'
-                }
+                {language === 'fr' ? 'Explorez notre villa d\'investissement interactive. Chaque pièce représente un projet immobilier en cours.' : 'Explore our interactive investment villa. Each room represents an active real estate project.'}
               </p>
             </div>
 
@@ -183,41 +158,25 @@ const RealEstate = () => {
                 {language === 'fr' ? 'Villa d\'Investissement 3D' : '3D Investment Villa'}
               </h3>
               <p className="text-slate-400">
-                {language === 'fr' 
-                  ? 'Glissez horizontalement pour faire tourner la villa • Cliquez sur une pièce pour les détails'
-                  : 'Drag horizontally to rotate the villa • Click on a room for details'
-                }
+                {language === 'fr' ? 'Glissez horizontalement pour faire tourner la villa • Cliquez sur une pièce pour les détails' : 'Drag horizontally to rotate the villa • Click on a room for details'}
               </p>
             </div>
 
             {/* 3D Villa Container */}
-            <div 
-              className="relative h-96 mx-auto max-w-4xl cursor-grab active:cursor-grabbing"
-              onMouseDown={handleMouseDown}
-              onMouseMove={handleMouseMove}
-              onMouseUp={handleMouseUp}
-              onMouseLeave={handleMouseUp}
-              style={{ perspective: '1200px' }}
-            >
-              <div 
-                className="absolute inset-0 transform-gpu transition-transform"
-                style={{
-                  transform: `rotateY(${rotation}deg)`,
-                  transformStyle: 'preserve-3d'
-                }}
-              >
+            <div className="relative h-96 mx-auto max-w-4xl cursor-grab active:cursor-grabbing" onMouseDown={handleMouseDown} onMouseMove={handleMouseMove} onMouseUp={handleMouseUp} onMouseLeave={handleMouseUp} style={{
+            perspective: '1200px'
+          }}>
+              <div className="absolute inset-0 transform-gpu transition-transform" style={{
+              transform: `rotateY(${rotation}deg)`,
+              transformStyle: 'preserve-3d'
+            }}>
                 {/* Villa Structure */}
-                {floors.map((floor, floorIndex) => (
-                  <div
-                    key={floor.id}
-                    className={`absolute w-80 h-24 bg-gradient-to-r ${floor.color} rounded-lg border-2 border-white/30`}
-                    style={{
-                      bottom: `${floorIndex * 80 + 50}px`,
-                      left: '50%',
-                      transform: 'translateX(-50%)',
-                      transformStyle: 'preserve-3d'
-                    }}
-                  >
+                {floors.map((floor, floorIndex) => <div key={floor.id} className={`absolute w-80 h-24 bg-gradient-to-r ${floor.color} rounded-lg border-2 border-white/30`} style={{
+                bottom: `${floorIndex * 80 + 50}px`,
+                left: '50%',
+                transform: 'translateX(-50%)',
+                transformStyle: 'preserve-3d'
+              }}>
                     {/* Floor Label */}
                     <div className="absolute -left-32 top-1/2 transform -translate-y-1/2 text-white font-bold">
                       {floor.name}
@@ -225,12 +184,7 @@ const RealEstate = () => {
 
                     {/* Room Divisions */}
                     <div className="h-full flex">
-                      {floor.projects.map((project, projectIndex) => (
-                        <div
-                          key={project.id}
-                          className="flex-1 relative group cursor-pointer"
-                          onClick={() => setSelectedRoom(project)}
-                        >
+                      {floor.projects.map((project, projectIndex) => <div key={project.id} className="flex-1 relative group cursor-pointer" onClick={() => setSelectedRoom(project)}>
                           {/* Room Content */}
                           <div className="h-full p-3 flex flex-col justify-center items-center text-center text-white/90 group-hover:text-white transition-colors">
                             <div className="text-sm font-bold">{project.name}</div>
@@ -238,20 +192,16 @@ const RealEstate = () => {
                           </div>
 
                           {/* Room Divider */}
-                          {projectIndex < floor.projects.length - 1 && (
-                            <div className="absolute right-0 top-2 bottom-2 w-px bg-white/30" />
-                          )}
+                          {projectIndex < floor.projects.length - 1 && <div className="absolute right-0 top-2 bottom-2 w-px bg-white/30" />}
 
                           {/* Hover Effect */}
                           <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity rounded" />
-                        </div>
-                      ))}
+                        </div>)}
                     </div>
 
                     {/* Floor Accent Light */}
                     <div className="absolute -bottom-1 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white/50 to-transparent" />
-                  </div>
-                ))}
+                  </div>)}
 
                 {/* Villa Base */}
                 <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-96 h-12 bg-slate-800 rounded-lg border border-slate-600" />
@@ -265,11 +215,9 @@ const RealEstate = () => {
                   {language === 'fr' ? 'Plan de la Villa' : 'Villa Layout'}
                 </div>
                 <div className="flex gap-2">
-                  {floors.map(floor => (
-                    <div key={floor.id} className={`w-16 h-8 bg-gradient-to-r ${floor.color} rounded text-xs text-white flex items-center justify-center`}>
+                  {floors.map(floor => <div key={floor.id} className={`w-16 h-8 bg-gradient-to-r ${floor.color} rounded text-xs text-white flex items-center justify-center`}>
                       L{floor.level}
-                    </div>
-                  ))}
+                    </div>)}
                 </div>
               </div>
             </div>
@@ -317,8 +265,7 @@ const RealEstate = () => {
       </main>
 
       {/* Property Dossier Modal */}
-      {selectedRoom && (
-        <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-8">
+      {selectedRoom && <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-8">
           <div className="bg-slate-900 rounded-2xl p-8 max-w-4xl w-full max-h-[90vh] overflow-y-auto border border-slate-700">
             <div className="flex justify-between items-start mb-8">
               <div>
@@ -328,10 +275,7 @@ const RealEstate = () => {
                   <span>{selectedRoom.type}</span>
                 </div>
               </div>
-              <button
-                onClick={() => setSelectedRoom(null)}
-                className="text-slate-400 hover:text-white text-2xl"
-              >
+              <button onClick={() => setSelectedRoom(null)} className="text-slate-400 hover:text-white text-2xl">
                 ✕
               </button>
             </div>
@@ -347,11 +291,9 @@ const RealEstate = () => {
                   </div>
                 </div>
                 <div className="flex gap-2">
-                  {selectedRoom.photos.map((photo: string, index: number) => (
-                    <div key={index} className="w-16 h-12 bg-slate-800 rounded border border-slate-600 flex items-center justify-center">
+                  {selectedRoom.photos.map((photo: string, index: number) => <div key={index} className="w-16 h-12 bg-slate-800 rounded border border-slate-600 flex items-center justify-center">
                       <span className="text-xs text-slate-500">{index + 1}</span>
-                    </div>
-                  ))}
+                    </div>)}
                 </div>
               </div>
 
@@ -387,10 +329,9 @@ const RealEstate = () => {
                     {language === 'fr' ? 'Progression du Financement' : 'Financing Progress'}
                   </h4>
                   <div className="bg-slate-800 rounded-full h-4 overflow-hidden">
-                    <div 
-                      className="h-full bg-gradient-to-r from-orange-400 to-orange-500 transition-all duration-500"
-                      style={{ width: `${selectedRoom.financing}%` }}
-                    />
+                    <div className="h-full bg-gradient-to-r from-orange-400 to-orange-500 transition-all duration-500" style={{
+                  width: `${selectedRoom.financing}%`
+                }} />
                   </div>
                   <div className="flex justify-between text-sm text-slate-400 mt-2">
                     <span>0%</span>
@@ -411,12 +352,9 @@ const RealEstate = () => {
               </div>
             </div>
           </div>
-        </div>
-      )}
+        </div>}
 
       <Footer />
-    </div>
-  );
+    </div>;
 };
-
 export default RealEstate;

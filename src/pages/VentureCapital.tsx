@@ -3,102 +3,86 @@ import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import { ArrowLeft, Rocket, Play, TrendingUp, Calendar, Target, Users } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
-
 const VentureCapital = () => {
-  const { language } = useLanguage();
+  const {
+    language
+  } = useLanguage();
   const [scrollY, setScrollY] = useState(0);
   const [activePlatform, setActivePlatform] = useState<number | null>(null);
   const [selectedDeal, setSelectedDeal] = useState<any | null>(null);
-
-  const platforms = [
-    {
+  const platforms = [{
+    id: 1,
+    theme: 'DeepTech',
+    color: 'from-purple-600 to-purple-800',
+    height: '25%',
+    deals: [{
       id: 1,
-      theme: 'DeepTech',
-      color: 'from-purple-600 to-purple-800',
-      height: '25%',
-      deals: [
-        {
-          id: 1,
-          name: 'QuantumFlow AI',
-          stage: 'Series A',
-          funding: '€12M',
-          valuation: '€80M',
-          milestones: ['Q1 2024: Product Launch', 'Q3 2024: First Enterprise Client', 'Q1 2025: Series B'],
-          video: 'quantum-pitch.mp4'
-        },
-        {
-          id: 2,
-          name: 'BioSynth Labs',
-          stage: 'Seed',
-          funding: '€4.5M',
-          valuation: '€25M',
-          milestones: ['Q2 2024: FDA Approval', 'Q4 2024: Manufacturing Scale', 'Q2 2025: Market Entry'],
-          video: 'biosynth-pitch.mp4'
-        }
-      ]
-    },
-    {
+      name: 'QuantumFlow AI',
+      stage: 'Series A',
+      funding: '€12M',
+      valuation: '€80M',
+      milestones: ['Q1 2024: Product Launch', 'Q3 2024: First Enterprise Client', 'Q1 2025: Series B'],
+      video: 'quantum-pitch.mp4'
+    }, {
       id: 2,
-      theme: 'FinTech',
-      color: 'from-blue-600 to-blue-800',
-      height: '50%',
-      deals: [
-        {
-          id: 3,
-          name: 'CryptoTrade Pro',
-          stage: 'Series B',
-          funding: '€25M',
-          valuation: '€180M',
-          milestones: ['Q1 2024: EU License', 'Q2 2024: 1M Users', 'Q4 2024: IPO Prep'],
-          video: 'cryptotrade-pitch.mp4'
-        }
-      ]
-    },
-    {
+      name: 'BioSynth Labs',
+      stage: 'Seed',
+      funding: '€4.5M',
+      valuation: '€25M',
+      milestones: ['Q2 2024: FDA Approval', 'Q4 2024: Manufacturing Scale', 'Q2 2025: Market Entry'],
+      video: 'biosynth-pitch.mp4'
+    }]
+  }, {
+    id: 2,
+    theme: 'FinTech',
+    color: 'from-blue-600 to-blue-800',
+    height: '50%',
+    deals: [{
       id: 3,
-      theme: 'Climate',
-      color: 'from-green-600 to-green-800',
-      height: '75%',
-      deals: [
-        {
-          id: 4,
-          name: 'CarbonZero Tech',
-          stage: 'Series A',
-          funding: '€18M',
-          valuation: '€120M',
-          milestones: ['Q1 2024: Pilot Projects', 'Q3 2024: Commercial Launch', 'Q1 2025: Scale Up'],
-          video: 'carbonzero-pitch.mp4'
-        },
-        {
-          id: 5,
-          name: 'SolarGrid Systems',
-          stage: 'Seed+',
-          funding: '€8M',
-          valuation: '€45M',
-          milestones: ['Q2 2024: Technology Patent', 'Q4 2024: First Installation', 'Q2 2025: Series A'],
-          video: 'solargrid-pitch.mp4'
-        }
-      ]
-    },
-    {
+      name: 'CryptoTrade Pro',
+      stage: 'Series B',
+      funding: '€25M',
+      valuation: '€180M',
+      milestones: ['Q1 2024: EU License', 'Q2 2024: 1M Users', 'Q4 2024: IPO Prep'],
+      video: 'cryptotrade-pitch.mp4'
+    }]
+  }, {
+    id: 3,
+    theme: 'Climate',
+    color: 'from-green-600 to-green-800',
+    height: '75%',
+    deals: [{
       id: 4,
-      theme: 'Consumer',
-      color: 'from-orange-600 to-orange-800',
-      height: '100%',
-      deals: [
-        {
-          id: 6,
-          name: 'FoodTech Revolution',
-          stage: 'Series A',
-          funding: '€15M',
-          valuation: '€95M',
-          milestones: ['Q1 2024: Product Launch', 'Q2 2024: Retail Partnerships', 'Q4 2024: International'],
-          video: 'foodtech-pitch.mp4'
-        }
-      ]
-    }
-  ];
-
+      name: 'CarbonZero Tech',
+      stage: 'Series A',
+      funding: '€18M',
+      valuation: '€120M',
+      milestones: ['Q1 2024: Pilot Projects', 'Q3 2024: Commercial Launch', 'Q1 2025: Scale Up'],
+      video: 'carbonzero-pitch.mp4'
+    }, {
+      id: 5,
+      name: 'SolarGrid Systems',
+      stage: 'Seed+',
+      funding: '€8M',
+      valuation: '€45M',
+      milestones: ['Q2 2024: Technology Patent', 'Q4 2024: First Installation', 'Q2 2025: Series A'],
+      video: 'solargrid-pitch.mp4'
+    }]
+  }, {
+    id: 4,
+    theme: 'Consumer',
+    color: 'from-orange-600 to-orange-800',
+    height: '100%',
+    deals: [{
+      id: 6,
+      name: 'FoodTech Revolution',
+      stage: 'Series A',
+      funding: '€15M',
+      valuation: '€95M',
+      milestones: ['Q1 2024: Product Launch', 'Q2 2024: Retail Partnerships', 'Q4 2024: International'],
+      video: 'foodtech-pitch.mp4'
+    }]
+  }];
   useEffect(() => {
     const handleScroll = () => {
       setScrollY(window.scrollY);
@@ -106,20 +90,14 @@ const VentureCapital = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
   const allDeals = platforms.flatMap(p => p.deals);
   const avgIRR = '28.5';
-
-  return (
-    <div className="min-h-screen bg-slate-950 text-white">
+  return <div className="min-h-screen bg-slate-950 text-white">
       <Navigation />
       
       <main className="pt-24">
         <div className="section-container">
-          <button
-            onClick={() => window.history.back()}
-            className="flex items-center gap-2 text-muted-foreground hover:text-foreground mb-8"
-          >
+          <button onClick={() => window.history.back()} className="flex items-center gap-2 mb-8 text-slate-50">
             <ArrowLeft className="w-4 h-4" />
             {language === 'fr' ? 'Retour aux investissements' : 'Back to investments'}
           </button>
@@ -133,19 +111,13 @@ const VentureCapital = () => {
                 {language === 'fr' ? 'Capital-risque' : 'Venture Capital'}
               </h1>
               <p className="text-xl text-slate-300 max-w-3xl mx-auto mb-12">
-                {language === 'fr' 
-                  ? 'Gravissez notre tour de lancement et découvrez les start-ups les plus prometteuses par secteur.'
-                  : 'Climb our launchpad tower and discover the most promising startups by sector.'
-                }
+                {language === 'fr' ? 'Gravissez notre tour de lancement et découvrez les start-ups les plus prometteuses par secteur.' : 'Climb our launchpad tower and discover the most promising startups by sector.'}
               </p>
             </div>
 
             {/* Rocket Nosecone with Portfolio Performance */}
             <div className="flex justify-center">
-              <div 
-                className="relative bg-gradient-to-t from-slate-700 to-slate-600 w-32 h-48 rounded-t-full border-4 border-orange-400 hover:scale-105 transition-transform cursor-pointer group"
-                onMouseEnter={() => setActivePlatform(0)}
-              >
+              <div className="relative bg-gradient-to-t from-slate-700 to-slate-600 w-32 h-48 rounded-t-full border-4 border-orange-400 hover:scale-105 transition-transform cursor-pointer group" onMouseEnter={() => setActivePlatform(0)}>
                 <Rocket className="w-8 h-8 text-orange-400 absolute top-4 left-1/2 transform -translate-x-1/2" />
                 <div className="absolute inset-0 flex flex-col justify-center items-center text-center px-4">
                   <div className="text-sm text-slate-300 mb-1">Portfolio IRR</div>
@@ -169,15 +141,10 @@ const VentureCapital = () => {
             <div className="relative">
               {/* Tower Structure */}
               <div className="flex flex-col-reverse gap-8 max-w-4xl mx-auto">
-                {platforms.map((platform, index) => (
-                  <div
-                    key={platform.id}
-                    className={`relative bg-gradient-to-r ${platform.color} rounded-2xl p-8 transform transition-all duration-500`}
-                    style={{
-                      transform: `translateY(${-scrollY * 0.1 * (index + 1)}px)`,
-                      minHeight: '200px'
-                    }}
-                  >
+                {platforms.map((platform, index) => <div key={platform.id} className={`relative bg-gradient-to-r ${platform.color} rounded-2xl p-8 transform transition-all duration-500`} style={{
+                transform: `translateY(${-scrollY * 0.1 * (index + 1)}px)`,
+                minHeight: '200px'
+              }}>
                     <div className="flex justify-between items-start mb-6">
                       <h3 className="text-3xl font-bold text-white">{platform.theme}</h3>
                       <div className="text-sm bg-white/20 px-3 py-1 rounded-full">
@@ -187,12 +154,7 @@ const VentureCapital = () => {
 
                     {/* Launch Pads (Deal Cards) */}
                     <div className="grid md:grid-cols-2 gap-6">
-                      {platform.deals.map((deal) => (
-                        <div
-                          key={deal.id}
-                          className="bg-white/10 backdrop-blur-sm rounded-xl p-6 hover:bg-white/20 transition-all duration-300 cursor-pointer relative group"
-                          onClick={() => setSelectedDeal(deal)}
-                        >
+                      {platform.deals.map(deal => <div key={deal.id} className="bg-white/10 backdrop-blur-sm rounded-xl p-6 hover:bg-white/20 transition-all duration-300 cursor-pointer relative group" onClick={() => setSelectedDeal(deal)}>
                           {/* Pulse animation */}
                           <div className="absolute -inset-1 bg-white/20 rounded-xl animate-pulse opacity-0 group-hover:opacity-100 transition-opacity" />
                           
@@ -217,11 +179,9 @@ const VentureCapital = () => {
                               {language === 'fr' ? 'Valorisation' : 'Valuation'}: <span className="font-medium">{deal.valuation}</span>
                             </div>
                           </div>
-                        </div>
-                      ))}
+                        </div>)}
                     </div>
-                  </div>
-                ))}
+                  </div>)}
               </div>
 
               {/* Tower Support Structure */}
@@ -256,15 +216,11 @@ const VentureCapital = () => {
       </main>
 
       {/* Mission Control Modal */}
-      {selectedDeal && (
-        <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-8">
+      {selectedDeal && <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-8">
           <div className="bg-slate-900 rounded-2xl p-8 max-w-4xl w-full max-h-[90vh] overflow-y-auto border border-slate-700">
             <div className="flex justify-between items-start mb-8">
               <h3 className="text-3xl font-bold text-white">{selectedDeal.name}</h3>
-              <button
-                onClick={() => setSelectedDeal(null)}
-                className="text-slate-400 hover:text-white text-2xl"
-              >
+              <button onClick={() => setSelectedDeal(null)} className="text-slate-400 hover:text-white text-2xl">
                 ✕
               </button>
             </div>
@@ -306,12 +262,10 @@ const VentureCapital = () => {
                     {language === 'fr' ? 'Jalons à venir' : 'Upcoming Milestones'}
                   </h4>
                   <div className="space-y-3">
-                    {selectedDeal.milestones.map((milestone: string, index: number) => (
-                      <div key={index} className="flex items-center gap-3">
+                    {selectedDeal.milestones.map((milestone: string, index: number) => <div key={index} className="flex items-center gap-3">
                         <div className="w-2 h-2 bg-orange-400 rounded-full flex-shrink-0" />
                         <span className="text-slate-300">{milestone}</span>
-                      </div>
-                    ))}
+                      </div>)}
                   </div>
                 </div>
 
@@ -321,12 +275,9 @@ const VentureCapital = () => {
               </div>
             </div>
           </div>
-        </div>
-      )}
+        </div>}
 
       <Footer />
-    </div>
-  );
+    </div>;
 };
-
 export default VentureCapital;

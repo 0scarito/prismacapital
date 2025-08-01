@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
-import { ArrowLeft, TrendingUp, ArrowRight, DollarSign, BarChart3, Target, Briefcase } from 'lucide-react';
+import { ArrowLeft, TrendingUp, ArrowRight, DollarSign, BarChart3, Target, Briefcase, Filter, ChevronDown } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 
 const PrivateEquity = () => {
@@ -9,6 +9,8 @@ const PrivateEquity = () => {
   const [activeStage, setActiveStage] = useState(0);
   const [bookmarkedDeals, setBookmarkedDeals] = useState<number[]>([]);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [showHint, setShowHint] = useState(true);
+  const [animateChip, setAnimateChip] = useState(false);
 
   const stages = [
     {
@@ -46,12 +48,30 @@ const PrivateEquity = () => {
   ];
 
   const bookmarkDeal = (dealId: number) => {
-    setBookmarkedDeals(prev => 
-      prev.includes(dealId) 
+    setBookmarkedDeals(prev =>
+      prev.includes(dealId)
         ? prev.filter(id => id !== dealId)
         : [...prev, dealId]
     );
   };
+
+  useEffect(() => {
+    const hide = () => setShowHint(false);
+    window.addEventListener('scroll', hide, { once: true });
+    window.addEventListener('pointermove', hide, { once: true });
+    return () => {
+      window.removeEventListener('scroll', hide);
+      window.removeEventListener('pointermove', hide);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (bookmarkedDeals.length > 0) {
+      setAnimateChip(true);
+      const t = setTimeout(() => setAnimateChip(false), 400);
+      return () => clearTimeout(t);
+    }
+  }, [bookmarkedDeals]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
@@ -61,10 +81,10 @@ const PrivateEquity = () => {
       <div className="fixed top-32 right-8 z-50">
         <button
           onClick={() => setIsDrawerOpen(true)}
-          className="bg-metallic-gold text-deep-navy px-4 py-2 rounded-full font-medium shadow-lg hover:scale-105 transition-transform"
+          className={`bg-metallic-gold text-deep-navy w-10 h-10 rounded-full flex items-center justify-center gap-1 shadow-lg transition-transform ${animateChip ? 'animate-pop' : ''}`}
         >
-          <Briefcase className="w-4 h-4 inline mr-2" />
-          {bookmarkedDeals.length} {language === 'fr' ? 'deals' : 'deals'}
+          <Briefcase className="w-4 h-4" />
+          <span className="font-bold text-sm">{bookmarkedDeals.length}</span>
         </button>
       </div>
 
@@ -80,30 +100,38 @@ const PrivateEquity = () => {
         </div>
 
         {/* Hero */}
-        <section className="py-20 bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900">
-          <div className="section-container">
+        <section className="relative py-20 bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 overflow-hidden">
+          <Filter className="absolute inset-0 w-full h-full text-white/10 scale-150" />
+          <div className="section-container relative z-10 text-center">
             <h1 className="text-6xl font-bold text-white mb-6">
               {language === 'fr' ? 'Capital-investissement' : 'Private Equity'}
             </h1>
-            <p className="text-xl text-slate-300 max-w-3xl">
-              {language === 'fr' 
+            <p className="text-xl text-slate-300 max-w-3xl mx-auto">
+              {language === 'fr'
                 ? 'Découvrez notre pipeline de transactions structurées en quatre étapes, de l\'identification à la sortie.'
                 : 'Discover our deal-flow pipeline structured in four stages, from sourcing to exit.'
               }
             </p>
           </div>
+          {showHint && (
+            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex flex-col items-center text-white/70 animate-bounce">
+              <ChevronDown className="w-6 h-6" />
+              <ChevronDown className="w-6 h-6 -mt-2 opacity-70" />
+              <ChevronDown className="w-6 h-6 -mt-2 opacity-40" />
+            </div>
+          )}
         </section>
 
         {/* Deal-Flow Pipeline */}
         <section className="py-20">
           <div className="section-container">
             {/* Pipeline Navigation */}
-            <div className="flex flex-col lg:flex-row gap-4 mb-12 overflow-x-auto">
+            <div className="flex flex-col lg:flex-row gap-4 mb-12 overflow-x-auto lg:overflow-visible snap-x snap-mandatory">
               {stages.map((stage, index) => (
                 <button
                   key={index}
                   onClick={() => setActiveStage(index)}
-                  className={`flex-1 min-w-64 ${stage.color} text-white p-6 rounded-3xl transition-all duration-300 hover:scale-105 ${
+                  className={`relative flex-none lg:flex-1 w-[26rem] h-[14rem] ${stage.color} text-white p-6 rounded-3xl transition-all duration-300 hover:scale-105 snap-center group ${
                     activeStage === index ? 'ring-4 ring-metallic-gold shadow-2xl' : ''
                   }`}
                 >
@@ -111,13 +139,24 @@ const PrivateEquity = () => {
                   <div className="text-sm opacity-80">
                     {stage.deals.length} {language === 'fr' ? 'opportunités' : 'opportunities'}
                   </div>
+                  <div className="absolute left-1/2 -bottom-4 -translate-x-1/2 flex gap-4 pointer-events-none opacity-0 group-hover:opacity-100 group-hover:-translate-y-2 transition-all">
+                    {stage.deals.slice(0, 3).map((deal, i) => (
+                      <div
+                        key={deal.id}
+                        className="bg-white text-slate-800 rounded-lg shadow-lg p-4 w-48 h-32"
+                        style={{ transform: `rotate(${(i - 1) * 4}deg)` }}
+                      >
+                        <div className="text-sm font-semibold truncate">{deal.name}</div>
+                      </div>
+                    ))}
+                  </div>
                 </button>
               ))}
             </div>
 
             {/* Progress Bar */}
             <div className="mb-12">
-              <div className="w-full bg-slate-200 rounded-full h-2 overflow-hidden">
+              <div className="w-full bg-slate-200 rounded-full h-1 overflow-hidden">
                 <div 
                   className={`h-full transition-all duration-500 ${stages[activeStage].color.replace('bg-', 'bg-')}`}
                   style={{ width: `${((activeStage + 1) / stages.length) * 100}%` }}

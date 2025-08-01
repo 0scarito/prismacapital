@@ -1,9 +1,16 @@
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
-import { ArrowLeft, Coins, Zap, ParkingCircle, Bell } from 'lucide-react';
+import { useState } from 'react';
+import { ArrowLeft, Coins, Zap, ParkingCircle, Bell, Briefcase } from 'lucide-react';
 import BlockchainCarousel from '@/components/BlockchainCarousel';
+import PortfolioDrawer from '@/components/PortfolioDrawer';
 const Crypto = () => {
   const prices = ['BTC $65,000', 'ETH $3,400', 'SOL $180', 'ADA $0.60'];
+  const [showPortfolio, setShowPortfolio] = useState(false);
+  const metrics = [
+    { label: 'YTD Performance', value: '+68%' },
+    { label: 'Staking Rewards', value: '5%' }
+  ];
   const examples = [{
     title: 'Buy Top Tokens 24/7',
     description: 'Purchase leading cryptocurrencies any time, day or night.',
@@ -23,6 +30,12 @@ const Crypto = () => {
   }];
   return <div className="min-h-screen bg-background">
       <Navigation />
+
+      <div className="fixed top-32 right-8 z-50">
+        <button onClick={() => setShowPortfolio(true)} className="bg-cyan-400 text-slate-900 w-10 h-10 rounded-full flex items-center justify-center shadow-lg">
+          <Briefcase className="w-4 h-4" />
+        </button>
+      </div>
       <main className="pt-24 pb-16">
         <div className="section-container">
           <button onClick={() => window.history.back()} className="flex items-center gap-2 mb-8 text-slate-50">
@@ -72,6 +85,12 @@ const Crypto = () => {
           </div>
         </div>
       </main>
+      <PortfolioDrawer
+        open={showPortfolio}
+        onClose={() => setShowPortfolio(false)}
+        title="Portfolio"
+        metrics={metrics}
+      />
       <Footer riskCategory="risk.crypto" />
     </div>;
 };

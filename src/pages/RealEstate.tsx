@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
-import { ArrowLeft, Building, Home, Zap, TrendingUp, Play, MapPin, DollarSign, Calendar, Users } from 'lucide-react';
+import { ArrowLeft, Building, Home, Zap, TrendingUp, Play, MapPin, DollarSign, Calendar, Users, Briefcase } from 'lucide-react';
+import PortfolioDrawer from '@/components/PortfolioDrawer';
 import { useLanguage } from '@/contexts/LanguageContext';
 const RealEstate = () => {
   const {
@@ -11,6 +12,11 @@ const RealEstate = () => {
   const [selectedRoom, setSelectedRoom] = useState<any | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState(0);
+  const [showPortfolio, setShowPortfolio] = useState(false);
+  const metrics = [
+    { label: 'Average Yield', value: '7.8%' },
+    { label: 'Occupancy', value: '93%' }
+  ];
   const floors = [{
     id: 'rooftop',
     name: language === 'fr' ? 'Toit - Énergies' : 'Rooftop - Energy',
@@ -110,6 +116,12 @@ const RealEstate = () => {
   };
   return <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-700">
       <Navigation />
+
+      <div className="fixed top-32 right-8 z-50">
+        <button onClick={() => setShowPortfolio(true)} className="bg-orange-400 text-slate-900 w-10 h-10 rounded-full flex items-center justify-center shadow-lg">
+          <Briefcase className="w-4 h-4" />
+        </button>
+      </div>
       
       <main className="pt-24">
         <div className="section-container">
@@ -352,9 +364,17 @@ const RealEstate = () => {
               </div>
             </div>
           </div>
-        </div>}
+          </div>
+          }
+
+      <PortfolioDrawer
+        open={showPortfolio}
+        onClose={() => setShowPortfolio(false)}
+        title="Portfolio"
+        metrics={metrics}
+      />
 
       <Footer riskCategory="risk.realEstate" />
     </div>;
-};
-export default RealEstate;
+  };
+  export default RealEstate;

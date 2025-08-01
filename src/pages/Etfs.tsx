@@ -1,7 +1,8 @@
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import { useState } from 'react';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Briefcase } from 'lucide-react';
+import PortfolioDrawer from '@/components/PortfolioDrawer';
 
 const PieChart = () => (
   <svg
@@ -48,6 +49,11 @@ const GrowthChart = ({ years }: { years: number }) => {
 const Etfs = () => {
   const [years, setYears] = useState(10);
   const projected = (100 * Math.pow(1.07, years)).toFixed(0);
+  const [showPortfolio, setShowPortfolio] = useState(false);
+  const metrics = [
+    { label: 'Projected CAGR', value: '7%' },
+    { label: 'Avg Fee', value: '0.15%' }
+  ];
   const examples = [
     {
       title: 'Diversified Baskets',
@@ -70,6 +76,12 @@ const Etfs = () => {
   return (
     <div className="min-h-screen bg-[#18202C] text-warm-white">
       <Navigation />
+
+      <div className="fixed top-32 right-8 z-50">
+        <button onClick={() => setShowPortfolio(true)} className="bg-teal-400 text-slate-900 w-10 h-10 rounded-full flex items-center justify-center shadow-lg">
+          <Briefcase className="w-4 h-4" />
+        </button>
+      </div>
       <main className="pt-24 pb-16 space-y-16">
         <div className="section-container">
           <button
@@ -123,6 +135,12 @@ const Etfs = () => {
           </div>
         </section>
       </main>
+      <PortfolioDrawer
+        open={showPortfolio}
+        onClose={() => setShowPortfolio(false)}
+        title="Portfolio"
+        metrics={metrics}
+      />
       <Footer riskCategory="risk.etf" />
     </div>
   );

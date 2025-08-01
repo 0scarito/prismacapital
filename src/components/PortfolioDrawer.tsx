@@ -1,0 +1,37 @@
+import { ArrowLeft } from 'lucide-react';
+
+interface Metric {
+  label: string;
+  value: string;
+}
+
+interface PortfolioDrawerProps {
+  open: boolean;
+  onClose: () => void;
+  title: string;
+  metrics: Metric[];
+}
+
+export default function PortfolioDrawer({ open, onClose, title, metrics }: PortfolioDrawerProps) {
+  if (!open) return null;
+  return (
+    <div className="fixed inset-0 z-50 bg-black/50 flex justify-end">
+      <div className="bg-white w-80 md:w-96 h-full p-6 overflow-y-auto">
+        <div className="flex items-center gap-2 mb-6">
+          <button onClick={onClose} className="text-slate-500 hover:text-slate-700">
+            <ArrowLeft className="w-4 h-4" />
+          </button>
+          <h3 className="text-xl font-bold text-slate-800">{title}</h3>
+        </div>
+        <div className="space-y-4">
+          {metrics.map((m) => (
+            <div key={m.label} className="flex justify-between border-b pb-2">
+              <span className="text-sm text-slate-600">{m.label}</span>
+              <span className="font-semibold text-slate-800">{m.value}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}

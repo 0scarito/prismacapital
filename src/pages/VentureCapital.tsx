@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
-import { ArrowLeft, Rocket, Play, TrendingUp, Calendar, Target, Users } from 'lucide-react';
+import { ArrowLeft, Rocket, Play, TrendingUp, Calendar, Target, Users, Briefcase } from 'lucide-react';
+import PortfolioDrawer from '@/components/PortfolioDrawer';
 import { useLanguage } from '@/contexts/LanguageContext';
 
 interface Deal {
@@ -30,6 +31,11 @@ const VentureCapital = () => {
   const [selectedDeal, setSelectedDeal] = useState<Deal | null>(null);
   const [spinFast, setSpinFast] = useState(false);
   const [towerOffset, setTowerOffset] = useState(0);
+  const [showPortfolio, setShowPortfolio] = useState(false);
+  const metrics = [
+    { label: 'Portfolio IRR', value: '28.5%' },
+    { label: 'Exits', value: '12' }
+  ];
   const platforms: Platform[] = [{
     id: 1,
     theme: 'DeepTech',
@@ -122,6 +128,12 @@ const VentureCapital = () => {
   return (
     <div className="min-h-screen bg-slate-950 text-white">
       <Navigation />
+
+      <div className="fixed top-32 right-8 z-50">
+        <button onClick={() => setShowPortfolio(true)} className="bg-orange-400 text-slate-900 w-10 h-10 rounded-full flex items-center justify-center shadow-lg">
+          <Briefcase className="w-4 h-4" />
+        </button>
+      </div>
       
       <main className="pt-24">
         <div className="section-container">
@@ -267,6 +279,12 @@ const VentureCapital = () => {
           </div>
         </section>
       </main>
+      <PortfolioDrawer
+        open={showPortfolio}
+        onClose={() => setShowPortfolio(false)}
+        title="Portfolio"
+        metrics={metrics}
+      />
 
       {/* Mission Control Modal */}
       {selectedDeal && (

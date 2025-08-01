@@ -1,76 +1,78 @@
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import { Shield, Award, CheckCircle, Building, Users, Globe } from 'lucide-react';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const Partners = () => {
+  const { t } = useLanguage();
   const partnerCategories = [
     {
-      title: "Partenaires Réglementaires",
+      title: t('partners.category.regulatory'),
       icon: <Shield className="w-8 h-8 text-metallic-gold" />,
       partners: [
         {
           name: "Autorité des Marchés Financiers (AMF)",
-          role: "Régulateur principal",
-          description: "Prisma Capital opère sous la supervision de l'AMF avec l'agrément FR-2024-15.",
+          role: t('partners.role.regulator'),
+          description: t('partners.description.amf'),
           logo: "🏛️",
-          status: "Agréé"
+          status: t('partners.status.licensed')
         },
         {
           name: "ACPR - Banque de France",
-          role: "Contrôle prudentiel",
-          description: "Supervision des activités de financement participatif.",
+          role: t('partners.role.prudential'),
+          description: t('partners.description.acpr'),
           logo: "🏦",
-          status: "Supervisé"
+          status: t('partners.status.supervised')
         }
       ]
     },
     {
-      title: "Partenaires Technologiques",
+      title: t('partners.category.technology'),
       icon: <Building className="w-8 h-8 text-metallic-gold" />,
       partners: [
         {
           name: "Stripe",
-          role: "Processeur de paiements",
-          description: "Sécurisation des transactions financières avec certification PCI DSS.",
+          role: t('partners.role.processor'),
+          description: t('partners.description.stripe'),
           logo: "💳",
-          status: "Certifié"
+          status: t('partners.status.certified')
         },
         {
           name: "AWS",
-          role: "Infrastructure cloud",
-          description: "Hébergement sécurisé avec conformité GDPR et ISO 27001.",
+          role: t('partners.role.infrastructure'),
+          description: t('partners.description.aws'),
           logo: "☁️",
-          status: "Conforme"
+          status: t('partners.status.compliant')
         }
       ]
     },
     {
-      title: "Partenaires Investissement",
+      title: t('partners.category.investment'),
       icon: <Users className="w-8 h-8 text-metallic-gold" />,
       partners: [
         {
           name: "BPI France",
-          role: "Co-investissement",
-          description: "Partenariat pour le soutien aux start-ups innovantes françaises.",
+          role: t('partners.role.coinvest'),
+          description: t('partners.description.bpi'),
           logo: "🇫🇷",
-          status: "Partenaire"
+          status: t('partners.status.partner')
         },
         {
           name: "French Tech",
-          role: "Écosystème",
-          description: "Membre actif de l'écosystème French Tech pour l'innovation.",
+          role: t('partners.role.ecosystem'),
+          description: t('partners.description.frenchtech'),
           logo: "🚀",
-          status: "Membre"
+          status: t('partners.status.member')
         }
       ]
     }
   ];
 
   const certifications = [
-    { name: "PSD2 Compliant", icon: "🔒" },
-    { name: "GDPR Certifié", icon: "🛡️" },
-    { name: "ISO 27001", icon: "🏆" },
-    { name: "AMF Agréé", icon: "✅" }
+    { name: t('partners.cert.psd2'), icon: '🔒' },
+    { name: t('partners.cert.gdpr'), icon: '🛡️' },
+    { name: t('partners.cert.iso'), icon: '🏆' },
+    { name: t('partners.cert.amf'), icon: '✅' }
   ];
 
   return (
@@ -83,11 +85,10 @@ const Partners = () => {
           <div className="section-container">
             <div className="text-center max-w-4xl mx-auto">
               <h1 className="font-serif font-bold text-5xl lg:text-7xl text-warm-white mb-8 leading-tight">
-                Nos Partenaires
+                {t('partners.hero.title')}
               </h1>
               <p className="font-sans text-xl text-light-gray mb-12 leading-relaxed">
-                Prisma Capital s'appuie sur un écosystème de partenaires de confiance pour vous offrir
-                la meilleure expérience d'investissement, en toute sécurité.
+                {t('partners.hero.subtitle')}
               </p>
             </div>
           </div>
@@ -159,17 +160,17 @@ const Partners = () => {
             <div className="grid lg:grid-cols-2 gap-12 items-center">
               <div>
                 <h2 className="font-serif font-bold text-4xl text-warm-white mb-8">
-                  Une confiance méritée
+                  {t('partners.trust.title')}
                 </h2>
                 <div className="space-y-6">
                   <div className="flex items-start gap-4">
                     <CheckCircle className="w-6 h-6 text-metallic-gold flex-shrink-0 mt-1" />
                     <div>
                       <h3 className="font-sans font-medium text-warm-white mb-2">
-                        Supervision réglementaire complète
+                        {t('partners.trust.supervision.title')}
                       </h3>
                       <p className="font-sans text-light-gray text-sm">
-                        Toutes nos activités sont supervisées par l'AMF et l'ACPR.
+                        {t('partners.trust.supervision.desc')}
                       </p>
                     </div>
                   </div>
@@ -177,10 +178,10 @@ const Partners = () => {
                     <CheckCircle className="w-6 h-6 text-metallic-gold flex-shrink-0 mt-1" />
                     <div>
                       <h3 className="font-sans font-medium text-warm-white mb-2">
-                        Sécurité des données garantie
+                        {t('partners.trust.security.title')}
                       </h3>
                       <p className="font-sans text-light-gray text-sm">
-                        Conformité GDPR et chiffrement de bout en bout.
+                        {t('partners.trust.security.desc')}
                       </p>
                     </div>
                   </div>
@@ -188,10 +189,10 @@ const Partners = () => {
                     <CheckCircle className="w-6 h-6 text-metallic-gold flex-shrink-0 mt-1" />
                     <div>
                       <h3 className="font-sans font-medium text-warm-white mb-2">
-                        Partenaires de premier plan
+                        {t('partners.trust.leaders.title')}
                       </h3>
                       <p className="font-sans text-light-gray text-sm">
-                        Collaboration avec les leaders de chaque secteur.
+                        {t('partners.trust.leaders.desc')}
                       </p>
                     </div>
                   </div>
@@ -200,13 +201,13 @@ const Partners = () => {
               <div className="bg-gradient-subtle rounded-2xl p-8 text-center">
                 <Award className="w-16 h-16 text-metallic-gold mx-auto mb-6" />
                 <h3 className="font-serif font-bold text-2xl text-deep-navy mb-4">
-                  Certifié par l'AMF
+                  {t('partners.award.title')}
                 </h3>
                 <p className="font-sans text-deep-navy/80 mb-6">
-                  Agrément de Conseiller en Investissements Participatifs
+                  {t('partners.award.desc')}
                 </p>
                 <div className="text-xs text-deep-navy/60 font-mono">
-                  N° d'agrément : FR-2024-15
+                  {t('partners.award.number')}
                 </div>
               </div>
             </div>
@@ -218,14 +219,14 @@ const Partners = () => {
           <div className="section-container">
             <div className="text-center">
               <h2 className="font-serif font-bold text-4xl text-warm-white mb-6">
-                Devenir partenaire
+                {t('partners.cta.title')}
               </h2>
               <p className="font-sans text-xl text-light-gray mb-8 max-w-2xl mx-auto">
-                Rejoignez notre écosystème de partenaires et contribuez à l'innovation française.
+                {t('partners.cta.subtitle')}
               </p>
               <button className="btn-primary inline-flex items-center gap-2">
                 <Building className="w-5 h-5" />
-                Contactez-nous
+                {t('partners.cta.button')}
               </button>
             </div>
           </div>

@@ -2,58 +2,59 @@ import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import { Link } from 'react-router-dom';
 import { Shield, Lock, Eye, FileCheck, Server, Users, AlertTriangle, CheckCircle } from 'lucide-react';
+import { useLanguage } from '@/contexts/LanguageContext';
 const Security = () => {
-  const securityFeatures = [{
-    icon: <Shield className="w-8 h-8 text-metallic-gold" />,
-    title: "Chiffrement de bout en bout",
-    description: "Toutes vos données sont chiffrées avec AES-256, le standard militaire utilisé par les banques centrales."
-  }, {
-    icon: <Lock className="w-8 h-8 text-metallic-gold" />,
-    title: "Authentification multi-facteurs",
-    description: "Protection renforcée de votre compte avec vérification par SMS et authentificateur mobile."
-  }, {
-    icon: <Server className="w-8 h-8 text-metallic-gold" />,
-    title: "Infrastructure sécurisée",
-    description: "Hébergement sur AWS avec certification ISO 27001 et surveillance 24h/24."
-  }, {
-    icon: <Eye className="w-8 h-8 text-metallic-gold" />,
-    title: "Audit de sécurité continu",
-    description: "Tests de pénétration trimestriels par des experts en cybersécurité indépendants."
-  }];
-  const complianceItems = [{
-    name: "GDPR",
-    description: "Conformité totale au Règlement Général sur la Protection des Données",
-    status: "Certifié"
-  }, {
-    name: "PSD2",
-    description: "Directive sur les Services de Paiement pour la sécurité des transactions",
-    status: "Conforme"
-  }, {
-    name: "AMF",
-    description: "Supervision par l'Autorité des Marchés Financiers",
-    status: "Agréé"
-  }, {
-    name: "KYC/AML",
-    description: "Procédures renforcées de connaissance client et anti-blanchiment",
-    status: "Validé"
-  }];
-  const securityProcess = [{
-    step: "01",
-    title: "Vérification d'identité",
-    description: "KYC renforcé avec vérification de documents officiels"
-  }, {
-    step: "02",
-    title: "Sécurisation des fonds",
-    description: "Ségrégation des fonds clients dans des comptes séparés"
-  }, {
-    step: "03",
-    title: "Monitoring en continu",
-    description: "Surveillance 24h/24 des transactions et détection des fraudes"
-  }, {
-    step: "04",
-    title: "Backup et récupération",
-    description: "Sauvegarde automatique et plan de continuité d'activité"
-  }];
+  const { t } = useLanguage();
+  const securityFeatures = [
+    {
+      icon: <Shield className="w-8 h-8 text-metallic-gold" />,
+      title: t('security.feature.encryption.title'),
+      description: t('security.feature.encryption.desc')
+    },
+    {
+      icon: <Lock className="w-8 h-8 text-metallic-gold" />,
+      title: t('security.feature.mfa.title'),
+      description: t('security.feature.mfa.desc')
+    },
+    {
+      icon: <Server className="w-8 h-8 text-metallic-gold" />,
+      title: t('security.feature.infrastructure.title'),
+      description: t('security.feature.infrastructure.desc')
+    },
+    {
+      icon: <Eye className="w-8 h-8 text-metallic-gold" />,
+      title: t('security.feature.audits.title'),
+      description: t('security.feature.audits.desc')
+    }
+  ];
+  const complianceItems = [
+    { name: 'GDPR', description: t('security.compliance.desc.gdpr'), status: t('security.compliance.status.certified') },
+    { name: 'PSD2', description: t('security.compliance.desc.psd2'), status: t('security.compliance.status.compliant') },
+    { name: 'AMF', description: t('security.compliance.desc.amf'), status: t('security.compliance.status.licensed') },
+    { name: 'KYC/AML', description: t('security.compliance.desc.kyc'), status: t('security.compliance.status.validated') }
+  ];
+  const securityProcess = [
+    {
+      step: '01',
+      title: t('security.process.step1.title'),
+      description: t('security.process.step1.desc')
+    },
+    {
+      step: '02',
+      title: t('security.process.step2.title'),
+      description: t('security.process.step2.desc')
+    },
+    {
+      step: '03',
+      title: t('security.process.step3.title'),
+      description: t('security.process.step3.desc')
+    },
+    {
+      step: '04',
+      title: t('security.process.step4.title'),
+      description: t('security.process.step4.desc')
+    }
+  ];
   return <div className="min-h-screen bg-background font-sans">
       <Navigation />
 
@@ -63,17 +64,16 @@ const Security = () => {
           <div className="section-container">
             <div className="text-center max-w-4xl mx-auto">
               <h1 className="font-serif font-bold text-5xl lg:text-7xl text-warm-white mb-8 leading-tight">
-                Sécurité & Conformité
+                {t('security.hero.title')}
               </h1>
               <p className="font-sans text-xl text-light-gray mb-12 leading-relaxed">
-                Votre sécurité est notre priorité absolue. Découvrez comment nous protégeons
-                vos données et vos investissements avec les plus hauts standards de l'industrie.
+                {t('security.hero.subtitle')}
               </p>
               <div className="flex justify-center">
                 <div className="bg-warm-white/10 backdrop-blur-sm rounded-xl p-6 border border-warm-white/20">
                   <div className="flex items-center gap-4 text-metallic-gold">
                     <Shield className="w-8 h-8" />
-                    <span className="font-sans font-medium">Certifié ISO 27001 • GDPR • AMF Agréé</span>
+                    <span className="font-sans font-medium">{t('security.hero.badge')}</span>
                   </div>
                 </div>
               </div>
@@ -86,11 +86,10 @@ const Security = () => {
           <div className="section-container">
             <div className="text-center mb-16">
               <h2 className="font-serif font-bold text-4xl text-deep-navy mb-6">
-                Protection Multi-Niveaux
+                {t('security.features.title')}
               </h2>
               <p className="font-sans text-lg text-deep-navy/80 max-w-3xl mx-auto">
-                Chaque aspect de notre plateforme est conçu avec la sécurité comme priorité,
-                de la collecte des données à l'exécution des investissements.
+                {t('security.features.subtitle')}
               </p>
             </div>
 
@@ -115,11 +114,10 @@ const Security = () => {
           <div className="section-container">
             <div className="text-center mb-16">
               <h2 className="font-serif font-bold text-4xl text-warm-white mb-6">
-                Conformité Réglementaire
+                {t('security.compliance.title')}
               </h2>
               <p className="font-sans text-lg text-light-gray max-w-3xl mx-auto">
-                Prisma Capital respecte toutes les réglementations en vigueur et maintient
-                les plus hauts standards de conformité.
+                {t('security.compliance.subtitle')}
               </p>
             </div>
 
@@ -146,11 +144,10 @@ const Security = () => {
           <div className="section-container">
             <div className="text-center mb-16">
               <h2 className="font-serif font-bold text-4xl text-deep-navy mb-6">
-                Notre Processus de Sécurité
+                {t('security.process.title')}
               </h2>
               <p className="font-sans text-lg text-deep-navy/80 max-w-3xl mx-auto">
-                Découvrez les étapes que nous suivons pour garantir la sécurité
-                de vos investissements à chaque moment.
+                {t('security.process.subtitle')}
               </p>
             </div>
 
@@ -178,15 +175,15 @@ const Security = () => {
           <div className="section-container">
             <div className="text-center">
               <h2 className="font-serif font-bold text-4xl text-warm-white mb-6">
-                Une Question de Sécurité ?
+                {t('security.contact.title')}
               </h2>
               <p className="font-sans text-xl text-light-gray mb-8 max-w-2xl mx-auto">
-                Notre équipe de sécurité est disponible 24h/24 pour répondre à vos préoccupations.
+                {t('security.contact.subtitle')}
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <button className="btn-primary inline-flex items-center gap-2">
                   <Shield className="w-5 h-5" />
-                  Contacter la Sécurité
+                  {t('security.contact.button')}
                 </button>
                 <Link to="/faq" className="btn-ghost inline-flex items-center gap-2">
                   <FileCheck className="w-5 h-5" />

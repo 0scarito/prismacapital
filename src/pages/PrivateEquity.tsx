@@ -271,7 +271,7 @@ const PrivateEquity = () => {
         </div>
       )}
 
-      <Footer />
+      <Footer riskCategory="risk.privateEquity" />
     </div>
   );
 };

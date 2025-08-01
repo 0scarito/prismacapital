@@ -354,7 +354,7 @@ const RealEstate = () => {
           </div>
         </div>}
 
-      <Footer />
+      <Footer riskCategory="risk.realEstate" />
     </div>;
 };
 export default RealEstate;

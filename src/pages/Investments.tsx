@@ -1,7 +1,9 @@
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
-import { TrendingUp, Leaf, Cpu, Utensils, Building, ArrowRight, Home, DollarSign, Bitcoin } from 'lucide-react';
+import { TrendingUp, Leaf, Building, Home, DollarSign, Bitcoin } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { Link } from 'react-router-dom';
+import CategoryCard from '@/components/CategoryCard';
 const Investments = () => {
   const {
     t,
@@ -9,32 +11,32 @@ const Investments = () => {
   } = useLanguage();
   const investmentCategories = [{
     title: language === 'fr' ? 'Capital-investissement' : 'Private Equity',
-    icon: <Building className="w-12 h-12 text-metallic-gold" />,
+    icon: <Building aria-hidden="true" className="w-12 h-12 text-metallic-gold" />,
     description: language === 'fr' ? 'Investissez dans des entreprises établies avec un potentiel de croissance élevé' : 'Invest in established companies with high growth potential',
     href: '/investments/private-equity'
   }, {
     title: 'Venture Capital',
-    icon: <TrendingUp className="w-12 h-12 text-metallic-gold" />,
+    icon: <TrendingUp aria-hidden="true" className="w-12 h-12 text-metallic-gold" />,
     description: language === 'fr' ? 'Soutenez les start-ups innovantes dès leurs premiers stades de développement' : 'Support innovative startups from their earliest stages of development',
     href: '/investments/venture-capital'
   }, {
     title: language === 'fr' ? 'Crowdfunding Immobilier' : 'Real-estate Crowdfunding',
-    icon: <Home className="w-12 h-12 text-metallic-gold" />,
+    icon: <Home aria-hidden="true" className="w-12 h-12 text-metallic-gold" />,
     description: language === 'fr' ? 'Participez à des projets immobiliers sélectionnés avec des rendements attractifs' : 'Participate in selected real estate projects with attractive returns',
     href: '/investments/real-estate'
   }, {
     title: language === 'fr' ? 'Matières Premières' : 'Commodities',
-    icon: <Leaf className="w-12 h-12 text-metallic-gold" />,
+    icon: <Leaf aria-hidden="true" className="w-12 h-12 text-metallic-gold" />,
     description: language === 'fr' ? 'Diversifiez avec l\'or, l\'argent et autres matières premières stratégiques' : 'Diversify with gold, silver and other strategic commodities',
     href: '/investments/commodities'
   }, {
     title: language === 'fr' ? 'ETF Diversifiés' : 'Diversified ETFs',
-    icon: <DollarSign className="w-12 h-12 text-metallic-gold" />,
+    icon: <DollarSign aria-hidden="true" className="w-12 h-12 text-metallic-gold" />,
     description: language === 'fr' ? 'Accédez aux marchés mondiaux avec des fonds indiciels diversifiés' : 'Access global markets with diversified index funds',
     href: '/investments/etfs'
   }, {
     title: 'Crypto-assets',
-    icon: <Bitcoin className="w-12 h-12 text-metallic-gold" />,
+    icon: <Bitcoin aria-hidden="true" className="w-12 h-12 text-metallic-gold" />,
     description: language === 'fr' ? 'Explorez l\'univers des crypto-monnaies avec une approche sécurisée' : 'Explore the cryptocurrency universe with a secure approach',
     href: '/investments/crypto'
   }];
@@ -55,9 +57,9 @@ const Investments = () => {
               </p>
               
               {/* Partners & Securities Button */}
-              <button onClick={() => window.location.href = '/partners'} className="btn-ghost mb-8">
+              <Link to="/partners" className="btn-ghost mb-8 inline-block">
                 {language === 'fr' ? 'Partenaires & Sécurité' : 'Partners & Securities'}
-              </button>
+              </Link>
               
               <div className="flex justify-center">
                 <div className="bg-warm-white/10 backdrop-blur-sm rounded-xl p-6 border border-warm-white/20">
@@ -103,25 +105,16 @@ const Investments = () => {
             </div>
 
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {investmentCategories.map((category, index) => <div key={index} className="bg-gradient-subtle rounded-2xl p-8 border border-border/20 hover:shadow-lg transition-all duration-300 cursor-pointer group" onClick={() => window.location.href = category.href}>
-                  <div className="text-center">
-                    <div className="mb-6 flex justify-center">
-                      {category.icon}
-                    </div>
-                    
-                    <h3 className="font-serif font-bold text-xl text-deep-navy mb-4 group-hover:text-metallic-gold transition-colors">
-                      {category.title}
-                    </h3>
-                    
-                    <p className="font-sans text-deep-navy/80 mb-6 leading-relaxed">
-                      {category.description}
-                    </p>
-
-                    <button className="w-full btn-primary">
-                      {language === 'fr' ? 'Explorer' : 'Explore'}
-                    </button>
-                  </div>
-                </div>)}
+              {investmentCategories.map((category) => (
+                <CategoryCard
+                  key={category.href}
+                  title={category.title}
+                  description={category.description}
+                  href={category.href}
+                  icon={category.icon}
+                  exploreLabel={language === 'fr' ? `Explorer ${category.title}` : `Explore ${category.title}`}
+                />
+              ))}
             </div>
           </div>
         </section>

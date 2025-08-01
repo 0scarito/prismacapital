@@ -2,9 +2,11 @@ import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import WorldMap from '@/components/WorldMap';
 import { useState } from 'react';
-import { ArrowLeft, Coins, Wheat, Zap, Link as Chain } from 'lucide-react';
+import { ArrowLeft, Coins, Wheat, Zap, Link as Chain, Briefcase } from 'lucide-react';
+import PortfolioDrawer from '@/components/PortfolioDrawer';
 const Commodities = () => {
   const [highlight, setHighlight] = useState<string | undefined>(undefined);
+  const [showPortfolio, setShowPortfolio] = useState(false);
   const examples = [{
     title: 'Hedge Inflation',
     description: 'Preserve purchasing power with precious metals.',
@@ -44,8 +46,18 @@ const Commodities = () => {
       change: '+18%'
     }
   };
+  const metrics = [
+    { label: 'YTD Performance', value: '+12%' },
+    { label: 'Volatility', value: 'High' }
+  ];
   return <div className="min-h-screen bg-background">
       <Navigation />
+
+      <div className="fixed top-32 right-8 z-50">
+        <button onClick={() => setShowPortfolio(true)} className="bg-orange-400 text-slate-900 w-10 h-10 rounded-full flex items-center justify-center shadow-lg">
+          <Briefcase className="w-4 h-4" />
+        </button>
+      </div>
       <main className="pt-24 pb-16">
         <div className="section-container">
           <button onClick={() => window.history.back()} className="flex items-center gap-2 mb-8 text-slate-50">
@@ -85,6 +97,12 @@ const Commodities = () => {
           </div>
         </div>
       </main>
+      <PortfolioDrawer
+        open={showPortfolio}
+        onClose={() => setShowPortfolio(false)}
+        title="Portfolio"
+        metrics={metrics}
+      />
       <Footer riskCategory="risk.commodities" />
     </div>;
 };

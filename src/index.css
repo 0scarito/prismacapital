@@ -260,6 +260,16 @@
   animation: heartbeat 1s infinite;
 }
 
+@keyframes pop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+.animate-pop {
+  animation: pop 0.4s ease;
+}
+
 @layer base {
   * {
     @apply border-border;

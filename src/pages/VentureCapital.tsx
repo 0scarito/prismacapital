@@ -1,92 +1,320 @@
+import { useState, useEffect } from 'react';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
+import { Rocket, Play, TrendingUp, Calendar, Target, Users } from 'lucide-react';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const VentureCapital = () => {
-  const examples = [
+  const { language } = useLanguage();
+  const [scrollY, setScrollY] = useState(0);
+  const [activePlatform, setActivePlatform] = useState<number | null>(null);
+  const [selectedDeal, setSelectedDeal] = useState<any | null>(null);
+
+  const platforms = [
     {
-      title: 'Early Entry',
-      description: 'Early entry into disruptive ventures.',
-      timeline: ['2021 Incorporation', '2022 Seed', '2024 Series A']
+      id: 1,
+      theme: 'DeepTech',
+      color: 'from-purple-600 to-purple-800',
+      height: '25%',
+      deals: [
+        {
+          id: 1,
+          name: 'QuantumFlow AI',
+          stage: 'Series A',
+          funding: '€12M',
+          valuation: '€80M',
+          milestones: ['Q1 2024: Product Launch', 'Q3 2024: First Enterprise Client', 'Q1 2025: Series B'],
+          video: 'quantum-pitch.mp4'
+        },
+        {
+          id: 2,
+          name: 'BioSynth Labs',
+          stage: 'Seed',
+          funding: '€4.5M',
+          valuation: '€25M',
+          milestones: ['Q2 2024: FDA Approval', 'Q4 2024: Manufacturing Scale', 'Q2 2025: Market Entry'],
+          video: 'biosynth-pitch.mp4'
+        }
+      ]
     },
     {
-      title: 'Co-invest with VCs',
-      description: 'Alongside tier-one venture funds.',
-      timeline: ['2020 Seed', '2023 Series B']
+      id: 2,
+      theme: 'FinTech',
+      color: 'from-blue-600 to-blue-800',
+      height: '50%',
+      deals: [
+        {
+          id: 3,
+          name: 'CryptoTrade Pro',
+          stage: 'Series B',
+          funding: '€25M',
+          valuation: '€180M',
+          milestones: ['Q1 2024: EU License', 'Q2 2024: 1M Users', 'Q4 2024: IPO Prep'],
+          video: 'cryptotrade-pitch.mp4'
+        }
+      ]
     },
     {
-      title: 'Flexible Tickets',
-      description: 'Tickets from €1 000 for accessibility.',
-      timeline: ['Opens 2024']
+      id: 3,
+      theme: 'Climate',
+      color: 'from-green-600 to-green-800',
+      height: '75%',
+      deals: [
+        {
+          id: 4,
+          name: 'CarbonZero Tech',
+          stage: 'Series A',
+          funding: '€18M',
+          valuation: '€120M',
+          milestones: ['Q1 2024: Pilot Projects', 'Q3 2024: Commercial Launch', 'Q1 2025: Scale Up'],
+          video: 'carbonzero-pitch.mp4'
+        },
+        {
+          id: 5,
+          name: 'SolarGrid Systems',
+          stage: 'Seed+',
+          funding: '€8M',
+          valuation: '€45M',
+          milestones: ['Q2 2024: Technology Patent', 'Q4 2024: First Installation', 'Q2 2025: Series A'],
+          video: 'solargrid-pitch.mp4'
+        }
+      ]
     },
     {
-      title: 'Founder Video Updates',
-      description: 'Monthly progress direct from founders.',
-      timeline: ['Launch 2023']
+      id: 4,
+      theme: 'Consumer',
+      color: 'from-orange-600 to-orange-800',
+      height: '100%',
+      deals: [
+        {
+          id: 6,
+          name: 'FoodTech Revolution',
+          stage: 'Series A',
+          funding: '€15M',
+          valuation: '€95M',
+          milestones: ['Q1 2024: Product Launch', 'Q2 2024: Retail Partnerships', 'Q4 2024: International'],
+          video: 'foodtech-pitch.mp4'
+        }
+      ]
     }
   ];
 
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollY(window.scrollY);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const allDeals = platforms.flatMap(p => p.deals);
+  const avgIRR = '28.5';
+
   return (
-    <div className="min-h-screen bg-background font-sans">
+    <div className="min-h-screen bg-slate-950 text-white">
       <Navigation />
+      
       <main className="pt-24">
-        {/* Hero */}
-        <section
-          className="py-20"
-          style={{ background: 'linear-gradient(135deg,#281a4b,#3b2270)' }}
-        >
+        {/* Hero with Rocket Nosecone */}
+        <section className="py-20 bg-gradient-to-b from-slate-900 to-slate-950 relative">
           <div className="section-container">
-            <div className="flex items-center gap-4">
-              <h1 className="text-5xl font-bold text-white">Start-ups</h1>
-              <img
-                src="/rocket.png"
-                alt="Rocket launch"
-                className="w-12 h-12 object-contain"
-              />
+            <div className="text-center">
+              <h1 className="text-6xl font-bold mb-6">
+                {language === 'fr' ? 'Capital-risque' : 'Venture Capital'}
+              </h1>
+              <p className="text-xl text-slate-300 max-w-3xl mx-auto mb-12">
+                {language === 'fr' 
+                  ? 'Gravissez notre tour de lancement et découvrez les start-ups les plus prometteuses par secteur.'
+                  : 'Climb our launchpad tower and discover the most promising startups by sector.'
+                }
+              </p>
+            </div>
+
+            {/* Rocket Nosecone with Portfolio Performance */}
+            <div className="flex justify-center">
+              <div 
+                className="relative bg-gradient-to-t from-slate-700 to-slate-600 w-32 h-48 rounded-t-full border-4 border-orange-400 hover:scale-105 transition-transform cursor-pointer group"
+                onMouseEnter={() => setActivePlatform(0)}
+              >
+                <Rocket className="w-8 h-8 text-orange-400 absolute top-4 left-1/2 transform -translate-x-1/2" />
+                <div className="absolute inset-0 flex flex-col justify-center items-center text-center px-4">
+                  <div className="text-sm text-slate-300 mb-1">Portfolio IRR</div>
+                  <div className="text-2xl font-bold text-orange-400">{avgIRR}%</div>
+                </div>
+                
+                {/* Hover tooltip */}
+                <div className="absolute -right-48 top-0 bg-slate-800 p-4 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                  <div className="text-sm text-slate-300">Fund Performance</div>
+                  <div className="text-lg font-bold text-orange-400">{avgIRR}% IRR</div>
+                  <div className="text-xs text-slate-400">Based on 24 exits</div>
+                </div>
+              </div>
             </div>
           </div>
         </section>
 
-        {/* Cards */}
-        <section className="py-12">
+        {/* Launchpad Tower */}
+        <section className="py-20 relative">
           <div className="section-container">
-            <div className="grid sm:grid-cols-2 gap-6">
-              {examples.map((ex, idx) => (
-                <details
-                  key={idx}
-                  className="group bg-card rounded-lg p-6 border border-border shadow-prisma-card transition-all duration-300 ease-out open:sm:col-span-2"
-                >
-                  <summary className="cursor-pointer list-none">
-                    <h3 className="font-serif text-xl font-bold mb-2 leading-[1.45]">
-                      {ex.title}
-                    </h3>
-                    <p className="text-base leading-[1.45] text-muted-foreground">
-                      {ex.description}
-                    </p>
-                  </summary>
-                  <div className="mt-4">
-                    <ul className="flex items-center flex-wrap gap-6">
-                      {ex.timeline.map((t, i) => (
-                        <li key={i} className="flex items-center gap-2">
-                          <svg
-                            className="w-3 h-3 fill-primary"
-                            viewBox="0 0 8 8"
-                          >
-                            <circle cx="4" cy="4" r="4" />
-                          </svg>
-                          <span className="text-sm">{t}</span>
-                        </li>
+            <div className="relative">
+              {/* Tower Structure */}
+              <div className="flex flex-col-reverse gap-8 max-w-4xl mx-auto">
+                {platforms.map((platform, index) => (
+                  <div
+                    key={platform.id}
+                    className={`relative bg-gradient-to-r ${platform.color} rounded-2xl p-8 transform transition-all duration-500`}
+                    style={{
+                      transform: `translateY(${-scrollY * 0.1 * (index + 1)}px)`,
+                      minHeight: '200px'
+                    }}
+                  >
+                    <div className="flex justify-between items-start mb-6">
+                      <h3 className="text-3xl font-bold text-white">{platform.theme}</h3>
+                      <div className="text-sm bg-white/20 px-3 py-1 rounded-full">
+                        {platform.deals.length} {language === 'fr' ? 'deals' : 'deals'}
+                      </div>
+                    </div>
+
+                    {/* Launch Pads (Deal Cards) */}
+                    <div className="grid md:grid-cols-2 gap-6">
+                      {platform.deals.map((deal) => (
+                        <div
+                          key={deal.id}
+                          className="bg-white/10 backdrop-blur-sm rounded-xl p-6 hover:bg-white/20 transition-all duration-300 cursor-pointer relative group"
+                          onClick={() => setSelectedDeal(deal)}
+                        >
+                          {/* Pulse animation */}
+                          <div className="absolute -inset-1 bg-white/20 rounded-xl animate-pulse opacity-0 group-hover:opacity-100 transition-opacity" />
+                          
+                          <div className="relative">
+                            <div className="flex justify-between items-start mb-4">
+                              <h4 className="text-xl font-bold text-white">{deal.name}</h4>
+                              <Play className="w-6 h-6 text-white/60 group-hover:text-white transition-colors" />
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-4 mb-4">
+                              <div>
+                                <div className="text-sm text-white/60">{language === 'fr' ? 'Étape' : 'Stage'}</div>
+                                <div className="font-medium text-white">{deal.stage}</div>
+                              </div>
+                              <div>
+                                <div className="text-sm text-white/60">{language === 'fr' ? 'Financement' : 'Funding'}</div>
+                                <div className="font-medium text-white">{deal.funding}</div>
+                              </div>
+                            </div>
+
+                            <div className="text-sm text-white/80">
+                              {language === 'fr' ? 'Valorisation' : 'Valuation'}: <span className="font-medium">{deal.valuation}</span>
+                            </div>
+                          </div>
+                        </div>
                       ))}
-                    </ul>
+                    </div>
                   </div>
-                </details>
-              ))}
+                ))}
+              </div>
+
+              {/* Tower Support Structure */}
+              <div className="absolute left-1/2 transform -translate-x-1/2 w-4 bg-slate-700 h-full -z-10 rounded-full" />
             </div>
-            <hr className="my-12 border-border/30" />
-            <div className="h-48" />
+          </div>
+        </section>
+
+        {/* Statistics */}
+        <section className="py-16 bg-slate-900/50">
+          <div className="section-container">
+            <div className="grid md:grid-cols-4 gap-8 text-center">
+              <div>
+                <div className="text-4xl font-bold text-orange-400 mb-2">47</div>
+                <div className="text-slate-300">{language === 'fr' ? 'Start-ups actives' : 'Active Startups'}</div>
+              </div>
+              <div>
+                <div className="text-4xl font-bold text-orange-400 mb-2">€180M</div>
+                <div className="text-slate-300">{language === 'fr' ? 'Fonds sous gestion' : 'Assets Under Management'}</div>
+              </div>
+              <div>
+                <div className="text-4xl font-bold text-orange-400 mb-2">12</div>
+                <div className="text-slate-300">{language === 'fr' ? 'Sorties réussies' : 'Successful Exits'}</div>
+              </div>
+              <div>
+                <div className="text-4xl font-bold text-orange-400 mb-2">8.5x</div>
+                <div className="text-slate-300">{language === 'fr' ? 'Multiple moyen' : 'Average Multiple'}</div>
+              </div>
+            </div>
           </div>
         </section>
       </main>
-      <Footer riskCategory="risk.ventureCapital" />
+
+      {/* Mission Control Modal */}
+      {selectedDeal && (
+        <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-8">
+          <div className="bg-slate-900 rounded-2xl p-8 max-w-4xl w-full max-h-[90vh] overflow-y-auto border border-slate-700">
+            <div className="flex justify-between items-start mb-8">
+              <h3 className="text-3xl font-bold text-white">{selectedDeal.name}</h3>
+              <button
+                onClick={() => setSelectedDeal(null)}
+                className="text-slate-400 hover:text-white text-2xl"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-8">
+              {/* Video Placeholder */}
+              <div className="bg-slate-800 rounded-xl aspect-video flex items-center justify-center">
+                <div className="text-center">
+                  <Play className="w-16 h-16 text-orange-400 mx-auto mb-4" />
+                  <div className="text-white">Pitch Video</div>
+                  <div className="text-slate-400 text-sm">{selectedDeal.video}</div>
+                </div>
+              </div>
+
+              {/* Deal Details */}
+              <div className="space-y-6">
+                <div>
+                  <h4 className="text-xl font-bold text-white mb-4">
+                    {language === 'fr' ? 'Informations clés' : 'Key Information'}
+                  </h4>
+                  <div className="space-y-3">
+                    <div className="flex justify-between">
+                      <span className="text-slate-400">{language === 'fr' ? 'Étape' : 'Stage'}</span>
+                      <span className="text-white font-medium">{selectedDeal.stage}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-slate-400">{language === 'fr' ? 'Financement' : 'Funding'}</span>
+                      <span className="text-white font-medium">{selectedDeal.funding}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-slate-400">{language === 'fr' ? 'Valorisation' : 'Valuation'}</span>
+                      <span className="text-white font-medium">{selectedDeal.valuation}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <h4 className="text-xl font-bold text-white mb-4">
+                    {language === 'fr' ? 'Jalons à venir' : 'Upcoming Milestones'}
+                  </h4>
+                  <div className="space-y-3">
+                    {selectedDeal.milestones.map((milestone: string, index: number) => (
+                      <div key={index} className="flex items-center gap-3">
+                        <div className="w-2 h-2 bg-orange-400 rounded-full flex-shrink-0" />
+                        <span className="text-slate-300">{milestone}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <button className="w-full bg-orange-400 hover:bg-orange-500 text-slate-900 py-3 px-6 rounded-lg font-bold transition-colors">
+                  {language === 'fr' ? 'Investir maintenant' : 'Invest Now'}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <Footer />
     </div>
   );
 };

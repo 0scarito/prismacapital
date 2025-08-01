@@ -81,10 +81,10 @@ const PrivateEquity = () => {
       <div className="fixed top-32 right-8 z-50">
         <button
           onClick={() => setIsDrawerOpen(true)}
-          className={`bg-metallic-gold text-deep-navy w-10 h-10 rounded-full flex items-center justify-center gap-1 shadow-lg transition-transform ${animateChip ? 'animate-pop' : ''}`}
+          className={`bg-metallic-gold text-deep-navy w-12 h-12 rounded-full flex items-center justify-center gap-1 shadow-lg transition-transform ${animateChip ? 'animate-pop' : ''}`}
         >
-          <Briefcase className="w-4 h-4" />
-          <span className="font-bold text-sm">{bookmarkedDeals.length}</span>
+          <Briefcase className="w-6 h-6" />
+          <span className="font-bold text-base">{bookmarkedDeals.length}</span>
         </button>
       </div>
 

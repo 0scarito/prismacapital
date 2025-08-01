@@ -1,6 +1,7 @@
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import { ArrowLeft, Coins, Zap, ParkingCircle, Bell } from 'lucide-react';
+import BlockchainCarousel from '@/components/BlockchainCarousel';
 const Crypto = () => {
   const prices = ['BTC $65,000', 'ETH $3,400', 'SOL $180', 'ADA $0.60'];
   const examples = [{
@@ -41,6 +42,8 @@ const Crypto = () => {
             <rect width="100%" height="100%" fill="url(#circuit)" />
           </svg>
         </section>
+
+        <BlockchainCarousel />
 
         <div className="bg-black overflow-hidden text-green-400 font-mono shadow-neon">
           <div className="flex animate-marquee space-x-8 px-4 py-2">

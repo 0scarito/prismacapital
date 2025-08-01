@@ -279,3 +279,51 @@
     @apply bg-background text-foreground;
   }
 }
+@keyframes blockchain-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes cube-shimmer {
+  from { background-position: -200% 0; }
+  to { background-position: 200% 0; }
+}
+
+.blockchain-carousel {
+  position: relative;
+  overflow: hidden;
+  height: 70vh;
+}
+
+.blockchain-track {
+  display: flex;
+  gap: 2rem;
+  width: max-content;
+  animation: blockchain-scroll 16s linear infinite;
+}
+
+.blockcube {
+  width: 18rem;
+  height: 18rem;
+  background: #151a29;
+  border: 1px solid rgb(51 65 85);
+  border-radius: 0.5rem;
+  transform: perspective(800px) rotateX(15deg) rotateY(-25deg);
+  transform-style: preserve-3d;
+  position: relative;
+  transition: transform 0.3s;
+}
+
+.blockcube:hover {
+  transform: perspective(800px) rotateX(15deg) rotateY(-35deg) translateY(-0.5rem);
+}
+
+.blockcube::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, transparent, rgba(255,255,255,0.2), transparent);
+  background-size: 200% 100%;
+  animation: cube-shimmer 8s linear infinite;
+}
+

@@ -336,7 +336,7 @@ const VentureCapital = () => {
         </div>
       )}
 
-      <Footer />
+      <Footer riskCategory="risk.ventureCapital" />
     </div>
   );
 };

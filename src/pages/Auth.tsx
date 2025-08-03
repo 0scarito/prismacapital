@@ -68,7 +68,14 @@ const Auth = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-background/80 p-4">
+    <div className="min-h-screen relative flex items-center justify-center bg-gradient-to-br from-background to-background/80 p-4">
+      <Button
+        variant="outline"
+        onClick={() => navigate(-1)}
+        className="absolute left-4 top-4"
+      >
+        Retour
+      </Button>
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl font-bold bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">

@@ -4,88 +4,119 @@ import Footer from '@/components/Footer';
 import { ArrowLeft, Building, Home, Zap, TrendingUp, Play, MapPin, DollarSign, Calendar, Users, Briefcase } from 'lucide-react';
 import PortfolioDrawer from '@/components/PortfolioDrawer';
 import { useLanguage } from '@/contexts/LanguageContext';
+
+interface Project {
+  id: number;
+  name: string;
+  type: string;
+  yield: string;
+  occupancy: string;
+  financing: number;
+  value: string;
+  photos: string[];
+  description: string;
+}
+
+interface Floor {
+  id: string;
+  name: string;
+  level: number;
+  color: string;
+  projects: Project[];
+}
+
 const RealEstate = () => {
-  const {
-    language
-  } = useLanguage();
+  const { t } = useLanguage();
   const [rotation, setRotation] = useState(0);
-  const [selectedRoom, setSelectedRoom] = useState<any | null>(null);
+  const [selectedRoom, setSelectedRoom] = useState<Project | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState(0);
   const [showPortfolio, setShowPortfolio] = useState(false);
   const metrics = [
-    { label: 'Average Yield', value: '7.8%' },
-    { label: 'Occupancy', value: '93%' }
+    { label: t('realEstate.metrics.averageYield'), value: '7.8%' },
+    { label: t('realEstate.metrics.occupancy'), value: '93%' }
   ];
-  const floors = [{
-    id: 'rooftop',
-    name: language === 'fr' ? 'Toit - Énergies' : 'Rooftop - Energy',
-    level: 3,
-    color: 'from-green-500 to-green-700',
-    projects: [{
-      id: 1,
-      name: 'Solar Park Berlin',
-      type: 'Green Energy',
-      yield: '8.2%',
-      occupancy: '100%',
-      financing: 85,
-      value: '€2.4M',
-      photos: ['solar1.jpg', 'solar2.jpg'],
-      description: language === 'fr' ? 'Parc solaire urbain premium' : 'Premium urban solar park'
-    }]
-  }, {
-    id: 'upper',
-    name: language === 'fr' ? 'Étage - Résidentiel' : 'Upper Floor - Residential',
-    level: 2,
-    color: 'from-blue-500 to-blue-700',
-    projects: [{
-      id: 2,
-      name: 'Luxury Apartments Munich',
-      type: 'Residential',
-      yield: '6.8%',
-      occupancy: '95%',
-      financing: 78,
-      value: '€8.7M',
-      photos: ['apt1.jpg', 'apt2.jpg', 'apt3.jpg'],
-      description: language === 'fr' ? 'Appartements de luxe centre-ville' : 'Luxury downtown apartments'
-    }, {
-      id: 3,
-      name: 'Student Housing Frankfurt',
-      type: 'Residential',
-      yield: '7.4%',
-      occupancy: '100%',
-      financing: 92,
-      value: '€5.2M',
-      photos: ['student1.jpg', 'student2.jpg'],
-      description: language === 'fr' ? 'Résidence étudiante moderne' : 'Modern student residence'
-    }]
-  }, {
-    id: 'ground',
-    name: language === 'fr' ? 'Rez-de-chaussée - Commercial' : 'Ground Floor - Commercial',
-    level: 1,
-    color: 'from-purple-500 to-purple-700',
-    projects: [{
-      id: 4,
-      name: 'Retail Center Hamburg',
-      type: 'Commercial',
-      yield: '9.1%',
-      occupancy: '88%',
-      financing: 67,
-      value: '€12.3M',
-      photos: ['retail1.jpg', 'retail2.jpg'],
-      description: language === 'fr' ? 'Centre commercial premium' : 'Premium shopping center'
-    }, {
-      id: 5,
-      name: 'Office Complex Düsseldorf',
-      type: 'Office',
-      yield: '7.9%',
-      occupancy: '92%',
-      financing: 73,
-      value: '€15.6M',
-      photos: ['office1.jpg', 'office2.jpg', 'office3.jpg'],
-      description: language === 'fr' ? 'Complexe de bureaux moderne' : 'Modern office complex'
-    }]
-  }];
+  const floors: Floor[] = [
+    {
+      id: 'rooftop',
+      name: t('realEstate.floor.rooftop'),
+      level: 3,
+      color: 'from-green-500 to-green-700',
+      projects: [
+        {
+          id: 1,
+          name: 'Solar Park Berlin',
+          type: 'Green Energy',
+          yield: '8.2%',
+          occupancy: '100%',
+          financing: 85,
+          value: '€2.4M',
+          photos: ['solar1.jpg', 'solar2.jpg'],
+          description: t('realEstate.project.solarPark')
+        }
+      ]
+    },
+    {
+      id: 'upper',
+      name: t('realEstate.floor.upper'),
+      level: 2,
+      color: 'from-blue-500 to-blue-700',
+      projects: [
+        {
+          id: 2,
+          name: 'Luxury Apartments Munich',
+          type: 'Residential',
+          yield: '6.8%',
+          occupancy: '95%',
+          financing: 78,
+          value: '€8.7M',
+          photos: ['apt1.jpg', 'apt2.jpg', 'apt3.jpg'],
+          description: t('realEstate.project.luxuryApts')
+        },
+        {
+          id: 3,
+          name: 'Student Housing Frankfurt',
+          type: 'Residential',
+          yield: '7.4%',
+          occupancy: '100%',
+          financing: 92,
+          value: '€5.2M',
+          photos: ['student1.jpg', 'student2.jpg'],
+          description: t('realEstate.project.studentHousing')
+        }
+      ]
+    },
+    {
+      id: 'ground',
+      name: t('realEstate.floor.ground'),
+      level: 1,
+      color: 'from-purple-500 to-purple-700',
+      projects: [
+        {
+          id: 4,
+          name: 'Retail Center Hamburg',
+          type: 'Commercial',
+          yield: '9.1%',
+          occupancy: '88%',
+          financing: 67,
+          value: '€12.3M',
+          photos: ['retail1.jpg', 'retail2.jpg'],
+          description: t('realEstate.project.retailCenter')
+        },
+        {
+          id: 5,
+          name: 'Office Complex Düsseldorf',
+          type: 'Office',
+          yield: '7.9%',
+          occupancy: '92%',
+          financing: 73,
+          value: '€15.6M',
+          photos: ['office1.jpg', 'office2.jpg', 'office3.jpg'],
+          description: t('realEstate.project.officeComplex')
+        }
+      ]
+    }
+  ];
   const allProjects = floors.flatMap(floor => floor.projects);
   const totalRent = allProjects.reduce((sum, project) => {
     const value = parseFloat(project.value.replace('€', '').replace('M', ''));
@@ -130,7 +161,7 @@ const RealEstate = () => {
         <div className="section-container">
           <button onClick={() => window.history.back()} className="flex items-center gap-2 mb-8 text-slate-50">
             <ArrowLeft className="w-4 h-4" />
-            {language === 'fr' ? 'Retour aux investissements' : 'Back to investments'}
+            {t('realEstate.back')}
           </button>
         </div>
 
@@ -139,10 +170,10 @@ const RealEstate = () => {
           <div className="section-container">
             <div className="text-center mb-12">
               <h1 className="text-6xl font-bold text-white mb-6">
-                {language === 'fr' ? 'Crowdfunding Immobilier' : 'Real-estate Crowdfunding'}
+                {t('realEstate.hero.title')}
               </h1>
               <p className="text-xl text-slate-300 max-w-3xl mx-auto">
-                {language === 'fr' ? 'Explorez notre villa d\'investissement interactive. Chaque pièce représente un projet immobilier en cours.' : 'Explore our interactive investment villa. Each room represents an active real estate project.'}
+                {t('realEstate.hero.description')}
               </p>
             </div>
 
@@ -153,7 +184,7 @@ const RealEstate = () => {
                   <div className="w-4 h-4 bg-orange-400 rounded-full animate-heartbeat" />
                   <div>
                     <div className="text-sm text-slate-400">
-                      {language === 'fr' ? 'Revenus locatifs mensuels agrégés' : 'Aggregate Monthly Rental Income'}
+                      {t('realEstate.hero.rentalIncome')}
                     </div>
                     <div className="text-2xl font-bold text-orange-400">
                       €{totalRent.toFixed(1)}M
@@ -170,10 +201,10 @@ const RealEstate = () => {
           <div className="section-container">
             <div className="text-center mb-8">
               <h3 className="text-2xl font-bold text-white mb-4">
-                {language === 'fr' ? 'Villa d\'Investissement 3D' : '3D Investment Villa'}
+                {t('realEstate.villaTitle')}
               </h3>
               <p className="text-slate-400">
-                {language === 'fr' ? 'Glissez horizontalement pour faire tourner la villa • Cliquez sur une pièce pour les détails' : 'Drag horizontally to rotate the villa • Click on a room for details'}
+                {t('realEstate.villaInstructions')}
               </p>
             </div>
 
@@ -227,7 +258,7 @@ const RealEstate = () => {
             <div className="mt-8 flex justify-center">
               <div className="bg-slate-800/50 rounded-lg p-4 border border-slate-600">
                 <div className="text-white font-bold mb-2 text-center">
-                  {language === 'fr' ? 'Plan de la Villa' : 'Villa Layout'}
+                  {t('realEstate.villaLayout')}
                 </div>
                 <div className="flex gap-2">
                   {floors.map(floor => <div key={floor.id} className={`w-16 h-8 bg-gradient-to-r ${floor.color} rounded text-xs text-white flex items-center justify-center`}>
@@ -243,35 +274,35 @@ const RealEstate = () => {
         <section className="py-16 bg-slate-900/50">
           <div className="section-container">
             <h3 className="text-2xl font-bold text-center text-white mb-8">
-              {language === 'fr' ? 'Statistiques du Portefeuille' : 'Portfolio Statistics'}
+              {t('realEstate.portfolioStats.title')}
             </h3>
             <div className="grid md:grid-cols-4 gap-6">
               <div className="bg-slate-800/50 backdrop-blur-sm p-6 rounded-xl border border-slate-700 text-center">
                 <Building className="w-8 h-8 text-orange-400 mx-auto mb-3" />
                 <div className="text-2xl font-bold text-white mb-1">{allProjects.length}</div>
                 <div className="text-slate-400 text-sm">
-                  {language === 'fr' ? 'Projets Actifs' : 'Active Projects'}
+                  {t('realEstate.portfolioStats.projects')}
                 </div>
               </div>
               <div className="bg-slate-800/50 backdrop-blur-sm p-6 rounded-xl border border-slate-700 text-center">
                 <DollarSign className="w-8 h-8 text-emerald-400 mx-auto mb-3" />
                 <div className="text-2xl font-bold text-white mb-1">7.8%</div>
                 <div className="text-slate-400 text-sm">
-                  {language === 'fr' ? 'Rendement Moyen' : 'Average Yield'}
+                  {t('realEstate.portfolioStats.averageYield')}
                 </div>
               </div>
               <div className="bg-slate-800/50 backdrop-blur-sm p-6 rounded-xl border border-slate-700 text-center">
                 <Users className="w-8 h-8 text-blue-400 mx-auto mb-3" />
                 <div className="text-2xl font-bold text-white mb-1">93%</div>
                 <div className="text-slate-400 text-sm">
-                  {language === 'fr' ? 'Taux d\'Occupation' : 'Occupancy Rate'}
+                  {t('realEstate.portfolioStats.occupancyRate')}
                 </div>
               </div>
               <div className="bg-slate-800/50 backdrop-blur-sm p-6 rounded-xl border border-slate-700 text-center">
                 <Calendar className="w-8 h-8 text-purple-400 mx-auto mb-3" />
                 <div className="text-2xl font-bold text-white mb-1">78%</div>
                 <div className="text-slate-400 text-sm">
-                  {language === 'fr' ? 'Financement Moyen' : 'Average Financing'}
+                  {t('realEstate.portfolioStats.averageFinancing')}
                 </div>
               </div>
             </div>
@@ -316,23 +347,23 @@ const RealEstate = () => {
               <div className="space-y-6">
                 <div>
                   <h4 className="text-xl font-bold text-white mb-4">
-                    {language === 'fr' ? 'Métriques Clés' : 'Key Metrics'}
+                    {t('realEstate.keyMetrics')}
                   </h4>
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <div className="text-slate-400 text-sm">{language === 'fr' ? 'Rendement' : 'Yield'}</div>
+                      <div className="text-slate-400 text-sm">{t('realEstate.metrics.yield')}</div>
                       <div className="text-2xl font-bold text-emerald-400">{selectedRoom.yield}</div>
                     </div>
                     <div>
-                      <div className="text-slate-400 text-sm">{language === 'fr' ? 'Occupation' : 'Occupancy'}</div>
+                      <div className="text-slate-400 text-sm">{t('realEstate.metrics.occupancy')}</div>
                       <div className="text-2xl font-bold text-blue-400">{selectedRoom.occupancy}</div>
                     </div>
                     <div>
-                      <div className="text-slate-400 text-sm">{language === 'fr' ? 'Valeur' : 'Value'}</div>
+                      <div className="text-slate-400 text-sm">{t('realEstate.metrics.value')}</div>
                       <div className="text-2xl font-bold text-white">{selectedRoom.value}</div>
                     </div>
                     <div>
-                      <div className="text-slate-400 text-sm">{language === 'fr' ? 'Financement' : 'Financing'}</div>
+                      <div className="text-slate-400 text-sm">{t('realEstate.metrics.financing')}</div>
                       <div className="text-2xl font-bold text-orange-400">{selectedRoom.financing}%</div>
                     </div>
                   </div>
@@ -341,7 +372,7 @@ const RealEstate = () => {
                 {/* Financing Progress */}
                 <div>
                   <h4 className="text-lg font-bold text-white mb-3">
-                    {language === 'fr' ? 'Progression du Financement' : 'Financing Progress'}
+                    {t('realEstate.financingProgress')}
                   </h4>
                   <div className="bg-slate-800 rounded-full h-4 overflow-hidden">
                     <div className="h-full bg-gradient-to-r from-orange-400 to-orange-500 transition-all duration-500" style={{
@@ -356,13 +387,13 @@ const RealEstate = () => {
 
                 <div>
                   <h4 className="text-lg font-bold text-white mb-3">
-                    {language === 'fr' ? 'Description' : 'Description'}
+                    {t('realEstate.description')}
                   </h4>
                   <p className="text-slate-300">{selectedRoom.description}</p>
                 </div>
 
                 <button className="w-full bg-orange-400 hover:bg-orange-500 text-slate-900 py-3 px-6 rounded-lg font-bold transition-colors">
-                  {language === 'fr' ? 'Investir dans ce projet' : 'Invest in this project'}
+                  {t('realEstate.invest')}
                 </button>
               </div>
             </div>

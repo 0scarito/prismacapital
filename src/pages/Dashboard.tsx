@@ -82,18 +82,18 @@ const Dashboard = () => {
       } = await supabase.from('coupons').select('*').eq('user_id', user?.id).order('created_at', {
         ascending: false
       });
-      if (couponsError) throw couponsError;
-      setCoupons((couponsData || []) as Coupon[]);
-    } catch (error: any) {
-      toast({
-        title: "Erreur",
-        description: "Impossible de charger vos données.",
-        variant: "destructive"
-      });
-    } finally {
-      setLoadingData(false);
-    }
-  };
+        if (couponsError) throw couponsError;
+        setCoupons((couponsData || []) as Coupon[]);
+      } catch {
+        toast({
+          title: t('dashboard.errorTitle'),
+          description: t('dashboard.errorDescription'),
+          variant: 'destructive'
+        });
+      } finally {
+        setLoadingData(false);
+      }
+    };
   const fetchInvestmentData = async () => {
     // Simulation de données d'investissement (en réalité, on récupérerait ça d'une API)
     const mockInvestments: Investment[] = [{

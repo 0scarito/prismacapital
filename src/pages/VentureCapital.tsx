@@ -23,9 +23,7 @@ interface Platform {
   deals: Deal[];
 }
 const VentureCapital = () => {
-  const {
-    language
-  } = useLanguage();
+  const { t } = useLanguage();
   const [scrollY, setScrollY] = useState(0);
   const [activePlatform, setActivePlatform] = useState<number | null>(null);
   const [selectedDeal, setSelectedDeal] = useState<Deal | null>(null);
@@ -33,8 +31,8 @@ const VentureCapital = () => {
   const [towerOffset, setTowerOffset] = useState(0);
   const [showPortfolio, setShowPortfolio] = useState(false);
   const metrics = [
-    { label: 'Portfolio IRR', value: '28.5%' },
-    { label: 'Exits', value: '12' }
+    { label: t('venture.portfolioIrr'), value: '28.5%' },
+    { label: t('venture.exits'), value: '12' }
   ];
   const platforms: Platform[] = [{
     id: 1,
@@ -142,7 +140,7 @@ const VentureCapital = () => {
         <div className="section-container">
           <button onClick={() => window.history.back()} className="flex items-center gap-2 mb-8 text-slate-50">
             <ArrowLeft className="w-4 h-4" />
-            {language === 'fr' ? 'Retour aux investissements' : 'Back to investments'}
+            {t('venture.back')}
           </button>
         </div>
 
@@ -151,10 +149,10 @@ const VentureCapital = () => {
           <div className="section-container">
             <div className="text-center">
               <h1 className="text-6xl font-bold mb-6">
-                {language === 'fr' ? 'Capital-risque' : 'Venture Capital'}
+                {t('venture.hero.title')}
               </h1>
               <p className="text-xl text-slate-300 max-w-3xl mx-auto mb-12">
-                {language === 'fr' ? 'Gravissez notre tour de lancement et découvrez les start-ups les plus prometteuses par secteur.' : 'Climb our launchpad tower and discover the most promising startups by sector.'}
+                {t('venture.hero.description')}
               </p>
             </div>
 
@@ -213,7 +211,7 @@ const VentureCapital = () => {
                     <div className="flex justify-between items-start mb-6">
                       <h3 className="text-3xl font-bold text-white">{platform.theme}</h3>
                       <div className="text-sm bg-white/20 px-3 py-1 rounded-full">
-                        {platform.deals.length} {language === 'fr' ? 'deals' : 'deals'}
+                        {platform.deals.length} {t('venture.deals')}
                       </div>
                     </div>
 
@@ -233,16 +231,16 @@ const VentureCapital = () => {
                             </div>
                             <div className="grid grid-cols-2 gap-2 text-sm mb-2">
                               <div>
-                                <div className="text-white/60">{language === 'fr' ? 'Étape' : 'Stage'}</div>
+                                <div className="text-white/60">{t('venture.stage')}</div>
                                 <div className="font-medium text-white">{deal.stage}</div>
                               </div>
                               <div>
-                                <div className="text-white/60">{language === 'fr' ? 'Financement' : 'Funding'}</div>
+                                <div className="text-white/60">{t('venture.funding')}</div>
                                 <div className="font-medium text-white">{deal.funding}</div>
                               </div>
                             </div>
                             <div className="text-sm text-white/80">
-                              {language === 'fr' ? 'Valorisation' : 'Valuation'}: <span className="font-medium">{deal.valuation}</span>
+                              {t('venture.valuation')}: <span className="font-medium">{deal.valuation}</span>
                             </div>
                           </div>
                         </div>
@@ -264,19 +262,19 @@ const VentureCapital = () => {
             <div className="grid md:grid-cols-4 gap-8 text-center">
               <div>
                 <div className="text-4xl font-bold text-orange-400 mb-2">47</div>
-                <div className="text-slate-300">{language === 'fr' ? 'Start-ups actives' : 'Active Startups'}</div>
+                <div className="text-slate-300">{t('venture.stats.activeStartups')}</div>
               </div>
               <div>
                 <div className="text-4xl font-bold text-orange-400 mb-2">€180M</div>
-                <div className="text-slate-300">{language === 'fr' ? 'Fonds sous gestion' : 'Assets Under Management'}</div>
+                <div className="text-slate-300">{t('venture.stats.aum')}</div>
               </div>
               <div>
                 <div className="text-4xl font-bold text-orange-400 mb-2">12</div>
-                <div className="text-slate-300">{language === 'fr' ? 'Sorties réussies' : 'Successful Exits'}</div>
+                <div className="text-slate-300">{t('venture.stats.exits')}</div>
               </div>
               <div>
                 <div className="text-4xl font-bold text-orange-400 mb-2">8.5x</div>
-                <div className="text-slate-300">{language === 'fr' ? 'Multiple moyen' : 'Average Multiple'}</div>
+                <div className="text-slate-300">{t('venture.stats.averageMultiple')}</div>
               </div>
             </div>
           </div>
@@ -318,19 +316,19 @@ const VentureCapital = () => {
               <div className="space-y-6">
                 <div>
                   <h4 className="text-xl font-bold text-white mb-4">
-                    {language === 'fr' ? 'Informations clés' : 'Key Information'}
+                    {t('venture.keyInfo')}
                   </h4>
                   <div className="space-y-3">
                     <div className="flex justify-between">
-                      <span className="text-slate-400">{language === 'fr' ? 'Étape' : 'Stage'}</span>
+                      <span className="text-slate-400">{t('venture.stage')}</span>
                       <span className="text-white font-medium">{selectedDeal.stage}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-slate-400">{language === 'fr' ? 'Financement' : 'Funding'}</span>
+                      <span className="text-slate-400">{t('venture.funding')}</span>
                       <span className="text-white font-medium">{selectedDeal.funding}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-slate-400">{language === 'fr' ? 'Valorisation' : 'Valuation'}</span>
+                      <span className="text-slate-400">{t('venture.valuation')}</span>
                       <span className="text-white font-medium">{selectedDeal.valuation}</span>
                     </div>
                   </div>
@@ -338,7 +336,7 @@ const VentureCapital = () => {
 
                 <div>
                   <h4 className="text-xl font-bold text-white mb-4">
-                    {language === 'fr' ? 'Jalons à venir' : 'Upcoming Milestones'}
+                    {t('venture.upcomingMilestones')}
                   </h4>
                   <div className="space-y-3">
                     {selectedDeal.milestones.map((milestone: string, index: number) => <div key={index} className="flex items-center gap-3">
@@ -349,7 +347,7 @@ const VentureCapital = () => {
                 </div>
 
                 <button className="w-full bg-orange-400 hover:bg-orange-500 text-slate-900 py-3 px-6 rounded-lg font-bold transition-colors">
-                  {language === 'fr' ? 'Investir maintenant' : 'Invest Now'}
+                  {t('venture.investNow')}
                 </button>
               </div>
             </div>

@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { Helmet } from 'react-helmet-async';
 import Navigation from '@/components/Navigation';
 import HeroSection from '@/components/HeroSection';
 import CredibilityBar from '@/components/CredibilityBar';
@@ -9,39 +10,16 @@ import Footer from '@/components/Footer';
 
 const Index = () => {
   useEffect(() => {
-    // Add smooth scroll behavior to html element
     document.documentElement.classList.add('smooth-scroll');
-    
-    // SEO Meta tags
-    document.title = 'Prisma Capital | Gift a stake in tomorrow';
-    
-    const metaDescription = document.querySelector('meta[name="description"]');
-    if (metaDescription) {
-      metaDescription.setAttribute('content', 
-        'Démocratisez l\'accès au private equity avec les Cartes Prisma Capital. Cartes-cadeaux NFC physiques pour investir dans les marchés privés. AMF agréé.'
-      );
-    }
-
-    // OpenGraph tags
-    const ogTitle = document.querySelector('meta[property="og:title"]');
-    if (ogTitle) {
-      ogTitle.setAttribute('content', 'Prisma Capital Cards | Gift Private-Markets Access');
-    }
-
-    const ogDescription = document.querySelector('meta[property="og:description"]');
-    if (ogDescription) {
-      ogDescription.setAttribute('content', 
-        'Démocratisez l\'accès au private equity avec les Cartes Prisma Capital. Cartes-cadeaux NFC physiques pour investir dans les marchés privés.'
-      );
-    }
 
     // Add analytics event tracking
     const handleCTAClick = (section: string) => {
       // Google Tag Manager event
-      if (typeof window !== 'undefined' && (window as any).dataLayer) {
-        (window as any).dataLayer.push({
+      if (typeof window !== 'undefined') {
+        const w = window as Window & { dataLayer?: Record<string, unknown>[] };
+        w.dataLayer?.push({
           event: 'cta_click',
-          section: section,
+          section,
           timestamp: Date.now()
         });
       }
@@ -66,6 +44,18 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background font-sans">
+      <Helmet>
+        <title>Prisma Capital | Gift a stake in tomorrow</title>
+        <meta
+          name="description"
+          content="Démocratisez l'accès au private equity avec les Cartes Prisma Capital. Cartes-cadeaux NFC physiques pour investir dans les marchés privés. AMF agréé."
+        />
+        <meta property="og:title" content="Prisma Capital Cards | Gift Private-Markets Access" />
+        <meta
+          property="og:description"
+          content="Démocratisez l'accès au private equity avec les Cartes Prisma Capital. Cartes-cadeaux NFC physiques pour investir dans les marchés privés."
+        />
+      </Helmet>
       {/* Navigation */}
       <Navigation />
       

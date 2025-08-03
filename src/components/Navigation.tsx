@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useAuth } from '@/hooks/useAuth';
 const Navigation = () => {
@@ -13,6 +14,7 @@ const Navigation = () => {
   const {
     user
   } = useAuth();
+  const navigate = useNavigate();
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
@@ -48,7 +50,7 @@ const Navigation = () => {
         });
       }
     } else {
-      window.location.href = href;
+      navigate(href);
     }
     setIsOpen(false);
   };
@@ -56,20 +58,26 @@ const Navigation = () => {
       <div className="section-container">
         <div className="flex items-center justify-between py-4">
           {/* Logo */}
-          <button onClick={() => handleNavigation('/')} className="flex items-center space-x-2">
+          <Link to="/" onClick={e => {
+            e.preventDefault();
+            handleNavigation('/');
+          }} className="flex items-center space-x-2">
             <div className="w-8 h-8 rounded-lg bg-gradient-prisma flex items-center justify-center">
               <span className="text-white font-bold text-sm">C</span>
             </div>
             <span className="font-heading text-xl text-foreground">
               Prisma Capital
             </span>
-          </button>
+          </Link>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
-            {navItems.map(item => <button key={item.href} onClick={() => handleNavigation(item.href)} className="font-body transition-colors duration-200 text-slate-50 bg-[#000a0e]/0">
+            {navItems.map(item => <Link key={item.href} to={item.href} onClick={e => {
+              e.preventDefault();
+              handleNavigation(item.href);
+            }} className="font-body transition-colors duration-200 text-slate-50 bg-[#000a0e]/0">
                 {item.label}
-              </button>)}
+              </Link>)}
 
             {/* Language Toggle */}
             <div className="flex items-center bg-muted rounded-full p-1">
@@ -92,9 +100,12 @@ const Navigation = () => {
         {/* Mobile Navigation */}
         {isOpen && <div className="md:hidden bg-background border-t border-border">
             <div className="py-4 space-y-4">
-              {navItems.map(item => <button key={item.href} onClick={() => handleNavigation(item.href)} className="block w-full text-left font-body text-foreground hover:text-primary transition-colors duration-200 py-2">
+              {navItems.map(item => <Link key={item.href} to={item.href} onClick={e => {
+                e.preventDefault();
+                handleNavigation(item.href);
+              }} className="block w-full text-left font-body text-foreground hover:text-primary transition-colors duration-200 py-2">
                   {item.label}
-                </button>)}
+                </Link>)}
 
               {/* Mobile Language Toggle */}
               <div className="flex items-center bg-muted rounded-full p-1">

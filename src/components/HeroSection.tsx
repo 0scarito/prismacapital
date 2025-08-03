@@ -5,7 +5,11 @@ const HeroSection = () => {
   const {
     t
   } = useLanguage();
-  const giftScenarios = ["Send €200 of French clean-tech equity to Clara", "Support Brittany's agritech start-ups for Jules' 18th birthday", "Back the French economy, one gift at a time"];
+  const giftScenarios = [
+    t('hero.giftScenarios.0'),
+    t('hero.giftScenarios.1'),
+    t('hero.giftScenarios.2')
+  ];
   const scrollToSection = (href: string) => {
     const element = document.querySelector(href);
     if (element) {
@@ -74,7 +78,7 @@ const HeroSection = () => {
                   <div className="w-6 h-6 bg-primary rounded flex items-center justify-center">
                     <div className="w-3 h-3 rounded-full bg-white"></div>
                   </div>
-                  <span className="font-sans text-sm text-muted-foreground">Prisma Capital Gift Builder</span>
+                  <span className="font-sans text-sm text-muted-foreground">{t('hero.giftBuilderTitle')}</span>
                 </div>
                 
                 <div className="min-h-[4rem] flex items-center py-2">
@@ -100,7 +104,7 @@ const HeroSection = () => {
       {/* Scroll Indicator */}
       <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-light-gray/60 animate-bounce">
         <div className="flex flex-col items-center gap-2">
-          <span className="font-sans text-sm">Scroll to explore</span>
+          <span className="font-sans text-sm">{t('hero.scrollToExplore')}</span>
           <div className="w-6 h-10 border-2 border-light-gray/30 rounded-full flex justify-center">
             <div className="w-1 h-3 bg-light-gray/60 rounded-full mt-2 animate-pulse"></div>
           </div>

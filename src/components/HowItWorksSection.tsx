@@ -9,24 +9,24 @@ const HowItWorksSection = () => {
   const steps = [
     {
       number: "1",
-      title: "Pick a sector",
-      description: "Choose from Clean-Tech, Food-Innovation, AI, and more—each portfolio vetted with our AMF-registered partner.",
+      title: t('howItWorks.steps.0.title'),
+      description: t('howItWorks.steps.0.description'),
       icon: Target,
-      interaction: "Hover reveals real start-up thumbnails."
+      interaction: t('howItWorks.steps.0.interaction')
     },
     {
-      number: "2", 
-      title: "Personalise the gift",
-      description: "Add the recipient's name and a message. We print it on archival-grade card stock with gold-foil edge.",
+      number: "2",
+      title: t('howItWorks.steps.1.title'),
+      description: t('howItWorks.steps.1.description'),
       icon: Gift,
-      interaction: "Live text input updates a coupon mock-up."
+      interaction: t('howItWorks.steps.1.interaction')
     },
     {
       number: "3",
-      title: "They redeem & learn",
-      description: "Recipient scans the QR, completes KYC with a guardian if under 18, and tracks their investment in our app—while taking bite-size finance lessons.",
+      title: t('howItWorks.steps.2.title'),
+      description: t('howItWorks.steps.2.description'),
       icon: Users,
-      interaction: "Animated phone mock slides in."
+      interaction: t('howItWorks.steps.2.interaction')
     }
   ];
 

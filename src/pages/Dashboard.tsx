@@ -43,9 +43,7 @@ const Dashboard = () => {
     signOut,
     loading
   } = useAuth();
-  const {
-    t
-  } = useLanguage();
+  const { t, language } = useLanguage();
   const [coupons, setCoupons] = useState<Coupon[]>([]);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [investments, setInvestments] = useState<Investment[]>([]);
@@ -208,11 +206,11 @@ const Dashboard = () => {
   const getStatusText = (status: string) => {
     switch (status) {
       case 'active':
-        return 'Actif';
+        return t('dashboard.status.active');
       case 'used':
-        return 'Utilisé';
+        return t('dashboard.status.used');
       case 'expired':
-        return 'Expiré';
+        return t('dashboard.status.expired');
       default:
         return status;
     }
@@ -221,7 +219,7 @@ const Dashboard = () => {
     return <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Chargement...</p>
+          <p className="text-muted-foreground">{t('dashboard.loading')}</p>
         </div>
       </div>;
   }
@@ -236,7 +234,7 @@ const Dashboard = () => {
             <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-slate-50">
               Prisma Capital
             </h1>
-            <span className="text-slate-50">Espace Personnel</span>
+            <span className="text-slate-50">{t('dashboard.personalSpace')}</span>
           </div>
           <div className="flex items-center space-x-4">
             
@@ -245,7 +243,7 @@ const Dashboard = () => {
             </Button>
             <Button variant="outline" size="sm" onClick={handleSignOut}>
               <LogOut className="h-4 w-4 mr-2" />
-              Déconnexion
+              {t('dashboard.signOut')}
             </Button>
           </div>
         </div>
@@ -255,19 +253,19 @@ const Dashboard = () => {
         {/* Welcome Section */}
         <div className="mb-8">
           <h2 className="text-3xl font-bold mb-2">
-            Bienvenue, {profile?.display_name || 'Utilisateur'} !
+            {t('dashboard.welcome')}, {profile?.display_name || t('dashboard.user')} !
           </h2>
           <p className="text-slate-50">
-            Gérez vos coupons et découvrez vos avantages exclusifs.
+            {t('dashboard.manageCoupons')}
           </p>
         </div>
 
         {/* Main Content */}
         <Tabs defaultValue="overview" className="space-y-6">
           <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="overview">Vue d'ensemble</TabsTrigger>
-            <TabsTrigger value="coupons">Mes Coupons</TabsTrigger>
-            <TabsTrigger value="investments">Mes Investissements</TabsTrigger>
+            <TabsTrigger value="overview">{t('dashboard.tabs.overview')}</TabsTrigger>
+            <TabsTrigger value="coupons">{t('dashboard.tabs.coupons')}</TabsTrigger>
+            <TabsTrigger value="investments">{t('dashboard.tabs.investments')}</TabsTrigger>
           </TabsList>
 
           <TabsContent value="overview" className="space-y-6">
@@ -275,7 +273,7 @@ const Dashboard = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">Coupons Actifs</CardTitle>
+                  <CardTitle className="text-sm font-medium">{t('dashboard.stats.activeCoupons')}</CardTitle>
                   <Gift className="h-4 w-4 text-green-500" />
                 </CardHeader>
                 <CardContent>
@@ -287,7 +285,7 @@ const Dashboard = () => {
               
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">Coupons Utilisés</CardTitle>
+                  <CardTitle className="text-sm font-medium">{t('dashboard.stats.usedCoupons')}</CardTitle>
                   <Calendar className="h-4 w-4 text-gray-500" />
                 </CardHeader>
                 <CardContent>
@@ -299,7 +297,7 @@ const Dashboard = () => {
               
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">Valeur Totale</CardTitle>
+                  <CardTitle className="text-sm font-medium">{t('dashboard.stats.totalValue')}</CardTitle>
                   <Euro className="h-4 w-4 text-primary" />
                 </CardHeader>
                 <CardContent>
@@ -315,20 +313,20 @@ const Dashboard = () => {
             {/* Coupons Section */}
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center">
+                  <CardTitle className="flex items-center">
                   <QrCode className="h-5 w-5 mr-2" />
-                  Mes Coupons
+                  {t('dashboard.coupons.title')}
                 </CardTitle>
                 <CardDescription>
-                  Voici tous vos coupons disponibles et utilisés.
+                  {t('dashboard.coupons.description')}
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 {coupons.length === 0 ? <div className="text-center py-8">
                     <Gift className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                    <h3 className="text-lg font-medium mb-2">Aucun coupon</h3>
+                    <h3 className="text-lg font-medium mb-2">{t('dashboard.coupons.none')}</h3>
                     <p className="text-muted-foreground">
-                      Vous n'avez pas encore de coupons. Revenez bientôt !
+                      {t('dashboard.coupons.empty')}
                     </p>
                   </div> : <div className="space-y-4">
                     {coupons.map(coupon => <div key={coupon.id} className="border rounded-lg p-4 hover:bg-accent/50 transition-colors">
@@ -353,8 +351,8 @@ const Dashboard = () => {
                           </div>
                           
                           <div className="text-xs text-muted-foreground">
-                            {coupon.expires_at && <p>Expire le {new Date(coupon.expires_at).toLocaleDateString()}</p>}
-                            {coupon.used_at && <p>Utilisé le {new Date(coupon.used_at).toLocaleDateString()}</p>}
+                            {coupon.expires_at && <p>{t('dashboard.coupon.expires')} {new Date(coupon.expires_at).toLocaleDateString(language === 'fr' ? 'fr-FR' : 'en-US')}</p>}
+                            {coupon.used_at && <p>{t('dashboard.coupon.used')} {new Date(coupon.used_at).toLocaleDateString(language === 'fr' ? 'fr-FR' : 'en-US')}</p>}
                           </div>
                         </div>
                       </div>)}
@@ -391,14 +389,14 @@ const Dashboard = () => {
                           <CartesianGrid strokeDasharray="3 3" className="opacity-30" />
                           <XAxis dataKey="date" tick={{
                         fontSize: 12
-                      }} tickFormatter={value => new Date(value).toLocaleDateString('fr-FR', {
+                      }} tickFormatter={value => new Date(value).toLocaleDateString(language === 'fr' ? 'fr-FR' : 'en-US', {
                         month: 'short',
                         day: 'numeric'
                       })} />
                           <YAxis tick={{
                         fontSize: 12
                       }} domain={['dataMin - 10', 'dataMax + 10']} />
-                          <Tooltip formatter={(value: number) => [investment.symbol === 'GOLD' ? `${value}$` : investment.symbol === 'BTCETF' ? `${value.toLocaleString()}$` : `${value}$`, 'Prix']} labelFormatter={label => new Date(label).toLocaleDateString('fr-FR')} />
+                          <Tooltip formatter={(value: number) => [investment.symbol === 'GOLD' ? `${value}$` : investment.symbol === 'BTCETF' ? `${value.toLocaleString()}$` : `${value}$`, t('dashboard.price')]} labelFormatter={label => new Date(label).toLocaleDateString(language === 'fr' ? 'fr-FR' : 'en-US')} />
                           <Line type="monotone" dataKey="price" stroke={investment.changePercent24h >= 0 ? '#10b981' : '#ef4444'} strokeWidth={2} dot={false} activeDot={{
                         r: 4
                       }} />

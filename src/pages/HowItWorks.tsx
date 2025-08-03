@@ -1,29 +1,44 @@
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import { ArrowRight, CheckCircle, Gift, Smartphone, TrendingUp } from 'lucide-react';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const HowItWorks = () => {
+  const { t } = useLanguage();
+
   const steps = [
     {
       number: "01",
-      title: "Choisissez votre secteur",
-      description: "Sélectionnez parmi nos secteurs soigneusement sélectionnés : Clean-Tech, Innovation Alimentaire, IA, et plus encore. Chaque portefeuille est vérifié avec notre partenaire agréé AMF.",
+      title: t('howItWorks.steps.0.title'),
+      description: t('howItWorks.steps.0.description'),
       icon: <CheckCircle className="w-8 h-8 text-metallic-gold" />,
-      features: ["Secteurs vérifiés", "Due diligence complète", "Diversification optimale"]
+      features: [
+        t('howItWorks.steps.0.features.0'),
+        t('howItWorks.steps.0.features.1'),
+        t('howItWorks.steps.0.features.2')
+      ]
     },
     {
-      number: "02", 
-      title: "Personnalisez le cadeau",
-      description: "Ajoutez le nom du destinataire et un message personnel. Nous l'imprimons sur un papier de qualité archivage avec une bordure dorée.",
+      number: "02",
+      title: t('howItWorks.steps.1.title'),
+      description: t('howItWorks.steps.1.description'),
       icon: <Gift className="w-8 h-8 text-metallic-gold" />,
-      features: ["Impression premium", "Message personnalisé", "Packaging luxe"]
+      features: [
+        t('howItWorks.steps.1.features.0'),
+        t('howItWorks.steps.1.features.1'),
+        t('howItWorks.steps.1.features.2')
+      ]
     },
     {
       number: "03",
-      title: "Livraison et activation",
-      description: "Le destinataire scanne le QR code, complète son KYC (avec un tuteur si mineur), et suit ses investissements dans notre app tout en apprenant la finance.",
+      title: t('howItWorks.steps.2.title'),
+      description: t('howItWorks.steps.2.description'),
       icon: <Smartphone className="w-8 h-8 text-metallic-gold" />,
-      features: ["KYC simplifié", "App mobile", "Leçons financières"]
+      features: [
+        t('howItWorks.steps.2.features.0'),
+        t('howItWorks.steps.2.features.1'),
+        t('howItWorks.steps.2.features.2')
+      ]
     }
   ];
 
@@ -37,11 +52,10 @@ const HowItWorks = () => {
           <div className="section-container">
             <div className="text-center max-w-4xl mx-auto">
               <h1 className="font-serif font-bold text-5xl lg:text-7xl text-warm-white mb-8 leading-tight">
-                Comment ça marche
+                {t('howItWorks.page.title')}
               </h1>
               <p className="font-sans text-xl text-light-gray mb-12 leading-relaxed">
-                Offrir un investissement en start-ups françaises n'a jamais été aussi simple. 
-                Découvrez notre processus en 3 étapes simples.
+                {t('howItWorks.page.subtitle')}
               </p>
             </div>
           </div>
@@ -95,16 +109,16 @@ const HowItWorks = () => {
           <div className="section-container">
             <div className="text-center">
               <h2 className="font-serif font-bold text-4xl text-warm-white mb-6">
-                Prêt à offrir l'avenir ?
+                {t('howItWorks.cta.title')}
               </h2>
               <p className="font-sans text-xl text-light-gray mb-8 max-w-2xl mx-auto">
-                Commencez dès maintenant et offrez un cadeau qui a du sens.
+                {t('howItWorks.cta.subtitle')}
               </p>
               <button
                 onClick={() => (window.location.href = '/investments')}
                 className="btn-primary inline-flex items-center gap-2"
               >
-                Choisir un cadeau
+                {t('howItWorks.cta.button')}
                 <ArrowRight className="w-5 h-5" />
               </button>
             </div>

@@ -1,18 +1,14 @@
 import { useState, useEffect } from 'react';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Moon, Sun } from 'lucide-react';
+import { useTheme } from 'next-themes';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useAuth } from '@/hooks/useAuth';
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const {
-    language,
-    setLanguage,
-    t
-  } = useLanguage();
-  const {
-    user
-  } = useAuth();
+  const { language, setLanguage, t } = useLanguage();
+  const { user } = useAuth();
+  const { theme, setTheme } = useTheme();
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
@@ -52,6 +48,8 @@ const Navigation = () => {
     }
     setIsOpen(false);
   };
+  const toggleTheme = () => setTheme(theme === 'dark' ? 'light' : 'dark');
+
   return <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-background/80 backdrop-blur-md shadow-lg' : 'bg-transparent'}`}>
       <div className="section-container">
         <div className="flex items-center justify-between py-4">
@@ -67,17 +65,36 @@ const Navigation = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
-            {navItems.map(item => <button key={item.href} onClick={() => handleNavigation(item.href)} className="font-body transition-colors duration-200 text-slate-50 bg-[#000a0e]/0">
+            {navItems.map(item => (
+              <button
+                key={item.href}
+                onClick={() => handleNavigation(item.href)}
+                className="font-body transition-colors duration-200 text-slate-50 bg-[#000a0e]/0"
+              >
                 {item.label}
-              </button>)}
+              </button>
+            ))}
 
-            {/* Language Toggle */}
+            <button
+              onClick={toggleTheme}
+              aria-label={theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'}
+              className="p-2 rounded-full bg-muted text-muted-foreground hover:text-foreground transition-colors"
+            >
+              {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+            </button>
+
             <div className="flex items-center bg-muted rounded-full p-1">
-              <button onClick={() => setLanguage('fr')} className={`px-3 py-1 text-sm font-medium rounded-full transition-colors ${language === 'fr' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:text-foreground'}`}>
+              <button
+                onClick={() => setLanguage('fr')}
+                className={`px-3 py-1 text-sm font-medium rounded-full transition-colors ${language === 'fr' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:text-foreground'}`}
+              >
                 FR
               </button>
               <span className="text-muted-foreground px-1">|</span>
-              <button onClick={() => setLanguage('en')} className={`px-3 py-1 text-sm font-medium rounded-full transition-colors ${language === 'en' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:text-foreground'}`}>
+              <button
+                onClick={() => setLanguage('en')}
+                className={`px-3 py-1 text-sm font-medium rounded-full transition-colors ${language === 'en' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:text-foreground'}`}
+              >
                 EN
               </button>
             </div>
@@ -90,24 +107,48 @@ const Navigation = () => {
         </div>
 
         {/* Mobile Navigation */}
-        {isOpen && <div className="md:hidden bg-background border-t border-border">
+        {isOpen && (
+          <div className="md:hidden bg-background border-t border-border">
             <div className="py-4 space-y-4">
-              {navItems.map(item => <button key={item.href} onClick={() => handleNavigation(item.href)} className="block w-full text-left font-body text-foreground hover:text-primary transition-colors duration-200 py-2">
+              {navItems.map(item => (
+                <button
+                  key={item.href}
+                  onClick={() => handleNavigation(item.href)}
+                  className="block w-full text-left font-body text-foreground hover:text-primary transition-colors duration-200 py-2"
+                >
                   {item.label}
-                </button>)}
+                </button>
+              ))}
 
-              {/* Mobile Language Toggle */}
-              <div className="flex items-center bg-muted rounded-full p-1">
-                <button onClick={() => setLanguage('fr')} className={`flex-1 px-3 py-1 text-sm font-medium rounded-full transition-colors ${language === 'fr' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:text-foreground'}`}>
-                  FR
+              {/* Mobile Theme and Language Toggle */}
+              <div className="flex items-center justify-between">
+                <button
+                  onClick={toggleTheme}
+                  aria-label={theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'}
+                  className="p-2 rounded-full bg-muted text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
                 </button>
-                <span className="text-muted-foreground px-1">|</span>
-                <button onClick={() => setLanguage('en')} className={`flex-1 px-3 py-1 text-sm font-medium rounded-full transition-colors ${language === 'en' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:text-foreground'}`}>
-                  EN
-                </button>
+
+                <div className="flex items-center bg-muted rounded-full p-1">
+                  <button
+                    onClick={() => setLanguage('fr')}
+                    className={`flex-1 px-3 py-1 text-sm font-medium rounded-full transition-colors ${language === 'fr' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:text-foreground'}`}
+                  >
+                    FR
+                  </button>
+                  <span className="text-muted-foreground px-1">|</span>
+                  <button
+                    onClick={() => setLanguage('en')}
+                    className={`flex-1 px-3 py-1 text-sm font-medium rounded-full transition-colors ${language === 'en' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:text-foreground'}`}
+                  >
+                    EN
+                  </button>
+                </div>
               </div>
             </div>
-          </div>}
+          </div>
+        )}
       </div>
     </nav>;
 };

@@ -5,8 +5,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./hooks/useAuth";
 import { LanguageProvider } from "./contexts/LanguageContext";
-import { ThemeProvider } from "next-themes";
-import { HelmetProvider } from "react-helmet-async";
 import Index from "./pages/Index";
 import HowItWorks from "./pages/HowItWorks";
 import Investments from "./pages/Investments";
@@ -35,49 +33,45 @@ import EsgReports from "./pages/EsgReports";
 const queryClient = new QueryClient();
 
 const App = () => (
-  <HelmetProvider>
-    <ThemeProvider attribute="class" defaultTheme="light">
-      <QueryClientProvider client={queryClient}>
-        <LanguageProvider>
-          <AuthProvider>
-            <TooltipProvider>
-              <Toaster />
-              <Sonner />
-              <BrowserRouter>
-                <Routes>
-                  <Route path="/" element={<Index />} />
-                  <Route path="/how-it-works" element={<HowItWorks />} />
-                  <Route path="/investments" element={<Investments />} />
-                  <Route path="/investments/private-equity" element={<PrivateEquity />} />
-                  <Route path="/investments/venture-capital" element={<VentureCapital />} />
-                  <Route path="/investments/real-estate" element={<RealEstate />} />
-                  <Route path="/investments/commodities" element={<Commodities />} />
-                  <Route path="/investments/etfs" element={<Etfs />} />
-                  <Route path="/investments/crypto" element={<Crypto />} />
-                  <Route path="/partners" element={<Partners />} />
-                  <Route path="/security" element={<Security />} />
-                  <Route path="/faq" element={<FAQ />} />
-                  <Route path="/payment" element={<Payment />} />
-                  <Route path="/auth" element={<Auth />} />
-                  <Route path="/dashboard" element={<Dashboard />} />
-                  <Route path="/legal-notices" element={<LegalNotices />} />
-                  <Route path="/risk-disclosure" element={<RiskDisclosure />} />
-                  <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-                  <Route path="/cookie-settings" element={<CookieSettings />} />
-                  <Route path="/help-center" element={<HelpCenter />} />
-                  <Route path="/contact-support" element={<ContactSupport />} />
-                  <Route path="/dici-documentation" element={<DiciDocumentation />} />
-                  <Route path="/esg-reports" element={<EsgReports />} />
-                  {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-                  <Route path="*" element={<NotFound />} />
-                </Routes>
-              </BrowserRouter>
-            </TooltipProvider>
-          </AuthProvider>
-        </LanguageProvider>
-      </QueryClientProvider>
-    </ThemeProvider>
-  </HelmetProvider>
+  <QueryClientProvider client={queryClient}>
+    <LanguageProvider>
+      <AuthProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/how-it-works" element={<HowItWorks />} />
+              <Route path="/investments" element={<Investments />} />
+              <Route path="/investments/private-equity" element={<PrivateEquity />} />
+              <Route path="/investments/venture-capital" element={<VentureCapital />} />
+              <Route path="/investments/real-estate" element={<RealEstate />} />
+              <Route path="/investments/commodities" element={<Commodities />} />
+              <Route path="/investments/etfs" element={<Etfs />} />
+              <Route path="/investments/crypto" element={<Crypto />} />
+              <Route path="/partners" element={<Partners />} />
+              <Route path="/security" element={<Security />} />
+              <Route path="/faq" element={<FAQ />} />
+              <Route path="/payment" element={<Payment />} />
+              <Route path="/auth" element={<Auth />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/legal-notices" element={<LegalNotices />} />
+              <Route path="/risk-disclosure" element={<RiskDisclosure />} />
+              <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+              <Route path="/cookie-settings" element={<CookieSettings />} />
+              <Route path="/help-center" element={<HelpCenter />} />
+              <Route path="/contact-support" element={<ContactSupport />} />
+              <Route path="/dici-documentation" element={<DiciDocumentation />} />
+              <Route path="/esg-reports" element={<EsgReports />} />
+              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </BrowserRouter>
+        </TooltipProvider>
+      </AuthProvider>
+    </LanguageProvider>
+  </QueryClientProvider>
 );
 
 export default App;

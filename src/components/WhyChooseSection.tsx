@@ -4,47 +4,29 @@ import { useLanguage } from '@/contexts/LanguageContext';
 
 const WhyChooseSection = () => {
   const [activePersona, setActivePersona] = useState('grandparents');
-  const { t, language } = useLanguage();
+  const { t } = useLanguage();
 
   const personas = {
     grandparents: {
       icon: Heart,
-      headline:
-        language === 'fr'
-          ? 'Transmettez un héritage, pas seulement un chèque'
-          : 'Leave a legacy, not just a cheque',
-      description:
-        language === 'fr'
-          ? "62% des grands-parents français préfèrent financer l'avenir plutôt que d'offrir un jouet (INSEE 2024)."
-          : "62% of French grands-parents say they'd rather fund a future than buy a toy (INSEE 2024).",
+      headline: t('whyChoose.personas.grandparents.headline'),
+      description: t('whyChoose.personas.grandparents.description'),
       stat: '62%',
-      statLabel: language === 'fr' ? 'préfèrent un cadeau utile' : 'prefer meaningful gifts'
+      statLabel: t('whyChoose.personas.grandparents.statLabel')
     },
     parents: {
       icon: Users,
-      headline:
-        language === 'fr'
-          ? 'Initiez tôt à la culture financière'
-          : 'Teach financial literacy early',
-      description:
-        language === 'fr'
-          ? "Offrez à vos enfants une véritable propriété tout en les sensibilisant à l'investissement et à l'innovation française."
-          : "Give your children real ownership while they learn about investing and French innovation.",
+      headline: t('whyChoose.personas.parents.headline'),
+      description: t('whyChoose.personas.parents.description'),
       stat: '85%',
-      statLabel: language === 'fr' ? 'souhaitent une éducation financière' : 'want financial education'
+      statLabel: t('whyChoose.personas.parents.statLabel')
     },
     recipients: {
       icon: TrendingUp,
-      headline:
-        language === 'fr'
-          ? 'Devenez vraiment actionnaire, pas simple épargnant'
-          : 'Own real equity, not savings',
-      description:
-        language === 'fr'
-          ? "Suivez la performance de votre investissement et découvrez les entreprises soutenues via notre application."
-          : "Track your investment's performance and learn about the companies you're backing through our app.",
+      headline: t('whyChoose.personas.recipients.headline'),
+      description: t('whyChoose.personas.recipients.description'),
       stat: '23%',
-      statLabel: language === 'fr' ? 'de rendement annuel moyen' : 'average annual returns'
+      statLabel: t('whyChoose.personas.recipients.statLabel')
     }
   };
 
@@ -55,7 +37,7 @@ const WhyChooseSection = () => {
       <div className="container mx-auto px-6 max-w-7xl">
         <div className="text-center mb-16">
           <h2 className="font-serif font-bold text-4xl lg:text-6xl text-foreground mb-6">
-            {language === 'fr' ? 'Pourquoi choisir Prisma Capital ?' : 'Why Choose Prisma Capital?'}
+            {t('whyChoose.title')}
           </h2>
         </div>
 

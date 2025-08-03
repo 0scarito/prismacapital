@@ -15,17 +15,31 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 const translations: Record<Language, Record<string, string>> = { fr, en };
 
 export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [language, setLanguage] = useState<Language>('fr');
+  const [language, setLanguage] = useState<Language>('en');
 
   useEffect(() => {
+    const pathLang = window.location.pathname.split('/')[1] as Language;
     const saved = localStorage.getItem('language') as Language;
-    if (saved && (saved === 'fr' || saved === 'en')) {
+    if (pathLang === 'fr' || pathLang === 'en') {
+      setLanguage(pathLang);
+    } else if (saved === 'fr' || saved === 'en') {
       setLanguage(saved);
     }
   }, []);
 
+  const t = (key: string): string => {
+    return translations[language][key] || translations.fr[key] || key;
+  };
+
   useEffect(() => {
     document.documentElement.lang = language;
+    document.title = t('meta.title');
+    const metaDescription = document.querySelector('meta[name="description"]');
+    if (metaDescription) metaDescription.setAttribute('content', t('meta.description'));
+    const ogTitle = document.querySelector('meta[property="og:title"]');
+    if (ogTitle) ogTitle.setAttribute('content', t('meta.ogTitle'));
+    const ogDesc = document.querySelector('meta[property="og:description"]');
+    if (ogDesc) ogDesc.setAttribute('content', t('meta.ogDescription'));
   }, [language]);
 
   const handleSetLanguage = (lang: Language) => {
@@ -37,10 +51,6 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     const pathWithoutLang = currentPath.replace(/^\/(fr|en)/, '') || '/';
     const newPath = `/${lang}${pathWithoutLang === '/' ? '' : pathWithoutLang}`;
     window.history.pushState({}, '', newPath);
-  };
-
-  const t = (key: string): string => {
-    return translations[language][key] || translations.fr[key] || key;
   };
 
   return (

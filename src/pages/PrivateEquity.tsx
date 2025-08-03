@@ -5,7 +5,7 @@ import { ArrowLeft, TrendingUp, ArrowRight, DollarSign, BarChart3, Target, Brief
 import { useLanguage } from '@/contexts/LanguageContext';
 
 const PrivateEquity = () => {
-  const { language } = useLanguage();
+  const { t } = useLanguage();
   const [activeStage, setActiveStage] = useState(0);
   const [bookmarkedDeals, setBookmarkedDeals] = useState<number[]>([]);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -14,7 +14,7 @@ const PrivateEquity = () => {
 
   const stages = [
     {
-      title: language === 'fr' ? 'Sourcing' : 'Sourcing',
+      title: t('privateEquity.stage.sourcing'),
       color: 'bg-slate-800',
       deals: [
         { id: 1, name: 'TechCorp SAS', ebitda: '€8.2M', irr: '18%', dividend: '6.2%' },
@@ -22,7 +22,7 @@ const PrivateEquity = () => {
       ]
     },
     {
-      title: language === 'fr' ? 'Due Diligence' : 'Due Diligence',
+      title: t('privateEquity.stage.dueDiligence'),
       color: 'bg-slate-600',
       deals: [
         { id: 3, name: 'GreenEnergy Co', ebitda: '€15.3M', irr: '25%', dividend: '7.1%' },
@@ -30,7 +30,7 @@ const PrivateEquity = () => {
       ]
     },
     {
-      title: language === 'fr' ? 'Value Creation' : 'Value Creation',
+      title: t('privateEquity.stage.valueCreation'),
       color: 'bg-blue-700',
       deals: [
         { id: 5, name: 'DataCrunch Analytics', ebitda: '€22.4M', irr: '28%', dividend: '8.3%' },
@@ -38,7 +38,7 @@ const PrivateEquity = () => {
       ]
     },
     {
-      title: language === 'fr' ? 'Exit' : 'Exit',
+      title: t('privateEquity.stage.exit'),
       color: 'bg-emerald-600',
       deals: [
         { id: 7, name: 'FinTech Innovations', ebitda: '€31.2M', irr: '35%', dividend: '9.4%' },
@@ -95,7 +95,7 @@ const PrivateEquity = () => {
             className="flex items-center gap-2 text-muted-foreground hover:text-foreground mb-8"
           >
             <ArrowLeft className="w-4 h-4" />
-            {language === 'fr' ? 'Retour aux investissements' : 'Back to investments'}
+            {t('privateEquity.back')}
           </button>
         </div>
 
@@ -104,13 +104,10 @@ const PrivateEquity = () => {
           <Filter className="absolute inset-0 w-full h-full text-white/10 scale-150" />
           <div className="section-container relative z-10 text-center">
             <h1 className="text-6xl font-bold text-white mb-6">
-              {language === 'fr' ? 'Capital-investissement' : 'Private Equity'}
+              {t('privateEquity.hero.title')}
             </h1>
             <p className="text-xl text-slate-300 max-w-3xl mx-auto">
-              {language === 'fr'
-                ? 'Découvrez notre pipeline de transactions structurées en quatre étapes, de l\'identification à la sortie.'
-                : 'Discover our deal-flow pipeline structured in four stages, from sourcing to exit.'
-              }
+              {t('privateEquity.hero.description')}
             </p>
           </div>
           {showHint && (
@@ -137,7 +134,7 @@ const PrivateEquity = () => {
                 >
                   <h3 className="text-xl font-bold mb-2">{stage.title}</h3>
                   <div className="text-sm opacity-80">
-                    {stage.deals.length} {language === 'fr' ? 'opportunités' : 'opportunities'}
+                    {stage.deals.length} {t('privateEquity.opportunities')}
                   </div>
                   <div className="absolute left-1/2 -bottom-4 -translate-x-1/2 flex gap-4 pointer-events-none opacity-0 group-hover:opacity-100 group-hover:-translate-y-2 transition-all">
                     {stage.deals.slice(0, 3).map((deal, i) => (
@@ -195,13 +192,13 @@ const PrivateEquity = () => {
                       <div className="text-lg font-bold text-emerald-600">{deal.irr}</div>
                     </div>
                     <div className="text-center">
-                      <div className="text-sm text-slate-600 mb-1">{language === 'fr' ? 'Dividende' : 'Dividend'}</div>
+                      <div className="text-sm text-slate-600 mb-1">{t('privateEquity.dividend')}</div>
                       <div className="text-lg font-bold text-blue-600">{deal.dividend}</div>
                     </div>
                   </div>
 
                   <button className="w-full bg-slate-100 hover:bg-metallic-gold hover:text-deep-navy text-slate-700 py-3 rounded-lg font-medium transition-all duration-300 group-hover:shadow-lg">
-                    {language === 'fr' ? 'Voir les détails' : 'View Details'}
+                    {t('privateEquity.viewDetails')}
                     <ArrowRight className="w-4 h-4 inline ml-2" />
                   </button>
                 </div>
@@ -221,37 +218,37 @@ const PrivateEquity = () => {
                   className="flex items-center text-slate-600 hover:text-slate-800"
                 >
                   <ArrowLeft className="w-6 h-6" />
-                  <span className="ml-1">Return</span>
+                  <span className="ml-1">{t('privateEquity.return')}</span>
                 </button>
                 <h3 className="text-2xl font-bold text-slate-800">
-                  {language === 'fr' ? 'Portfolio' : 'Portfolio'}
+                  {t('privateEquity.portfolio')}
                 </h3>
               </div>
             
             <div className="space-y-6">
               <div className="bg-slate-50 p-6 rounded-lg">
                 <h4 className="font-bold text-slate-800 mb-4">
-                  {language === 'fr' ? 'Performance Agrégée' : 'Aggregated Performance'}
+                  {t('privateEquity.portfolioPerformance')}
                 </h4>
                 <div className="grid grid-cols-2 gap-4 text-center">
                   <div>
                     <div className="text-2xl font-bold text-emerald-600">23.4%</div>
-                    <div className="text-sm text-slate-600">Avg IRR</div>
+                    <div className="text-sm text-slate-600">{t('privateEquity.avgIrr')}</div>
                   </div>
                   <div>
                     <div className="text-2xl font-bold text-blue-600">7.1%</div>
-                    <div className="text-sm text-slate-600">Avg Dividend</div>
+                    <div className="text-sm text-slate-600">{t('privateEquity.avgDividend')}</div>
                   </div>
                 </div>
               </div>
               
               <div>
                 <h4 className="font-bold text-slate-800 mb-4">
-                  {language === 'fr' ? 'Deals Sauvegardés' : 'Bookmarked Deals'}
+                  {t('privateEquity.bookmarkedDeals')}
                 </h4>
                 {bookmarkedDeals.length === 0 ? (
                   <p className="text-slate-500">
-                    {language === 'fr' ? 'Aucun deal sauvegardé' : 'No bookmarked deals'}
+                    {t('privateEquity.noDeals')}
                   </p>
                 ) : (
                   <div className="space-y-3">

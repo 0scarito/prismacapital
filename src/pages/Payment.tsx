@@ -5,7 +5,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { CreditCard, Euro, Gift, User, Mail, Phone, MapPin } from 'lucide-react';
 
 const Payment = () => {
-  const { language } = useLanguage();
+  const { t } = useLanguage();
   const [currentStep, setCurrentStep] = useState(1);
   const [selectedAmount, setSelectedAmount] = useState<number | null>(null);
   const [customAmount, setCustomAmount] = useState('');
@@ -67,13 +67,10 @@ const Payment = () => {
           {/* Header */}
           <div className="text-center mb-12">
             <h1 className="font-serif font-bold text-4xl lg:text-6xl text-foreground mb-6">
-              {language === 'fr' ? 'Achat de Coupon' : 'Coupon Purchase'}
+              {t('payment.title')}
             </h1>
             <p className="font-sans text-xl text-muted-foreground">
-              {language === 'fr' 
-                ? 'Offrez un investissement avec nos coupons cadeaux'
-                : 'Gift an investment with our gift coupons'
-              }
+              {t('payment.subtitle')}
             </p>
           </div>
 
@@ -106,10 +103,10 @@ const Payment = () => {
                 <div className="text-center mb-8">
                   <Euro className="w-12 h-12 text-primary mx-auto mb-4" />
                   <h2 className="font-serif text-2xl text-card-foreground mb-2">
-                    {language === 'fr' ? 'Choisissez le montant' : 'Choose Amount'}
+                    {t('payment.chooseAmount')}
                   </h2>
                   <p className="text-muted-foreground">
-                    {language === 'fr' ? 'Minimum 50€' : 'Minimum €50'}
+                    {t('payment.minimum')}
                   </p>
                 </div>
 
@@ -133,7 +130,7 @@ const Payment = () => {
                 {/* Custom Amount */}
                 <div className="mb-8">
                   <label className="block text-sm font-medium text-card-foreground mb-2">
-                    {language === 'fr' ? 'Montant personnalisé' : 'Custom Amount'}
+                    {t('payment.customAmount')}
                   </label>
                   <div className="relative">
                     <Euro className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground" />
@@ -156,17 +153,17 @@ const Payment = () => {
                 <div className="text-center mb-8">
                   <User className="w-12 h-12 text-primary mx-auto mb-4" />
                   <h2 className="font-serif text-2xl text-card-foreground mb-2">
-                    {language === 'fr' ? 'Vos informations' : 'Your Information'}
+                    {t('payment.yourInfo')}
                   </h2>
                   <p className="text-muted-foreground">
-                    {language === 'fr' ? 'Requis pour la conformité KYC' : 'Required for KYC compliance'}
+                    {t('payment.kyc')}
                   </p>
                 </div>
 
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-sm font-medium text-card-foreground mb-2">
-                      {language === 'fr' ? 'Prénom' : 'First Name'} *
+                      {t('payment.firstName')} *
                     </label>
                     <input
                       type="text"
@@ -175,10 +172,10 @@ const Payment = () => {
                       className="w-full px-4 py-3 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
                     />
                   </div>
-                  
+
                   <div>
                     <label className="block text-sm font-medium text-card-foreground mb-2">
-                      {language === 'fr' ? 'Nom' : 'Last Name'} *
+                      {t('payment.lastName')} *
                     </label>
                     <input
                       type="text"
@@ -187,7 +184,7 @@ const Payment = () => {
                       className="w-full px-4 py-3 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
                     />
                   </div>
-                  
+
                   <div>
                     <label className="block text-sm font-medium text-card-foreground mb-2">
                       Email *
@@ -202,10 +199,10 @@ const Payment = () => {
                       />
                     </div>
                   </div>
-                  
+
                   <div>
                     <label className="block text-sm font-medium text-card-foreground mb-2">
-                      {language === 'fr' ? 'Téléphone' : 'Phone'}
+                      {t('payment.phone')}
                     </label>
                     <div className="relative">
                       <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground" />
@@ -227,25 +224,25 @@ const Payment = () => {
                 <div className="text-center mb-8">
                   <CreditCard className="w-12 h-12 text-primary mx-auto mb-4" />
                   <h2 className="font-serif text-2xl text-card-foreground mb-2">
-                    {language === 'fr' ? 'Paiement' : 'Payment'}
+                    {t('payment.payment')}
                   </h2>
                   <p className="text-muted-foreground">
-                    {language === 'fr' ? 'Finalisez votre achat' : 'Complete your purchase'}
+                    {t('payment.completePurchase')}
                   </p>
                 </div>
 
                 {/* Order Summary */}
                 <div className="bg-muted/50 rounded-lg p-6 mb-8">
                   <h3 className="font-semibold text-card-foreground mb-4">
-                    {language === 'fr' ? 'Récapitulatif' : 'Order Summary'}
+                    {t('payment.orderSummary')}
                   </h3>
                   <div className="space-y-2">
                     <div className="flex justify-between">
-                      <span>{language === 'fr' ? 'Coupon cadeau' : 'Gift coupon'}</span>
+                      <span>{t('payment.giftCoupon')}</span>
                       <span>€{getCurrentAmount()}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span>{language === 'fr' ? 'Frais de traitement' : 'Processing fee'}</span>
+                      <span>{t('payment.processingFee')}</span>
                       <span>€0</span>
                     </div>
                     <div className="border-t pt-2 font-semibold flex justify-between">
@@ -258,10 +255,10 @@ const Payment = () => {
                 {/* Payment Methods */}
                 <div className="space-y-4">
                   <button className="w-full bg-primary text-primary-foreground py-4 rounded-lg font-medium hover:bg-primary/90 transition-colors">
-                    {language === 'fr' ? 'Payer avec Stripe' : 'Pay with Stripe'}
+                    {t('payment.payStripe')}
                   </button>
                   <button className="w-full bg-secondary text-secondary-foreground py-4 rounded-lg font-medium hover:bg-secondary/90 transition-colors">
-                    {language === 'fr' ? 'Payer avec PayPal' : 'Pay with PayPal'}
+                    {t('payment.payPaypal')}
                   </button>
                 </div>
               </div>
@@ -278,7 +275,7 @@ const Payment = () => {
                     : 'bg-secondary text-secondary-foreground hover:bg-secondary/90'
                 }`}
               >
-                {language === 'fr' ? 'Précédent' : 'Previous'}
+                {t('payment.previous')}
               </button>
 
               {currentStep < 3 ? (
@@ -291,7 +288,7 @@ const Payment = () => {
                       : 'bg-muted text-muted-foreground cursor-not-allowed'
                   }`}
                 >
-                  {language === 'fr' ? 'Suivant' : 'Next'}
+                  {t('payment.next')}
                 </button>
               ) : (
                 <div></div>

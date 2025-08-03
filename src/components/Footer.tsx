@@ -24,6 +24,12 @@ const Footer = ({ riskCategory }: FooterProps) => {
     ]
   };
 
+  const badges = [
+    { icon: Shield, label: t('footer.badge.amf') },
+    { icon: FileText, label: t('footer.badge.psd2') },
+    { icon: Eye, label: t('footer.badge.rgpd') }
+  ];
+
   return (
     <footer className="bg-midnight-navy text-white py-16">
       <div className="section-container">
@@ -45,17 +51,12 @@ const Footer = ({ riskCategory }: FooterProps) => {
 
             {/* Mission Statement */}
             <p className="font-body text-white/80 mb-6 leading-relaxed max-w-md">
-              Démocratiser l'accès aux marchés privés grâce à des cartes-cadeaux NFC physiques 
-              vendues offline. L'investissement de demain, accessible aujourd'hui.
+              {t('footer.tagline')}
             </p>
 
             {/* Compliance Badges */}
             <div className="flex flex-wrap gap-3 mb-6">
-              {[
-                { icon: Shield, label: 'AMF Agréé' },
-                { icon: FileText, label: 'PSD2 Conforme' },
-                { icon: Eye, label: 'RGPD Sécurisé' }
-              ].map((badge) => (
+              {badges.map((badge) => (
                 <div key={badge.label} className="flex items-center space-x-2 bg-white/10 rounded-lg px-3 py-2">
                   <badge.icon className="w-4 h-4 text-spectrum-teal" />
                   <span className="font-body text-xs text-white/90">{badge.label}</span>
@@ -74,7 +75,7 @@ const Footer = ({ riskCategory }: FooterProps) => {
                 <Linkedin className="w-5 h-5 text-white group-hover:scale-110 transition-transform" />
               </a>
               <span className="font-body text-sm text-white/60">
-                Suivez-nous sur LinkedIn
+                {t('footer.followLinkedIn')}
               </span>
             </div>
           </div>
@@ -117,10 +118,10 @@ const Footer = ({ riskCategory }: FooterProps) => {
             {/* Contact Info */}
             <div className="mt-6 space-y-2">
               <div className="font-body text-sm text-white/70">
-                Support : 01 23 45 67 89
+                {t('footer.supportPhone')}
               </div>
               <div className="font-body text-sm text-white/70">
-                Lun-Ven : 9h-18h
+                {t('footer.supportHours')}
               </div>
             </div>
           </div>
@@ -130,7 +131,7 @@ const Footer = ({ riskCategory }: FooterProps) => {
         <div className="border-t border-white/20 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <div className="font-body text-sm text-white/60">
-              © {currentYear} Prisma Capital Cards. Tous droits réservés.
+              © {currentYear} Prisma Capital Cards. {t('footer.copyright')}
             </div>
             
             <div className="flex items-center space-x-6 font-body text-sm text-white/60">
@@ -138,7 +139,7 @@ const Footer = ({ riskCategory }: FooterProps) => {
               <span>ACPR 12345678</span>
               <button className="flex items-center space-x-2 hover:text-spectrum-teal transition-colors">
                 <Cookie className="w-4 h-4" />
-                <span>Gérer les Cookies</span>
+                <span>{t('footer.cookie.manage')}</span>
               </button>
             </div>
           </div>
@@ -152,7 +153,7 @@ const Footer = ({ riskCategory }: FooterProps) => {
               "@context": "https://schema.org",
               "@type": "FinancialService",
               "name": "Prisma Capital Cards",
-              "description": "Démocratiser l'accès aux marchés privés grâce à des cartes-cadeaux NFC physiques",
+              "description": "" + t('footer.schema.description') + "",
               "url": "https://prismacapital.com",
               "logo": "https://prismacapital.com/logo.png",
               "contactPoint": {

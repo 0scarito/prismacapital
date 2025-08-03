@@ -13,7 +13,7 @@ interface InvestmentOpportunity {
 }
 
 const InvestmentCategory = ({ category }: { category: string }) => {
-  const { language } = useLanguage();
+  const { t } = useLanguage();
 
   const opportunities: InvestmentOpportunity[] = [
     {
@@ -41,7 +41,7 @@ const InvestmentCategory = ({ category }: { category: string }) => {
             className="flex items-center gap-2 text-muted-foreground hover:text-foreground mb-8"
           >
             <ArrowLeft className="w-4 h-4" />
-            {language === 'fr' ? 'Retour aux investissements' : 'Back to investments'}
+            {t('investmentCategory.back')}
           </button>
 
           {/* Partners Button */}
@@ -50,7 +50,7 @@ const InvestmentCategory = ({ category }: { category: string }) => {
               onClick={() => window.location.href = '/partners'}
               className="btn-ghost"
             >
-              {language === 'fr' ? 'Partenaires & Sécurité' : 'Partners & Securities'}
+              {t('investments.hero.partners')}
             </button>
           </div>
 
@@ -67,8 +67,8 @@ const InvestmentCategory = ({ category }: { category: string }) => {
                       {opportunity.description}
                     </p>
                     <div className="flex gap-4 text-sm">
-                      <span>Return: {opportunity.expectedReturn}</span>
-                      <span>Risk: {opportunity.riskLevel}</span>
+                      <span>{t('investmentCategory.return')}: {opportunity.expectedReturn}</span>
+                      <span>{t('investmentCategory.risk')}: {opportunity.riskLevel}</span>
                     </div>
                   </div>
                   
@@ -79,7 +79,7 @@ const InvestmentCategory = ({ category }: { category: string }) => {
                         onClick={() => window.location.href = '/payment'}
                         className="w-full btn-primary"
                       >
-                        {language === 'fr' ? 'Acheter' : 'Buy'} €{amount}
+                        {t('investmentCategory.buy')} €{amount}
                       </button>
                     ))}
                   </div>

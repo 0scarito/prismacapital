@@ -12,9 +12,9 @@ interface CategoryCardProps {
 }
 
 const CategoryCard = ({ title, description, href, icon, exploreLabel }: CategoryCardProps) => (
-  <Link to={href} className="group focus:outline-none">
-    <Card className="bg-gradient-subtle rounded-2xl p-8 border border-border/20 hover:shadow-lg transition-all duration-300 transform hover:scale-105 focus:scale-105 cursor-pointer">
-      <div className="text-center">
+  <Link to={href} className="group focus:outline-none block h-full">
+    <Card className="bg-gradient-subtle rounded-2xl p-8 border border-border/20 hover:shadow-lg transition-all duration-300 transform hover:scale-105 focus:scale-105 cursor-pointer h-full flex flex-col">
+      <div className="text-center flex flex-col h-full">
         <div className="mb-6 flex justify-center">
           {icon}
         </div>
@@ -24,7 +24,7 @@ const CategoryCard = ({ title, description, href, icon, exploreLabel }: Category
         <p className="font-sans text-deep-navy/80 mb-6 leading-relaxed">
           {description}
         </p>
-        <Button aria-label={exploreLabel} className="w-full btn-primary">
+        <Button aria-label={exploreLabel} className="w-full btn-primary mt-auto">
           {exploreLabel}
         </Button>
       </div>

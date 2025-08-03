@@ -13,6 +13,7 @@ import Security from "./pages/Security";
 import FAQ from "./pages/FAQ";
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
+import ProtectedRoute from "@/components/ProtectedRoute";
 import PrivateEquity from "./pages/PrivateEquity";
 import VentureCapital from "./pages/VentureCapital";
 import RealEstate from "./pages/RealEstate";
@@ -55,7 +56,7 @@ const App = () => (
               <Route path="/faq" element={<FAQ />} />
               <Route path="/payment" element={<Payment />} />
               <Route path="/auth" element={<Auth />} />
-              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
               <Route path="/legal-notices" element={<LegalNotices />} />
               <Route path="/risk-disclosure" element={<RiskDisclosure />} />
               <Route path="/privacy-policy" element={<PrivacyPolicy />} />

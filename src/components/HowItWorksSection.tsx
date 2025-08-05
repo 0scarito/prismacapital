@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Target, Gift, Users } from 'lucide-react';
+import { Target, Gift, Users, TrendingUp } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 
 const HowItWorksSection = () => {
@@ -27,6 +27,13 @@ const HowItWorksSection = () => {
       description: t('howItWorks.steps.2.description'),
       icon: Users,
       interaction: t('howItWorks.steps.2.interaction')
+    },
+    {
+      number: "4",
+      title: t('howItWorks.steps.3.title'),
+      description: t('howItWorks.steps.3.description'),
+      icon: TrendingUp,
+      interaction: t('howItWorks.steps.3.interaction')
     }
   ];
 
@@ -52,7 +59,7 @@ const HowItWorksSection = () => {
         </div>
 
         {/* Steps Grid */}
-        <div className="grid md:grid-cols-3 gap-8 lg:gap-12">
+        <div className="grid md:grid-cols-4 gap-8 lg:gap-12">
           {steps.map((step, index) => (
             <div 
               key={step.number} 

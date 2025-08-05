@@ -54,32 +54,42 @@ const HowItWorksSection = () => {
             <div 
               key={step.number} 
               className="relative group"
+              onMouseEnter={() => setHoveredStep(index)}
+              onMouseLeave={() => setHoveredStep(null)}
             >
               {/* Step Card */}
-              <div className="bg-muted/20 rounded-2xl p-8 border border-border/20 h-full">
+              <div className="relative bg-gradient-subtle rounded-2xl p-8 shadow-card hover:shadow-glow transition-all duration-500 z-10 border border-border/20 h-full">
                 {/* Step Number */}
-                <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-6 mx-auto">
-                  <span className="font-sans font-bold text-2xl text-foreground">
+                <div className="w-16 h-16 rounded-full bg-primary/10 border-2 border-primary flex items-center justify-center mb-6 mx-auto group-hover:scale-110 transition-transform duration-300">
+                  <span className="font-sans font-bold text-2xl text-primary">
                     {step.number}
                   </span>
                 </div>
 
                 {/* Icon */}
                 <div className="flex justify-center mb-6">
-                  <div className="w-12 h-12 rounded-lg bg-muted flex items-center justify-center">
-                    <step.icon className="w-6 h-6 text-foreground" strokeWidth={2} />
+                  <div className="w-12 h-12 rounded-lg bg-secondary/10 flex items-center justify-center group-hover:bg-secondary/20 transition-colors duration-300">
+                    <step.icon className="w-6 h-6 text-secondary" strokeWidth={2} />
                   </div>
                 </div>
 
                 {/* Content */}
                 <div className="text-center">
-                  <h3 className="font-serif font-bold text-2xl text-foreground mb-4">
+                  <h3 className="font-serif font-bold text-2xl text-card-foreground mb-4">
                     {step.title}
                   </h3>
                   <p className="font-sans text-muted-foreground leading-relaxed">
                     {step.description}
                   </p>
                 </div>
+
+                {/* Decorative Element */}
+                <div className="absolute -top-2 -right-2 w-6 h-6 bg-secondary/20 rounded-full group-hover:scale-125 transition-transform duration-300"></div>
+                
+                {/* Hover effect overlay */}
+                {hoveredStep === index && (
+                  <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-secondary/5 rounded-2xl pointer-events-none"></div>
+                )}
               </div>
             </div>
           ))}

@@ -26,11 +26,11 @@ const Navigation = () => {
     label: t('nav.home'),
     href: '/'
   }, {
-    label: t('nav.whatWeDo'),
-    href: '/how-it-works'
-  }, {
     label: t('nav.investments'),
     href: '/investments'
+  }, {
+    label: t('nav.whatWeDo'),
+    href: '/how-it-works'
   }, {
     label: t('nav.courses'),
     href: '/courses'

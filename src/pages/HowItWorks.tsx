@@ -39,6 +39,17 @@ const HowItWorks = () => {
         t('howItWorks.steps.2.features.1'),
         t('howItWorks.steps.2.features.2')
       ]
+    },
+    {
+      number: "04",
+      title: t('howItWorks.steps.3.title'),
+      description: t('howItWorks.steps.3.description'),
+      icon: <TrendingUp className="w-8 h-8 text-metallic-gold" />,
+      features: [
+        t('howItWorks.steps.3.features.0'),
+        t('howItWorks.steps.3.features.1'),
+        t('howItWorks.steps.3.features.2')
+      ]
     }
   ];
 

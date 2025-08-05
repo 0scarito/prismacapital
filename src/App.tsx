@@ -30,6 +30,7 @@ import HelpCenter from "./pages/HelpCenter";
 import ContactSupport from "./pages/ContactSupport";
 import DiciDocumentation from "./pages/DiciDocumentation";
 import EsgReports from "./pages/EsgReports";
+import Courses from "./pages/Courses";
 
 const queryClient = new QueryClient();
 
@@ -66,6 +67,7 @@ const App = () => (
               <Route path="/contact-support" element={<ContactSupport />} />
               <Route path="/dici-documentation" element={<DiciDocumentation />} />
               <Route path="/esg-reports" element={<EsgReports />} />
+              <Route path="/courses" element={<Courses />} />
               
               {/* Language-prefixed routes */}
               <Route path="/fr" element={<Index />} />
@@ -91,6 +93,7 @@ const App = () => (
               <Route path="/fr/contact-support" element={<ContactSupport />} />
               <Route path="/fr/dici-documentation" element={<DiciDocumentation />} />
               <Route path="/fr/esg-reports" element={<EsgReports />} />
+              <Route path="/fr/courses" element={<Courses />} />
               
               <Route path="/en" element={<Index />} />
               <Route path="/en/how-it-works" element={<HowItWorks />} />
@@ -115,6 +118,7 @@ const App = () => (
               <Route path="/en/contact-support" element={<ContactSupport />} />
               <Route path="/en/dici-documentation" element={<DiciDocumentation />} />
               <Route path="/en/esg-reports" element={<EsgReports />} />
+              <Route path="/en/courses" element={<Courses />} />
               
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />

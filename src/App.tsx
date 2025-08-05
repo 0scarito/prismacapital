@@ -42,6 +42,7 @@ const App = () => (
           <Sonner />
           <BrowserRouter>
             <Routes>
+              {/* Default routes (English) */}
               <Route path="/" element={<Index />} />
               <Route path="/how-it-works" element={<HowItWorks />} />
               <Route path="/investments" element={<Investments />} />
@@ -65,6 +66,56 @@ const App = () => (
               <Route path="/contact-support" element={<ContactSupport />} />
               <Route path="/dici-documentation" element={<DiciDocumentation />} />
               <Route path="/esg-reports" element={<EsgReports />} />
+              
+              {/* Language-prefixed routes */}
+              <Route path="/fr" element={<Index />} />
+              <Route path="/fr/how-it-works" element={<HowItWorks />} />
+              <Route path="/fr/investments" element={<Investments />} />
+              <Route path="/fr/investments/private-equity" element={<PrivateEquity />} />
+              <Route path="/fr/investments/venture-capital" element={<VentureCapital />} />
+              <Route path="/fr/investments/real-estate" element={<RealEstate />} />
+              <Route path="/fr/investments/commodities" element={<Commodities />} />
+              <Route path="/fr/investments/etfs" element={<Etfs />} />
+              <Route path="/fr/investments/crypto" element={<Crypto />} />
+              <Route path="/fr/partners" element={<Partners />} />
+              <Route path="/fr/security" element={<Security />} />
+              <Route path="/fr/faq" element={<FAQ />} />
+              <Route path="/fr/payment" element={<Payment />} />
+              <Route path="/fr/auth" element={<Auth />} />
+              <Route path="/fr/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+              <Route path="/fr/legal-notices" element={<LegalNotices />} />
+              <Route path="/fr/risk-disclosure" element={<RiskDisclosure />} />
+              <Route path="/fr/privacy-policy" element={<PrivacyPolicy />} />
+              <Route path="/fr/cookie-settings" element={<CookieSettings />} />
+              <Route path="/fr/help-center" element={<HelpCenter />} />
+              <Route path="/fr/contact-support" element={<ContactSupport />} />
+              <Route path="/fr/dici-documentation" element={<DiciDocumentation />} />
+              <Route path="/fr/esg-reports" element={<EsgReports />} />
+              
+              <Route path="/en" element={<Index />} />
+              <Route path="/en/how-it-works" element={<HowItWorks />} />
+              <Route path="/en/investments" element={<Investments />} />
+              <Route path="/en/investments/private-equity" element={<PrivateEquity />} />
+              <Route path="/en/investments/venture-capital" element={<VentureCapital />} />
+              <Route path="/en/investments/real-estate" element={<RealEstate />} />
+              <Route path="/en/investments/commodities" element={<Commodities />} />
+              <Route path="/en/investments/etfs" element={<Etfs />} />
+              <Route path="/en/investments/crypto" element={<Crypto />} />
+              <Route path="/en/partners" element={<Partners />} />
+              <Route path="/en/security" element={<Security />} />
+              <Route path="/en/faq" element={<FAQ />} />
+              <Route path="/en/payment" element={<Payment />} />
+              <Route path="/en/auth" element={<Auth />} />
+              <Route path="/en/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+              <Route path="/en/legal-notices" element={<LegalNotices />} />
+              <Route path="/en/risk-disclosure" element={<RiskDisclosure />} />
+              <Route path="/en/privacy-policy" element={<PrivacyPolicy />} />
+              <Route path="/en/cookie-settings" element={<CookieSettings />} />
+              <Route path="/en/help-center" element={<HelpCenter />} />
+              <Route path="/en/contact-support" element={<ContactSupport />} />
+              <Route path="/en/dici-documentation" element={<DiciDocumentation />} />
+              <Route path="/en/esg-reports" element={<EsgReports />} />
+              
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>

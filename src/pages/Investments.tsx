@@ -66,10 +66,15 @@ const Investments = () => {
                 {t('investments.hero.description')}
               </p>
 
-              {/* Partners & Securities Button */}
-              <Link to="/partners" className="btn-ghost mb-8 inline-block">
-                {t('investments.hero.partners')}
-              </Link>
+              {/* Partners & Security Buttons */}
+              <div className="flex justify-center gap-4 mb-8">
+                <Link to="/partners" className="btn-ghost">
+                  {t('investments.hero.partners')}
+                </Link>
+                <Link to="/security" className="btn-ghost">
+                  {t('investments.hero.security')}
+                </Link>
+              </div>
               
               <div className="flex justify-center">
                 <div className="bg-warm-white/10 backdrop-blur-sm rounded-xl p-6 border border-warm-white/20">

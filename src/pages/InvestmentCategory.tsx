@@ -44,14 +44,22 @@ const InvestmentCategory = ({ category }: { category: string }) => {
             {t('investmentCategory.back')}
           </button>
 
-          {/* Partners Button */}
+          {/* Partners & Security Buttons */}
           <div className="text-center mb-12">
-            <button
-              onClick={() => window.location.href = '/partners'}
-              className="btn-ghost"
-            >
-              {t('investments.hero.partners')}
-            </button>
+            <div className="flex justify-center gap-4">
+              <button
+                onClick={() => window.location.href = '/partners'}
+                className="btn-ghost"
+              >
+                {t('investments.hero.partners')}
+              </button>
+              <button
+                onClick={() => window.location.href = '/security'}
+                className="btn-ghost"
+              >
+                {t('investments.hero.security')}
+              </button>
+            </div>
           </div>
 
           {/* Investment Opportunities */}

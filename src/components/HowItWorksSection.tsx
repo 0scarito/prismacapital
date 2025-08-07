@@ -10,19 +10,29 @@ const HowItWorksSection = () => {
     {
       number: "1",
       title: "Éduquez",
-      description: "Offrez une éducation financière de qualité à vos proches",
+      description:
+        "Ce n'est pas qu'un simple investissement, ce n'est pas non plus juste un cadeau. " +
+        "C'est aussi une opportunité d'aller chercher la curiosité, de s'ouvrir à de nouveaux horizons. " +
+        "C'est l'occasion de découvrir de nouvelles façons de gérer son argent, le tout de manière intelligente mais aussi entraînante.",
       icon: Target
     },
     {
-      number: "2", 
+      number: "2",
       title: "Investissez",
-      description: "Transformez votre investissement en cadeau éducatif",
+      description:
+        "C'est sécurisé, simple, rapide et facile. Vous avez la possibilité de choisir parmi 6 différents secteurs " +
+        "des investissements soigneusement choisis par nous afin de transformer votre argent initial en petite fortune. " +
+        "En 25 ans, le marché a plus que triplé. 88% des millionnaires se sont enrichis en investissant dans un ou plusieurs types d'actifs. " +
+        "Chaque année depuis 40 ans, le marché a pris en moyenne un peu moins de 10%.",
       icon: Gift
     },
     {
       number: "3",
       title: "Transmettez",
-      description: "Partagez vos connaissances et construisez l'avenir",
+      description:
+        "Ce n'est pas juste un investissement, c'est un cadeau, c'est une opportunité qui ne perd pas sa valeur au bout de quelques jours. " +
+        "66% des Français qui ne trouvent pas d'utilité à leurs cadeaux ou ne les aiment pas finissent par les ranger au fond d'un placard dans les 3 premiers mois. " +
+        "En moyenne, les cadeaux perdent jusqu'à 55% de leur valeur au bout du premier mois après avoir été offerts.",
       icon: Users
     }
   ];

@@ -1,56 +1,32 @@
+import { useState } from 'react';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
-import WorldMap from '@/components/WorldMap';
-import { useState } from 'react';
-import { ArrowLeft, Coins, Wheat, Zap, Link as Chain, Briefcase } from 'lucide-react';
 import PortfolioDrawer from '@/components/PortfolioDrawer';
+import InvestmentCard from '@/components/InvestmentCard';
+import { ArrowLeft, Briefcase, Coins } from 'lucide-react';
+
 const Commodities = () => {
-  const [highlight, setHighlight] = useState<string | undefined>(undefined);
+  const [basket, setBasket] = useState<{ id: number; name: string }[]>([]);
   const [showPortfolio, setShowPortfolio] = useState(false);
-  const examples = [{
-    title: 'Hedge Inflation',
-    description: 'Preserve purchasing power with precious metals.',
-    country: 'ZAF',
-    icon: Coins
-  }, {
-    title: 'Food Staples',
-    description: 'Invest in essential agricultural goods.',
-    country: 'BRA',
-    icon: Wheat
-  }, {
-    title: 'Energy Markets',
-    description: 'Tap fossil and renewable energy opportunities.',
-    country: 'SAU',
-    icon: Zap
-  }, {
-    title: 'Tokenised Contracts',
-    description: 'Trade tokenised commodity contracts for liquidity.',
-    country: 'USA',
-    icon: Chain
-  }];
-  const countryData = {
-    ZAF: {
-      share: '6%',
-      change: '+23%'
-    },
-    BRA: {
-      share: '9%',
-      change: '+12%'
-    },
-    SAU: {
-      share: '11%',
-      change: '-5%'
-    },
-    USA: {
-      share: '20%',
-      change: '+18%'
-    }
-  };
+
+  const deals = [
+    { id: 1, name: 'Gold Hedge', description: 'Preserve purchasing power with allocated gold bullion.' },
+    { id: 2, name: 'Agricultural Fund', description: 'Invest in global food staples and farmland.' },
+    { id: 3, name: 'Energy Exposure', description: 'Access oil and renewable energy markets.' },
+    { id: 4, name: 'Tokenised Metals', description: 'Trade tokenised commodity contracts for liquidity.' },
+  ];
+
   const metrics = [
     { label: 'YTD Performance', value: '+12%' },
-    { label: 'Volatility', value: 'High' }
+    { label: 'Volatility', value: 'High' },
   ];
-  return <div className="min-h-screen bg-background">
+
+  const addToBasket = (deal: { id: number; name: string }) => {
+    setBasket((prev) => (prev.find((d) => d.id === deal.id) ? prev : [...prev, deal]));
+  };
+
+  return (
+    <div className="min-h-screen bg-background">
       <Navigation />
 
       <div className="fixed top-32 right-8 z-50">
@@ -59,8 +35,12 @@ const Commodities = () => {
           className="bg-metallic-gold text-deep-navy w-12 h-12 rounded-full flex items-center justify-center shadow-lg"
         >
           <Briefcase className="w-6 h-6" />
+          {basket.length > 0 && (
+            <span className="ml-1 font-bold text-sm">{basket.length}</span>
+          )}
         </button>
       </div>
+
       <main className="pt-24 pb-16">
         <div className="section-container">
           <button onClick={() => window.history.back()} className="flex items-center gap-2 mb-8 text-slate-50">
@@ -68,45 +48,53 @@ const Commodities = () => {
             Back to investments
           </button>
         </div>
-        {/* Hero Banner */}
-        <section className="relative h-72 flex items-center justify-center text-white mb-12" style={{
-        backgroundColor: '#1A1F24'
-      }}>
-          <div className="absolute inset-0 bg-cover bg-center opacity-50 mix-blend-overlay" style={{
-          backgroundImage: "url(https://images.unsplash.com/photo-1626014283048-1cdceb4cb6c1?auto=format&fit=crop&w=1600&q=60), url(https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?auto=format&fit=crop&w=1600&q=60)"
-        }} />
-          <h1 className="relative z-10 text-5xl font-bold">Commodities</h1>
+
+        <section className="relative h-72 flex items-center justify-center text-white mb-12" style={{ backgroundColor: '#1A1F24' }}>
+          <h1 className="text-5xl font-bold">Commodities</h1>
+          <Coins className="absolute right-8 bottom-6 w-32 h-32 text-[#C87437]" />
         </section>
 
-        <div className="section-container">
-          <div className="max-w-4xl mx-auto">
-            <div className="grid sm:grid-cols-2 gap-6 mb-12">
-              {examples.map((ex, idx) => <div key={idx} onMouseEnter={() => setHighlight(ex.country)} onMouseLeave={() => setHighlight(undefined)} className="bg-card rounded-lg p-6 border border-border shadow-prisma-card">
-                  <div className="mb-4 text-[#C87437]">
-                    <ex.icon className="w-8 h-8" />
-                  </div>
-                  <h3 className="font-serif text-lg text-foreground mb-2 font-bold">
-                    {ex.title}
-                  </h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    {ex.description}
-                  </p>
-                </div>)}
-            </div>
-
-            <div className="mb-8">
-              <WorldMap highlight={highlight} data={countryData} />
+        <section className="py-20">
+          <div className="section-container">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+              {deals.map((deal) => (
+                <InvestmentCard
+                  key={deal.id}
+                  title={deal.name}
+                  description={deal.description}
+                  onAdd={() => addToBasket(deal)}
+                />
+              ))}
             </div>
           </div>
-        </div>
+        </section>
+
+        <section className="py-16 bg-slate-100 mt-12">
+          <div className="section-container">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+              {metrics.map((m) => (
+                <div key={m.label}>
+                  <div className="text-2xl font-bold">{m.value}</div>
+                  <div className="text-sm text-slate-600">{m.label}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
       </main>
+
       <PortfolioDrawer
         open={showPortfolio}
         onClose={() => setShowPortfolio(false)}
         title="Portfolio"
         metrics={metrics}
+        items={basket.map((d) => d.name)}
       />
+
       <Footer riskCategory="risk.commodities" />
-    </div>;
+    </div>
+  );
 };
+
 export default Commodities;
+

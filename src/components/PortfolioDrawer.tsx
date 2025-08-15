@@ -10,9 +10,10 @@ interface PortfolioDrawerProps {
   onClose: () => void;
   title: string;
   metrics: Metric[];
+  items?: string[];
 }
 
-export default function PortfolioDrawer({ open, onClose, title, metrics }: PortfolioDrawerProps) {
+export default function PortfolioDrawer({ open, onClose, title, metrics, items = [] }: PortfolioDrawerProps) {
   if (!open) return null;
   return (
     <div className="fixed inset-0 z-50 bg-black/50 flex justify-end">
@@ -35,6 +36,18 @@ export default function PortfolioDrawer({ open, onClose, title, metrics }: Portf
             </div>
           ))}
         </div>
+        {items.length > 0 && (
+          <div className="mt-8">
+            <h4 className="font-semibold text-slate-800 mb-4">Selected Deals</h4>
+            <ul className="space-y-2">
+              {items.map((item, idx) => (
+                <li key={idx} className="text-sm text-slate-700">
+                  • {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
     </div>
   );

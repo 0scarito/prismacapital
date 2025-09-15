@@ -1,77 +1,29 @@
+import { useState } from 'react';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
-import { useState } from 'react';
-import { ArrowLeft, Briefcase } from 'lucide-react';
 import PortfolioDrawer from '@/components/PortfolioDrawer';
-
-const PieChart = () => (
-  <svg
-    role="img"
-    aria-label="Illustration of diversified ETF allocation"
-    width="120"
-    height="120"
-    viewBox="0 0 32 32"
-  >
-    <circle cx="16" cy="16" r="16" fill="#0b121a" />
-    <path d="M16 16 L16 0 A16 16 0 0 1 31.2 9.4 Z" fill="#14b8a6" />
-    <path d="M16 16 L31.2 9.4 A16 16 0 0 1 28 28 Z" fill="#0ea5e9" />
-    <path d="M16 16 L28 28 A16 16 0 0 1 16 32 Z" fill="#c9a970" />
-  </svg>
-);
-
-const GrowthChart = ({ years }: { years: number }) => {
-  const maxYears = 20;
-  const cagr = 0.07;
-  const maxY = Math.pow(1 + cagr, maxYears);
-  const points = Array.from({ length: years + 1 }).map((_, i) => {
-    const x = (i / maxYears) * 300;
-    const y = 160 - (Math.pow(1 + cagr, i) / maxY) * 160;
-    return `${x},${y}`;
-  });
-  return (
-    <svg
-      role="img"
-      aria-label="Historical CAGR projection"
-      width="300"
-      height="160"
-      viewBox="0 0 300 160"
-    >
-      <polyline
-        fill="none"
-        stroke="#14b8a6"
-        strokeWidth="2"
-        points={points.join(' ')}
-      />
-    </svg>
-  );
-};
+import InvestmentCard from '@/components/InvestmentCard';
+import { ArrowLeft, Briefcase } from 'lucide-react';
 
 const Etfs = () => {
-  const [years, setYears] = useState(10);
-  const projected = (100 * Math.pow(1.07, years)).toFixed(0);
+  const [basket, setBasket] = useState<{ id: number; name: string }[]>([]);
   const [showPortfolio, setShowPortfolio] = useState(false);
+
+  const deals = [
+    { id: 1, name: 'Global Equity ETF', description: 'Broad exposure to developed market equities.' },
+    { id: 2, name: 'Climate Action ETF', description: 'Focused on companies driving the energy transition.' },
+    { id: 3, name: 'Health Tech ETF', description: 'Innovators in biotech and medical technology.' },
+    { id: 4, name: 'Cybersecurity ETF', description: 'Firms securing the digital economy.' },
+  ];
+
   const metrics = [
     { label: 'Projected CAGR', value: '7%' },
-    { label: 'Avg Fee', value: '0.15%' }
+    { label: 'Avg Fee', value: '0.15%' },
   ];
-  const examples = [
-    {
-      title: 'Diversified Baskets',
-      description: 'Access stock and bond baskets in one click.'
-    },
-    {
-      title: 'Ultra-low Fees',
-      description: 'Benefit from highly competitive fees and full transparency.'
-    },
-    {
-      title: 'Strong Themes',
-      description: 'Choose focused themes: AI, climate, health, cybersecurity…'
-    },
-    {
-      title: 'Auto-Reinvested',
-      description: 'Dividends are reinvested automatically for long-term growth.'
-    }
-  ];
+
+  const addToBasket = (deal: { id: number; name: string }) => {
+    setBasket((prev) => (prev.find((d) => d.id === deal.id) ? prev : [...prev, deal]));
+  };
 
   return (
     <div className="min-h-screen bg-[#18202C] text-warm-white">
@@ -83,9 +35,13 @@ const Etfs = () => {
           className="bg-metallic-gold text-deep-navy w-12 h-12 rounded-full flex items-center justify-center shadow-lg"
         >
           <Briefcase className="w-6 h-6" />
+          {basket.length > 0 && (
+            <span className="ml-1 font-bold text-sm">{basket.length}</span>
+          )}
         </button>
       </div>
-      <main className="pt-24 pb-16 space-y-16">
+
+      <main className="pt-24 pb-16">
         <div className="section-container">
           <button
             onClick={() => window.history.back()}
@@ -95,58 +51,52 @@ const Etfs = () => {
             Back to investments
           </button>
         </div>
-        <section className="section-container h-[20rem] flex items-center justify-between">
+
+        <section className="section-container h-[20rem] flex items-center">
           <h1 className="text-4xl md:text-5xl font-bold">ETF &amp; Indices</h1>
-          <PieChart />
         </section>
 
-        <section className="section-container">
-          <div className="flex flex-wrap justify-center gap-6">
-            {examples.map((ex, idx) => (
-              <div
-                key={idx}
-                className="w-[28rem] h-[12rem] bg-[#1b2532] border border-teal-800 rounded-lg p-6 flex flex-col justify-between shadow-prisma-card"
-              >
-                <h3 className="font-serif text-xl text-teal-100 mb-2 font-bold">
-                  {ex.title}
-                </h3>
-                <p className="text-teal-50 leading-relaxed text-sm">{ex.description}</p>
-              </div>
-            ))}
+        <section className="py-20">
+          <div className="section-container">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+              {deals.map((deal) => (
+                <InvestmentCard
+                  key={deal.id}
+                  title={deal.name}
+                  description={deal.description}
+                  onAdd={() => addToBasket(deal)}
+                />
+              ))}
+            </div>
           </div>
         </section>
 
-        <section className="section-container">
-          <div className="bg-[#0b0f14] rounded-lg p-6 md:flex items-center gap-6">
-            <div className="md:w-1/3 w-full mb-6 md:mb-0">
-              <label htmlFor="years" className="block mb-2 text-teal-100 font-medium">
-                Projection {years}y → {projected}€
-              </label>
-              <input
-                id="years"
-                type="range"
-                min="1"
-                max="20"
-                value={years}
-                onChange={e => setYears(parseInt(e.target.value))}
-                className="w-full accent-teal-500"
-              />
-            </div>
-            <div className="md:w-2/3 w-full flex justify-center">
-              <GrowthChart years={years} />
+        <section className="py-16 bg-[#0b0f14] mt-12">
+          <div className="section-container">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+              {metrics.map((m) => (
+                <div key={m.label}>
+                  <div className="text-2xl font-bold">{m.value}</div>
+                  <div className="text-sm text-slate-300">{m.label}</div>
+                </div>
+              ))}
             </div>
           </div>
         </section>
       </main>
+
       <PortfolioDrawer
         open={showPortfolio}
         onClose={() => setShowPortfolio(false)}
         title="Portfolio"
         metrics={metrics}
+        items={basket.map((d) => d.name)}
       />
+
       <Footer riskCategory="risk.etf" />
     </div>
   );
 };
 
 export default Etfs;
+

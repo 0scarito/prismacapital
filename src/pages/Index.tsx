@@ -7,20 +7,27 @@ import WhyChooseSection from '@/components/WhyChooseSection';
 import ComplianceSection from '@/components/ComplianceSection';
 import Footer from '@/components/Footer';
 
+// Global type declaration for analytics
 declare global {
   interface Window {
     dataLayer?: Array<Record<string, unknown>>;
   }
 }
 
+/**
+ * Home page component with smooth scrolling and analytics tracking
+ */
 const Index = () => {
   useEffect(() => {
-    // Add smooth scroll behavior to html element
+    // Enable smooth scrolling for the page
     document.documentElement.classList.add('smooth-scroll');
 
-    // Add analytics event tracking
-    const handleCTAClick = (section: string) => {
-      if (typeof window !== 'undefined' && window.dataLayer) {
+    // Track CTA button clicks for analytics
+    const handleCTAClick = (event: Event) => {
+      const button = event.currentTarget as HTMLElement;
+      const section = button.getAttribute('data-cta');
+      
+      if (section && window.dataLayer) {
         window.dataLayer.push({
           event: 'cta_click',
           section,
@@ -29,19 +36,17 @@ const Index = () => {
       }
     };
 
-    // Attach event listeners to CTA buttons
-    const ctaButtons = document.querySelectorAll('[data-cta]');
+    // Attach click handlers to all CTA buttons
+    const ctaButtons = document.querySelectorAll<HTMLElement>('[data-cta]');
     ctaButtons.forEach(button => {
-      button.addEventListener('click', () => {
-        const section = button.getAttribute('data-cta');
-        if (section) handleCTAClick(section);
-      });
+      button.addEventListener('click', handleCTAClick);
     });
 
+    // Cleanup function
     return () => {
       document.documentElement.classList.remove('smooth-scroll');
       ctaButtons.forEach(button => {
-        button.removeEventListener('click', () => {});
+        button.removeEventListener('click', handleCTAClick);
       });
     };
   }, []);

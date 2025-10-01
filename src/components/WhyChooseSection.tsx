@@ -1,5 +1,9 @@
 import { useLanguage } from '@/contexts/LanguageContext';
 
+/**
+ * Why Choose Section - Highlights benefits for different user personas
+ * Features statistics and testimonials for grandparents, parents, and recipients
+ */
 const WhyChooseSection = () => {
   const { t } = useLanguage();
 

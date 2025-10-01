@@ -3,6 +3,11 @@ import { Menu, X } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useAuth } from '@/hooks/useAuth';
+
+/**
+ * Main navigation component with responsive menu
+ * Includes language toggle and authentication-aware navigation
+ */
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -15,10 +20,12 @@ const Navigation = () => {
     user
   } = useAuth();
   const navigate = useNavigate();
+  // Track scroll position for navbar background effect
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
     };
+    
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -47,15 +54,16 @@ const Navigation = () => {
     label: t('nav.joinUs'),
     href: '/auth'
   }];
+  // Handle navigation clicks - supports both routes and anchor links
   const handleNavigation = (href: string) => {
     if (href.startsWith('#')) {
+      // Smooth scroll to section for anchor links
       const element = document.querySelector(href);
       if (element) {
-        element.scrollIntoView({
-          behavior: 'smooth'
-        });
+        element.scrollIntoView({ behavior: 'smooth' });
       }
     } else {
+      // Navigate to route
       navigate(href);
     }
     setIsOpen(false);

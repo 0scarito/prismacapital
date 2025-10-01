@@ -1,5 +1,9 @@
 import { Shield, CheckCircle } from 'lucide-react';
 
+/**
+ * Credibility Bar - Displays trust indicators and partner logos
+ * Sticky bar with AMF badge, partner marquee, and GDPR compliance
+ */
 const CredibilityBar = () => {
   const partners = [
     "BNP Paribas",

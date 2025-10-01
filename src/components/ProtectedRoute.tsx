@@ -6,6 +6,10 @@ interface ProtectedRouteProps {
   children: ReactNode;
 }
 
+/**
+ * Protected Route wrapper - Redirects to auth if user not logged in
+ * Shows nothing while authentication state is loading
+ */
 const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
   const { user, loading } = useAuth();
 

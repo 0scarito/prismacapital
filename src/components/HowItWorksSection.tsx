@@ -1,11 +1,16 @@
 import { useState } from 'react';
-import { Target, Gift, Users, TrendingUp } from 'lucide-react';
+import { Target, Gift, Users } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 
+/**
+ * How It Works Section - Displays three main value propositions
+ * Educate, Invest, and Transmit with hover effects
+ */
 const HowItWorksSection = () => {
   const [hoveredStep, setHoveredStep] = useState<number | null>(null);
   const { t } = useLanguage();
   
+  // Three core steps of the platform
   const steps = [
     {
       number: "1",

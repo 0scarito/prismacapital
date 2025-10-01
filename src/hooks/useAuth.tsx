@@ -20,22 +20,26 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+/**
+ * Authentication Provider - Manages user auth state with Supabase
+ * Provides sign in, sign up, and sign out functionality
+ */
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Set up auth state listener
+    // Subscribe to auth state changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
+      (_event, session) => {
         setSession(session);
         setUser(session?.user ?? null);
         setLoading(false);
       }
     );
 
-    // Check for existing session
+    // Initialize with existing session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setUser(session?.user ?? null);
@@ -45,6 +49,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     return () => subscription.unsubscribe();
   }, []);
 
+  /**
+   * Sign in with email and password
+   */
   const signIn = async (
     email: string,
     password: string
@@ -56,18 +63,20 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     return { error };
   };
 
+  /**
+   * Sign up new user with email and password
+   * Optional display name stored in user metadata
+   */
   const signUp = async (
     email: string,
     password: string,
     displayName?: string
   ): Promise<{ error: AuthError | null }> => {
-    const redirectUrl = `${window.location.origin}/`;
-
     const { error } = await supabase.auth.signUp({
       email,
       password,
       options: {
-        emailRedirectTo: redirectUrl,
+        emailRedirectTo: `${window.location.origin}/`,
         data: {
           display_name: displayName,
         },
@@ -76,6 +85,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     return { error };
   };
 
+  /**
+   * Sign out current user
+   */
   const signOut = async () => {
     await supabase.auth.signOut();
   };
@@ -92,6 +104,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
+/**
+ * useAuth Hook - Access authentication context
+ * Must be used within AuthProvider
+ */
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (context === undefined) {

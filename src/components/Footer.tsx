@@ -5,10 +5,16 @@ import RiskWarningSlider from './RiskWarningSlider';
 interface FooterProps {
   riskCategory?: string;
 }
+
+/**
+ * Footer component with compliance badges, legal links, and structured data
+ * Includes dynamic risk warnings based on category
+ */
 const Footer = ({ riskCategory }: FooterProps) => {
   const currentYear = new Date().getFullYear();
   const { t } = useLanguage();
 
+  // Footer navigation links organized by section
   const footerLinks = {
     legal: [
       { label: t('footer.legalNotices'), href: '/legal-notices' },

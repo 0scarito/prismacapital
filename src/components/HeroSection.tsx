@@ -1,5 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
+
+/**
+ * Hero section with animated gift scenarios and trust indicators
+ * Displays rotating use cases with typewriter effect
+ */
 const HeroSection = () => {
   const [currentCard, setCurrentCard] = useState(0);
   const {
@@ -10,20 +15,21 @@ const HeroSection = () => {
     t('hero.giftScenarios.1'),
     t('hero.giftScenarios.2')
   ];
+  // Smooth scroll to section by ID
   const scrollToSection = (href: string) => {
     const element = document.querySelector(href);
     if (element) {
-      element.scrollIntoView({
-        behavior: 'smooth'
-      });
+      element.scrollIntoView({ behavior: 'smooth' });
     }
   };
+  // Auto-rotate through gift scenarios every 4 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentCard(prev => (prev + 1) % giftScenarios.length);
     }, 4000);
+    
     return () => clearInterval(interval);
-  }, []);
+  }, [giftScenarios.length]);
   return <section id="hero" className="min-h-screen relative overflow-hidden bg-gradient-hero">
       {/* Blur mask for depth */}
       <div className="absolute bottom-0 left-0 w-1/2 h-1/2 bg-gradient-to-tr from-dark-navy/20 to-transparent blur-3xl"></div>

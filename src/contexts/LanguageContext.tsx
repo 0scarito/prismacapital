@@ -14,32 +14,50 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 
 const translations: Record<Language, Record<string, string>> = { fr, en };
 
+/**
+ * Language Provider - Manages i18n state and translations
+ * Supports French and English with localStorage persistence
+ */
 export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [language, setLanguage] = useState<Language>('en');
 
-  useEffect(() => {
-    const pathLang = window.location.pathname.split('/')[1] as Language;
-    const saved = localStorage.getItem('language') as Language;
-    if (pathLang === 'fr' || pathLang === 'en') {
-      setLanguage(pathLang);
-    } else if (saved === 'fr' || saved === 'en') {
-      setLanguage(saved);
-    }
-  }, []);
-
+  // Translation function - returns translated string or fallback
   const t = (key: string): string => {
     return translations[language][key] || translations.fr[key] || key;
   };
 
-  useEffect(() => {
+  // Update document metadata when language changes
+  const updateMetaTags = () => {
     document.documentElement.lang = language;
     document.title = t('meta.title');
-    const metaDescription = document.querySelector('meta[name="description"]');
-    if (metaDescription) metaDescription.setAttribute('content', t('meta.description'));
-    const ogTitle = document.querySelector('meta[property="og:title"]');
-    if (ogTitle) ogTitle.setAttribute('content', t('meta.ogTitle'));
-    const ogDesc = document.querySelector('meta[property="og:description"]');
-    if (ogDesc) ogDesc.setAttribute('content', t('meta.ogDescription'));
+    
+    const metaTags = [
+      { selector: 'meta[name="description"]', content: t('meta.description') },
+      { selector: 'meta[property="og:title"]', content: t('meta.ogTitle') },
+      { selector: 'meta[property="og:description"]', content: t('meta.ogDescription') }
+    ];
+
+    metaTags.forEach(({ selector, content }) => {
+      const element = document.querySelector(selector);
+      if (element) element.setAttribute('content', content);
+    });
+  };
+
+  // Initialize language from URL path or localStorage
+  useEffect(() => {
+    const pathLang = window.location.pathname.split('/')[1] as Language;
+    const savedLang = localStorage.getItem('language') as Language;
+    
+    if (pathLang === 'fr' || pathLang === 'en') {
+      setLanguage(pathLang);
+    } else if (savedLang === 'fr' || savedLang === 'en') {
+      setLanguage(savedLang);
+    }
+  }, []);
+
+  // Update meta tags when language changes
+  useEffect(() => {
+    updateMetaTags();
   }, [language]);
 
   const handleSetLanguage = (lang: Language) => {

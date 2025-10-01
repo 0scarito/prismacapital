@@ -1,3 +1,7 @@
+/**
+ * Compliance Section - Legal disclaimer and regulatory information
+ * Displays AMF authorization and risk warnings
+ */
 const ComplianceSection = () => {
   return <section className="py-12 bg-deep-navy border-t border-border/20">
       <div className="container mx-auto px-6 max-w-7xl">

@@ -1,6 +1,7 @@
 import { Linkedin, Shield, FileText, Cookie, Eye } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import RiskWarningSlider from './RiskWarningSlider';
+import prismaLogo from '@/assets/prisma-logo.png';
 
 interface FooterProps {
   riskCategory?: string;
@@ -47,12 +48,11 @@ const Footer = ({ riskCategory }: FooterProps) => {
           <div className="lg:col-span-2">
             {/* Logo */}
             <div className="flex items-center space-x-3 mb-6">
-              <div className="w-10 h-10 rounded-xl bg-gradient-prisma flex items-center justify-center">
-                <span className="text-white font-bold text-lg">P</span>
-              </div>
-              <span className="font-heading text-2xl text-white">
-                Prisma Capital Cards
-              </span>
+              <img 
+                src={prismaLogo} 
+                alt="Prisma Capital Logo" 
+                className="h-12 w-auto object-contain"
+              />
             </div>
 
             {/* Mission Statement */}

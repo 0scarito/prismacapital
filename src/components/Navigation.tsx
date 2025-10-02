@@ -3,6 +3,7 @@ import { Menu, X } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useAuth } from '@/hooks/useAuth';
+import prismaLogo from '@/assets/prisma-logo.png';
 
 /**
  * Main navigation component with responsive menu
@@ -72,13 +73,12 @@ const Navigation = () => {
       <div className="pr-4 md:pr-8">
         <div className="flex items-center justify-between py-4">
           {/* Logo - Non-interactive, positioned on the left */}
-          <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 rounded-lg bg-gradient-prisma flex items-center justify-center">
-              <span className="text-white font-bold text-sm">C</span>
-            </div>
-            <span className="font-heading text-xl text-foreground">
-              Prisma Capital
-            </span>
+          <div className="flex items-center space-x-3">
+            <img 
+              src={prismaLogo} 
+              alt="Prisma Capital Logo" 
+              className="h-10 w-auto object-contain"
+            />
           </div>
 
           {/* Desktop Navigation */}

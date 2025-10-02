@@ -10,6 +10,7 @@ import { useToast } from '@/hooks/use-toast';
 import { LogOut, Gift, Calendar, Euro, QrCode, TrendingUp, TrendingDown } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import prismaLogo from '@/assets/prisma-logo.png';
 interface Coupon {
   id: string;
   title: string;
@@ -231,9 +232,11 @@ const Dashboard = () => {
       <header className="bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <div className="flex items-center space-x-4">
-            <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-slate-50">
-              Prisma Capital
-            </h1>
+            <img 
+              src={prismaLogo} 
+              alt="Prisma Capital Logo" 
+              className="h-10 w-auto object-contain"
+            />
             <span className="text-slate-50">{t('dashboard.personalSpace')}</span>
           </div>
           <div className="flex items-center space-x-4">

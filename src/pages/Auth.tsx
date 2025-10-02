@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
+import prismaLogo from '@/assets/prisma-logo.png';
 
 const Auth = () => {
   const [email, setEmail] = useState('');
@@ -78,9 +79,13 @@ const Auth = () => {
       </Button>
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl font-bold bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
-            Prisma Capital
-          </CardTitle>
+          <div className="flex justify-center mb-4">
+            <img 
+              src={prismaLogo} 
+              alt="Prisma Capital Logo" 
+              className="h-16 w-auto object-contain"
+            />
+          </div>
           <CardDescription>
             Accédez à votre espace personnel
           </CardDescription>

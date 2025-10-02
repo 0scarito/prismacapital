@@ -51,7 +51,7 @@ const Footer = ({ riskCategory }: FooterProps) => {
               <img 
                 src={prismaLogo} 
                 alt="Prisma Capital Logo" 
-                className="h-12 w-auto object-contain"
+                className="h-16 w-auto object-contain"
               />
             </div>
 

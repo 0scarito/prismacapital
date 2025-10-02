@@ -235,7 +235,7 @@ const Dashboard = () => {
             <img 
               src={prismaLogo} 
               alt="Prisma Capital Logo" 
-              className="h-10 w-auto object-contain"
+              className="h-14 w-auto object-contain"
             />
             <span className="text-slate-50">{t('dashboard.personalSpace')}</span>
           </div>

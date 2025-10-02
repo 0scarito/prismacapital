@@ -83,7 +83,7 @@ const Auth = () => {
             <img 
               src={prismaLogo} 
               alt="Prisma Capital Logo" 
-              className="h-16 w-auto object-contain"
+              className="h-20 w-auto object-contain"
             />
           </div>
           <CardDescription>

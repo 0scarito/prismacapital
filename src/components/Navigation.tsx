@@ -77,7 +77,7 @@ const Navigation = () => {
             <img 
               src={prismaLogo} 
               alt="Prisma Capital Logo" 
-              className="h-10 w-auto object-contain"
+              className="h-14 w-auto object-contain"
             />
           </div>
 

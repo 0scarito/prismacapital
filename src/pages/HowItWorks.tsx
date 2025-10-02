@@ -1,6 +1,6 @@
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
-import { ArrowRight, CheckCircle, Gift, Smartphone, TrendingUp } from 'lucide-react';
+import { ArrowRight, CheckCircle, Gift, Smartphone, TrendingUp, Wallet } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 
 const HowItWorks = () => {
@@ -49,6 +49,17 @@ const HowItWorks = () => {
         t('howItWorks.steps.3.features.0'),
         t('howItWorks.steps.3.features.1'),
         t('howItWorks.steps.3.features.2')
+      ]
+    },
+    {
+      number: "05",
+      title: t('howItWorks.steps.4.title'),
+      description: t('howItWorks.steps.4.description'),
+      icon: <Wallet className="w-8 h-8 text-metallic-gold" />,
+      features: [
+        t('howItWorks.steps.4.features.0'),
+        t('howItWorks.steps.4.features.1'),
+        t('howItWorks.steps.4.features.2')
       ]
     }
   ];

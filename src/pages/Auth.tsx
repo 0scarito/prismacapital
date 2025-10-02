@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
-import prismaLogo from '@/assets/prisma-logo.png';
+import prismaLogo from '@/assets/prisma-logo-blue.png';
 
 const Auth = () => {
   const [email, setEmail] = useState('');
@@ -83,7 +83,7 @@ const Auth = () => {
             <img 
               src={prismaLogo} 
               alt="Prisma Capital Logo" 
-              className="h-20 w-auto object-contain"
+              className="h-16 w-auto object-contain"
             />
           </div>
           <CardDescription>

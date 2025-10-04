@@ -1,13 +1,12 @@
 import { useState } from 'react';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
-import PortfolioDrawer from '@/components/PortfolioDrawer';
 import InvestmentCard from '@/components/InvestmentCard';
-import { ArrowLeft, Briefcase, Coins } from 'lucide-react';
+import { ArrowLeft, Coins } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 const Commodities = () => {
   const [basket, setBasket] = useState<{ id: number; name: string }[]>([]);
-  const [showPortfolio, setShowPortfolio] = useState(false);
 
   const deals = [
     { id: 1, name: 'Gold Hedge', description: 'Preserve purchasing power with allocated gold bullion.' },
@@ -29,32 +28,36 @@ const Commodities = () => {
     <div className="min-h-screen bg-background">
       <Navigation />
 
-      <div className="fixed top-32 right-8 z-50">
-        <button
-          onClick={() => setShowPortfolio(true)}
-          className="bg-metallic-gold text-deep-navy w-12 h-12 rounded-full flex items-center justify-center shadow-lg"
-        >
-          <Briefcase className="w-6 h-6" />
-          {basket.length > 0 && (
-            <span className="ml-1 font-bold text-sm">{basket.length}</span>
-          )}
-        </button>
-      </div>
-
-      <main className="pt-24 pb-16">
-        <div className="section-container">
-          <button onClick={() => window.history.back()} className="flex items-center gap-2 mb-8 text-slate-50">
+      <main className="pt-16 pb-16">
+        <div className="section-container mb-8">
+          <Button 
+            onClick={() => window.history.back()}
+            variant="outline"
+            className="bg-white text-primary hover:bg-white/90 border-primary/20"
+          >
             <ArrowLeft className="w-4 h-4" />
             Back to investments
-          </button>
+          </Button>
         </div>
 
-        <section className="relative h-72 flex items-center justify-center text-white mb-12" style={{ backgroundColor: '#1A1F24' }}>
-          <h1 className="text-5xl font-bold">Commodities</h1>
-          <Coins className="absolute right-8 bottom-6 w-32 h-32 text-[#C87437]" />
+        <section className="bg-gradient-to-r from-amber-900/30 to-orange-900/30 py-12 mb-12">
+          <div className="section-container">
+            <div className="flex items-center justify-center gap-8 mb-8">
+              <h1 className="text-5xl font-bold text-white">Commodities</h1>
+              <Coins className="w-16 h-16 text-[#C87437]" />
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
+              {metrics.map((m) => (
+                <div key={m.label} className="text-center">
+                  <div className="text-3xl font-bold text-orange-400">{m.value}</div>
+                  <div className="text-sm text-slate-400 mt-1">{m.label}</div>
+                </div>
+              ))}
+            </div>
+          </div>
         </section>
 
-        <section className="py-20">
+        <section className="py-12">
           <div className="section-container">
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
               {deals.map((deal) => (
@@ -71,27 +74,7 @@ const Commodities = () => {
           </div>
         </section>
 
-        <section className="py-16 bg-slate-100 mt-12">
-          <div className="section-container">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-              {metrics.map((m) => (
-                <div key={m.label}>
-                  <div className="text-2xl font-bold">{m.value}</div>
-                  <div className="text-sm text-slate-600">{m.label}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
       </main>
-
-      <PortfolioDrawer
-        open={showPortfolio}
-        onClose={() => setShowPortfolio(false)}
-        title="Portfolio"
-        metrics={metrics}
-        items={basket.map((d) => d.name)}
-      />
 
       <Footer riskCategory="risk.commodities" />
     </div>

@@ -7,79 +7,14 @@ export type Json =
   | Json[]
 
 export type Database = {
-  // Allows to automatically instanciate createClient with right options
+  // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: "12.2.12 (cd3cf9e)"
+    PostgrestVersion: "13.0.5"
   }
   public: {
     Tables: {
-      coupons: {
-        Row: {
-          code: string
-          created_at: string
-          description: string | null
-          expires_at: string | null
-          id: string
-          status: string
-          title: string
-          used_at: string | null
-          user_id: string
-          value: number
-        }
-        Insert: {
-          code: string
-          created_at?: string
-          description?: string | null
-          expires_at?: string | null
-          id?: string
-          status?: string
-          title: string
-          used_at?: string | null
-          user_id: string
-          value: number
-        }
-        Update: {
-          code?: string
-          created_at?: string
-          description?: string | null
-          expires_at?: string | null
-          id?: string
-          status?: string
-          title?: string
-          used_at?: string | null
-          user_id?: string
-          value?: number
-        }
-        Relationships: []
-      }
-      profiles: {
-        Row: {
-          created_at: string
-          display_name: string | null
-          email: string | null
-          id: string
-          updated_at: string
-          user_id: string
-        }
-        Insert: {
-          created_at?: string
-          display_name?: string | null
-          email?: string | null
-          id?: string
-          updated_at?: string
-          user_id: string
-        }
-        Update: {
-          created_at?: string
-          display_name?: string | null
-          email?: string | null
-          id?: string
-          updated_at?: string
-          user_id?: string
-        }
-        Relationships: []
-      }
+      [_ in never]: never
     }
     Views: {
       [_ in never]: never

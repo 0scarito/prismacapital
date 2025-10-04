@@ -1,13 +1,12 @@
 import { useState } from 'react';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
-import PortfolioDrawer from '@/components/PortfolioDrawer';
 import InvestmentCard from '@/components/InvestmentCard';
-import { ArrowLeft, Briefcase } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 const Etfs = () => {
   const [basket, setBasket] = useState<{ id: number; name: string }[]>([]);
-  const [showPortfolio, setShowPortfolio] = useState(false);
 
   const deals = [
     { id: 1, name: 'Global Equity ETF', description: 'Broad exposure to developed market equities.' },
@@ -29,34 +28,33 @@ const Etfs = () => {
     <div className="min-h-screen bg-[#18202C] text-warm-white">
       <Navigation />
 
-      <div className="fixed top-32 right-8 z-50">
-        <button
-          onClick={() => setShowPortfolio(true)}
-          className="bg-metallic-gold text-deep-navy w-12 h-12 rounded-full flex items-center justify-center shadow-lg"
-        >
-          <Briefcase className="w-6 h-6" />
-          {basket.length > 0 && (
-            <span className="ml-1 font-bold text-sm">{basket.length}</span>
-          )}
-        </button>
-      </div>
-
-      <main className="pt-24 pb-16">
-        <div className="section-container">
-          <button
+      <main className="pt-16 pb-16">
+        <div className="section-container mb-8">
+          <Button 
             onClick={() => window.history.back()}
-            className="flex items-center gap-2 text-teal-200 hover:text-white mb-8"
+            variant="outline"
+            className="bg-white text-primary hover:bg-white/90 border-primary/20"
           >
             <ArrowLeft className="w-4 h-4" />
             Back to investments
-          </button>
+          </Button>
         </div>
 
-        <section className="section-container h-[20rem] flex items-center">
-          <h1 className="text-4xl md:text-5xl font-bold">ETF &amp; Indices</h1>
+        <section className="bg-gradient-to-r from-teal-900/30 to-emerald-900/30 py-12 mb-12">
+          <div className="section-container">
+            <h1 className="text-4xl md:text-5xl font-bold mb-8 text-center">ETF &amp; Indices</h1>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
+              {metrics.map((m) => (
+                <div key={m.label} className="text-center">
+                  <div className="text-3xl font-bold text-teal-400">{m.value}</div>
+                  <div className="text-sm text-slate-300 mt-1">{m.label}</div>
+                </div>
+              ))}
+            </div>
+          </div>
         </section>
 
-        <section className="py-20">
+        <section className="py-12">
           <div className="section-container">
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
               {deals.map((deal) => (
@@ -73,27 +71,7 @@ const Etfs = () => {
           </div>
         </section>
 
-        <section className="py-16 bg-[#0b0f14] mt-12">
-          <div className="section-container">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-              {metrics.map((m) => (
-                <div key={m.label}>
-                  <div className="text-2xl font-bold">{m.value}</div>
-                  <div className="text-sm text-slate-300">{m.label}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
       </main>
-
-      <PortfolioDrawer
-        open={showPortfolio}
-        onClose={() => setShowPortfolio(false)}
-        title="Portfolio"
-        metrics={metrics}
-        items={basket.map((d) => d.name)}
-      />
 
       <Footer riskCategory="risk.etf" />
     </div>

@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
-import PortfolioDrawer from '@/components/PortfolioDrawer';
 import InvestmentCard from '@/components/InvestmentCard';
-import { ArrowLeft, Briefcase } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { Button } from '@/components/ui/button';
 interface Deal {
   id: number;
   name: string;
@@ -12,11 +12,8 @@ interface Deal {
   image?: string;
 }
 const PrivateEquity = () => {
-  const {
-    t
-  } = useLanguage();
+  const { t } = useLanguage();
   const [basket, setBasket] = useState<Deal[]>([]);
-  const [showPortfolio, setShowPortfolio] = useState(false);
   const deals: Deal[] = [{
     id: 1,
     name: 'TechCorp SAS',
@@ -63,42 +60,43 @@ const PrivateEquity = () => {
   return <div className="min-h-screen bg-background">
       <Navigation />
 
-      <div className="fixed top-32 right-8 z-50">
-        
-      </div>
-
-      <main className="pt-24 pb-16">
-        <div className="section-container">
-          <button onClick={() => window.history.back()} className="flex items-center gap-2 mb-8 text-muted-foreground hover:text-foreground">
+      <main className="pt-16 pb-16">
+        <div className="section-container mb-8">
+          <Button 
+            onClick={() => window.history.back()} 
+            variant="outline"
+            className="bg-white text-primary hover:bg-white/90 border-primary/20"
+          >
             <ArrowLeft className="w-4 h-4" />
             {t('privateEquity.back')}
-          </button>
+          </Button>
         </div>
 
-        <section className="py-20">
+        <section className="bg-gradient-to-r from-primary/10 to-primary/5 py-12 mb-12">
           <div className="section-container">
             <h1 className="text-4xl font-bold mb-8 text-center">
               {t('privateEquity.hero.title')}
             </h1>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
+              {metrics.map((m) => (
+                <div key={m.label} className="text-center">
+                  <div className="text-3xl font-bold text-primary">{m.value}</div>
+                  <div className="text-sm text-muted-foreground mt-1">{m.label}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="py-12">
+          <div className="section-container">
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
               {deals.map(deal => <InvestmentCard key={deal.id} id={`pe-${deal.id}`} title={deal.name} description={deal.description} type="Private Equity" onAdd={() => addToBasket(deal)} />)}
             </div>
           </div>
         </section>
 
-        <section className="py-16 bg-slate-100 mt-12">
-          <div className="section-container">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-              {metrics.map(m => <div key={m.label}>
-                  <div className="text-2xl font-bold">{m.value}</div>
-                  <div className="text-sm text-slate-600">{m.label}</div>
-                </div>)}
-            </div>
-          </div>
-        </section>
       </main>
-
-      <PortfolioDrawer open={showPortfolio} onClose={() => setShowPortfolio(false)} title="Portfolio" metrics={metrics} items={basket.map(d => d.name)} />
 
       <Footer riskCategory="risk.privateEquity" />
     </div>;

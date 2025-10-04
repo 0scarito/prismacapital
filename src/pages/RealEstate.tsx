@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
-import { ArrowLeft, Building, Home, Zap, TrendingUp, Play, MapPin, DollarSign, Calendar, Users, Briefcase } from 'lucide-react';
-import PortfolioDrawer from '@/components/PortfolioDrawer';
+import { ArrowLeft, Building, MapPin, DollarSign, Calendar, Users } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { Button } from '@/components/ui/button';
 
 interface Project {
   id: number;
@@ -31,11 +31,6 @@ const RealEstate = () => {
   const [selectedRoom, setSelectedRoom] = useState<Project | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState(0);
-  const [showPortfolio, setShowPortfolio] = useState(false);
-  const metrics = [
-    { label: t('realEstate.metrics.averageYield'), value: '7.8%' },
-    { label: t('realEstate.metrics.occupancy'), value: '93%' }
-  ];
   const floors: Floor[] = [
     {
       id: 'rooftop',
@@ -147,22 +142,17 @@ const RealEstate = () => {
   };
   return <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-700">
       <Navigation />
-
-      <div className="fixed top-32 right-8 z-50">
-        <button
-          onClick={() => setShowPortfolio(true)}
-          className="bg-metallic-gold text-deep-navy w-12 h-12 rounded-full flex items-center justify-center shadow-lg"
-        >
-          <Briefcase className="w-6 h-6" />
-        </button>
-      </div>
       
-      <main className="pt-24">
-        <div className="section-container">
-          <button onClick={() => window.history.back()} className="flex items-center gap-2 mb-8 text-slate-50">
+      <main className="pt-16">
+        <div className="section-container mb-8">
+          <Button 
+            onClick={() => window.history.back()}
+            variant="outline"
+            className="bg-white text-primary hover:bg-white/90 border-primary/20"
+          >
             <ArrowLeft className="w-4 h-4" />
             {t('realEstate.back')}
-          </button>
+          </Button>
         </div>
 
         {/* Hero */}
@@ -270,8 +260,8 @@ const RealEstate = () => {
           </div>
         </section>
 
-        {/* Property Statistics */}
-        <section className="py-16 bg-slate-900/50">
+        {/* Key Metrics Banner */}
+        <section className="py-12 bg-gradient-to-r from-orange-900/30 to-amber-900/30 mb-8">
           <div className="section-container">
             <h3 className="text-2xl font-bold text-center text-white mb-8">
               {t('realEstate.portfolioStats.title')}
@@ -400,13 +390,6 @@ const RealEstate = () => {
           </div>
           </div>
           }
-
-      <PortfolioDrawer
-        open={showPortfolio}
-        onClose={() => setShowPortfolio(false)}
-        title="Portfolio"
-        metrics={metrics}
-      />
 
       <Footer riskCategory="risk.realEstate" />
     </div>;

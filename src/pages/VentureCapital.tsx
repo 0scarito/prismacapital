@@ -96,8 +96,10 @@ const VentureCapital = () => {
               {deals.map((deal) => (
                 <InvestmentCard
                   key={deal.id}
+                  id={`vc-${deal.id}`}
                   title={deal.name}
                   description={deal.description}
+                  type="Venture Capital"
                   onAdd={() => addToBasket(deal)}
                 />
               ))}

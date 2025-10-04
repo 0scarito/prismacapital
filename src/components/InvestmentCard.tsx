@@ -1,15 +1,29 @@
 import { useState } from 'react';
-import { Plus } from 'lucide-react';
+import { Plus, Check } from 'lucide-react';
+import { useCart } from '@/contexts/CartContext';
 
 interface InvestmentCardProps {
+  id: string;
   title: string;
   description: string;
+  type: string;
   image?: string;
-  onAdd: () => void;
+  onAdd?: () => void;
 }
 
-const InvestmentCard = ({ title, description, image, onAdd }: InvestmentCardProps) => {
+const InvestmentCard = ({ id, title, description, type, image, onAdd }: InvestmentCardProps) => {
   const [showMore, setShowMore] = useState(false);
+  const { addItem, items } = useCart();
+  const isInCart = items.some(item => item.id === id);
+
+  const handleAdd = () => {
+    if (!isInCart) {
+      addItem({ id, name: title, description, type, image });
+    }
+    if (onAdd) {
+      onAdd();
+    }
+  };
 
   return (
     <div className="bg-white rounded-xl shadow p-4 flex flex-col">
@@ -37,11 +51,16 @@ const InvestmentCard = ({ title, description, image, onAdd }: InvestmentCardProp
           {showMore ? 'Less' : 'More'}
         </button>
         <button
-          onClick={onAdd}
-          className="bg-metallic-gold text-deep-navy px-3 py-1 rounded flex items-center gap-1"
+          onClick={handleAdd}
+          disabled={isInCart}
+          className={`px-3 py-1 rounded flex items-center gap-1 transition-colors ${
+            isInCart 
+              ? 'bg-green-500 text-white cursor-default' 
+              : 'bg-metallic-gold text-deep-navy hover:bg-metallic-gold/90'
+          }`}
         >
-          <Plus className="w-4 h-4" />
-          <span>Add</span>
+          {isInCart ? <Check className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
+          <span>{isInCart ? 'Added' : 'Add'}</span>
         </button>
       </div>
     </div>

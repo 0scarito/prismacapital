@@ -74,8 +74,10 @@ const PrivateEquity = () => {
               {deals.map((deal) => (
                 <InvestmentCard
                   key={deal.id}
+                  id={`pe-${deal.id}`}
                   title={deal.name}
                   description={deal.description}
+                  type="Private Equity"
                   onAdd={() => addToBasket(deal)}
                 />
               ))}

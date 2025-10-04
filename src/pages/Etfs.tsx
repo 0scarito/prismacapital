@@ -62,8 +62,10 @@ const Etfs = () => {
               {deals.map((deal) => (
                 <InvestmentCard
                   key={deal.id}
+                  id={`etf-${deal.id}`}
                   title={deal.name}
                   description={deal.description}
+                  type="ETFs"
                   onAdd={() => addToBasket(deal)}
                 />
               ))}

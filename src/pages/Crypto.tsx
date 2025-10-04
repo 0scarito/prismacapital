@@ -60,8 +60,10 @@ const Crypto = () => {
               {deals.map((deal) => (
                 <InvestmentCard
                   key={deal.id}
+                  id={`crypto-${deal.id}`}
                   title={deal.name}
                   description={deal.description}
+                  type="Crypto"
                   onAdd={() => addToBasket(deal)}
                 />
               ))}

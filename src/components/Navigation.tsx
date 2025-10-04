@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useAuth } from '@/hooks/useAuth';
 import prismaLogo from '@/assets/prisma-logo.png';
+import CartButton from '@/components/CartButton';
 
 /**
  * Main navigation component with responsive menu
@@ -90,6 +91,8 @@ const Navigation = () => {
                 {item.label}
               </Link>)}
 
+            <CartButton />
+
             {/* Language Toggle */}
             <div className="flex items-center bg-muted rounded-full p-1">
               <button onClick={() => setLanguage('fr')} className={`px-3 py-1 text-sm font-medium rounded-full transition-colors ${language === 'fr' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:text-foreground'}`}>
@@ -117,6 +120,10 @@ const Navigation = () => {
               }} className="block w-full text-left font-body text-foreground hover:text-primary transition-colors duration-200 py-2">
                   {item.label}
                 </Link>)}
+
+              <div className="flex justify-center py-2">
+                <CartButton />
+              </div>
 
               {/* Mobile Language Toggle */}
               <div className="flex items-center bg-muted rounded-full p-1">

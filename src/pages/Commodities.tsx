@@ -60,8 +60,10 @@ const Commodities = () => {
               {deals.map((deal) => (
                 <InvestmentCard
                   key={deal.id}
+                  id={`commodity-${deal.id}`}
                   title={deal.name}
                   description={deal.description}
+                  type="Commodities"
                   onAdd={() => addToBasket(deal)}
                 />
               ))}

@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./hooks/useAuth";
 import { LanguageProvider } from "./contexts/LanguageContext";
+import { CartProvider } from "./contexts/CartContext";
 import Index from "./pages/Index";
 import HowItWorks from "./pages/HowItWorks";
 import Investments from "./pages/Investments";
@@ -31,6 +32,8 @@ import ContactSupport from "./pages/ContactSupport";
 import DiciDocumentation from "./pages/DiciDocumentation";
 import EsgReports from "./pages/EsgReports";
 import Courses from "./pages/Courses";
+import Cart from "./pages/Cart";
+import Checkout from "./pages/Checkout";
 
 const queryClient = new QueryClient();
 
@@ -38,7 +41,8 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <LanguageProvider>
       <AuthProvider>
-        <TooltipProvider>
+        <CartProvider>
+          <TooltipProvider>
           <Toaster />
           <Sonner />
           <BrowserRouter>
@@ -57,6 +61,8 @@ const App = () => (
               <Route path="/security" element={<Security />} />
               <Route path="/faq" element={<FAQ />} />
               <Route path="/payment" element={<Payment />} />
+              <Route path="/cart" element={<Cart />} />
+              <Route path="/checkout" element={<Checkout />} />
               <Route path="/auth" element={<Auth />} />
               <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
               <Route path="/legal-notices" element={<LegalNotices />} />
@@ -125,6 +131,7 @@ const App = () => (
             </Routes>
           </BrowserRouter>
         </TooltipProvider>
+        </CartProvider>
       </AuthProvider>
     </LanguageProvider>
   </QueryClientProvider>

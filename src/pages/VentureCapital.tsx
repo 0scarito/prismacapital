@@ -63,28 +63,26 @@ const VentureCapital = () => {
     <div className="min-h-screen bg-slate-950 text-white">
       <Navigation />
 
-      <main className="pt-16 pb-16">
-        <div className="section-container mb-8">
-          <Button 
-            onClick={() => window.history.back()}
-            variant="outline"
-            className="bg-white text-primary hover:bg-white/90 border-primary/20"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            {t('venture.back')}
-          </Button>
-        </div>
-
-        <section className="bg-gradient-to-r from-cyan-900/30 to-blue-900/30 py-12 mb-12">
+      <main className="pt-24 pb-16">
+        <section className="bg-gradient-to-r from-cyan-900/30 to-blue-900/30 py-8 mb-12">
           <div className="section-container">
-            <h1 className="text-4xl font-bold mb-8 text-center">
+            <Button 
+              onClick={() => window.history.back()}
+              variant="outline"
+              className="bg-white text-primary hover:bg-white/90 border-primary/20 mb-6"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              {t('venture.back')}
+            </Button>
+
+            <h1 className="text-4xl font-bold mb-8 text-center text-white">
               {t('venture.hero.title')}
             </h1>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
               {metrics.map((m) => (
                 <div key={m.label} className="text-center">
-                  <div className="text-3xl font-bold text-cyan-400">{m.value}</div>
-                  <div className="text-sm text-slate-400 mt-1">{m.label}</div>
+                  <div className="text-3xl font-bold text-cyan-300">{m.value}</div>
+                  <div className="text-sm text-slate-300 mt-1">{m.label}</div>
                 </div>
               ))}
             </div>

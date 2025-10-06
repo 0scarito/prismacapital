@@ -143,23 +143,21 @@ const RealEstate = () => {
   return <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-700">
       <Navigation />
       
-      <main className="pt-16">
-        <div className="section-container mb-8">
-          <Button 
-            onClick={() => window.history.back()}
-            variant="outline"
-            className="bg-white text-primary hover:bg-white/90 border-primary/20"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            {t('realEstate.back')}
-          </Button>
-        </div>
-
+      <main className="pt-24">
         {/* Hero */}
-        <section className="py-20">
+        <section className="bg-gradient-to-r from-emerald-900/30 to-green-900/30 py-8 mb-12">
           <div className="section-container">
-            <div className="text-center mb-12">
-              <h1 className="text-6xl font-bold text-white mb-6">
+            <Button 
+              onClick={() => window.history.back()}
+              variant="outline"
+              className="bg-white text-primary hover:bg-white/90 border-primary/20 mb-6"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              {t('realEstate.back')}
+            </Button>
+
+            <div className="text-center mb-8">
+              <h1 className="text-5xl font-bold text-white mb-4">
                 {t('realEstate.hero.title')}
               </h1>
               <p className="text-xl text-slate-300 max-w-3xl mx-auto">
@@ -167,8 +165,19 @@ const RealEstate = () => {
               </p>
             </div>
 
-            {/* Rent Ticker - Basement */}
-            <div className="flex justify-center mb-8">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
+              <div className="text-center">
+                <div className="text-3xl font-bold text-emerald-300">{totalRent.toFixed(1)}M€</div>
+                <div className="text-sm text-slate-300 mt-1">{t('realEstate.totalRent')}</div>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold text-emerald-300">4</div>
+                <div className="text-sm text-slate-300 mt-1">{t('realEstate.properties')}</div>
+              </div>
+            </div>
+
+            {/* Rent Ticker */}
+            <div className="flex justify-center mt-8">
               <div className="bg-slate-900/50 backdrop-blur-sm rounded-xl p-6 border border-orange-400/30">
                 <div className="flex items-center gap-4">
                   <div className="w-4 h-4 bg-orange-400 rounded-full animate-heartbeat" />

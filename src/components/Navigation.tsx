@@ -70,7 +70,7 @@ const Navigation = () => {
     }
     setIsOpen(false);
   };
-  return <nav className={`fixed top-0 left-0 right-0 z-50 border-b border-border/40 transition-all duration-300 ${isScrolled ? 'bg-background/80 backdrop-blur-md' : 'bg-transparent'}`}>
+  return <nav className={`fixed top-0 left-0 right-0 z-50 border-b border-border/40 transition-all duration-300 ${isScrolled ? 'bg-background/80 backdrop-blur-md' : 'bg-primary/90 backdrop-blur-md'}`}>
       <div className="pr-4 md:pr-8">
         <div className="flex items-center justify-between py-4">
           {/* Logo - Non-interactive, positioned on the left */}

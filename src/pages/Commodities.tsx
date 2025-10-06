@@ -28,20 +28,18 @@ const Commodities = () => {
     <div className="min-h-screen bg-background">
       <Navigation />
 
-      <main className="pt-16 pb-16">
-        <div className="section-container mb-8">
-          <Button 
-            onClick={() => window.history.back()}
-            variant="outline"
-            className="bg-white text-primary hover:bg-white/90 border-primary/20"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Back to investments
-          </Button>
-        </div>
-
-        <section className="bg-gradient-to-r from-amber-900/30 to-orange-900/30 py-12 mb-12">
+      <main className="pt-24 pb-16">
+        <section className="bg-gradient-to-r from-amber-900/30 to-orange-900/30 py-8 mb-12">
           <div className="section-container">
+            <Button 
+              onClick={() => window.history.back()}
+              variant="outline"
+              className="bg-white text-primary hover:bg-white/90 border-primary/20 mb-6"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Back to investments
+            </Button>
+
             <div className="flex items-center justify-center gap-8 mb-8">
               <h1 className="text-5xl font-bold text-white">Commodities</h1>
               <Coins className="w-16 h-16 text-[#C87437]" />
@@ -49,8 +47,8 @@ const Commodities = () => {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
               {metrics.map((m) => (
                 <div key={m.label} className="text-center">
-                  <div className="text-3xl font-bold text-orange-400">{m.value}</div>
-                  <div className="text-sm text-slate-400 mt-1">{m.label}</div>
+                  <div className="text-3xl font-bold text-amber-300">{m.value}</div>
+                  <div className="text-sm text-slate-300 mt-1">{m.label}</div>
                 </div>
               ))}
             </div>

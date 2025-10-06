@@ -28,25 +28,23 @@ const Etfs = () => {
     <div className="min-h-screen bg-[#18202C] text-warm-white">
       <Navigation />
 
-      <main className="pt-16 pb-16">
-        <div className="section-container mb-8">
-          <Button 
-            onClick={() => window.history.back()}
-            variant="outline"
-            className="bg-white text-primary hover:bg-white/90 border-primary/20"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Back to investments
-          </Button>
-        </div>
-
-        <section className="bg-gradient-to-r from-teal-900/30 to-emerald-900/30 py-12 mb-12">
+      <main className="pt-24 pb-16">
+        <section className="bg-gradient-to-r from-purple-900/30 to-pink-900/30 py-8 mb-12">
           <div className="section-container">
-            <h1 className="text-4xl md:text-5xl font-bold mb-8 text-center">ETF &amp; Indices</h1>
+            <Button 
+              onClick={() => window.history.back()}
+              variant="outline"
+              className="bg-white text-primary hover:bg-white/90 border-primary/20 mb-6"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Back to investments
+            </Button>
+
+            <h1 className="text-4xl md:text-5xl font-bold mb-8 text-center text-white">ETF &amp; Indices</h1>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
               {metrics.map((m) => (
                 <div key={m.label} className="text-center">
-                  <div className="text-3xl font-bold text-teal-400">{m.value}</div>
+                  <div className="text-3xl font-bold text-purple-300">{m.value}</div>
                   <div className="text-sm text-slate-300 mt-1">{m.label}</div>
                 </div>
               ))}

@@ -60,27 +60,25 @@ const PrivateEquity = () => {
   return <div className="min-h-screen bg-background">
       <Navigation />
 
-      <main className="pt-16 pb-16">
-        <div className="section-container mb-8">
-          <Button 
-            onClick={() => window.history.back()} 
-            variant="outline"
-            className="bg-white text-primary hover:bg-white/90 border-primary/20"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            {t('privateEquity.back')}
-          </Button>
-        </div>
-
-        <section className="bg-gradient-to-r from-primary/10 to-primary/5 py-12 mb-12">
+      <main className="pt-24 pb-16">
+        <section className="bg-gradient-to-r from-primary/10 to-primary/5 py-8 mb-12">
           <div className="section-container">
-            <h1 className="text-4xl font-bold mb-8 text-center">
+            <Button 
+              onClick={() => window.history.back()} 
+              variant="outline"
+              className="bg-white text-primary hover:bg-white/90 border-primary/20 mb-6"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              {t('privateEquity.back')}
+            </Button>
+
+            <h1 className="text-4xl font-bold mb-8 text-center text-foreground">
               {t('privateEquity.hero.title')}
             </h1>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
               {metrics.map((m) => (
                 <div key={m.label} className="text-center">
-                  <div className="text-3xl font-bold text-primary">{m.value}</div>
+                  <div className="text-3xl font-bold text-foreground">{m.value}</div>
                   <div className="text-sm text-muted-foreground mt-1">{m.label}</div>
                 </div>
               ))}

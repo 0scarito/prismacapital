@@ -36,7 +36,6 @@ interface Investment {
 }
 interface Profile {
   display_name: string;
-  email: string;
 }
 const Dashboard = () => {
   const {
@@ -70,7 +69,7 @@ const Dashboard = () => {
       const {
         data: profileData,
         error: profileError
-      } = await supabase.from('profiles').select('display_name, email').eq('user_id', user?.id).single();
+      } = await supabase.from('profiles').select('display_name').eq('id', user?.id).single();
       if (profileError) throw profileError;
       setProfile(profileData);
 

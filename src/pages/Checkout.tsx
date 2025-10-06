@@ -75,16 +75,15 @@ const CheckoutContent = () => {
         const physicalCardCost = hasPhysicalCard ? PHYSICAL_CARD_COST : 0;
         const totalCost = amount + physicalCardCost;
 
-        return supabase.from('purchases' as any).insert({
+        return supabase.from('purchases').insert({
           user_id: user.id,
           investment_id: item.id,
           investment_name: item.name,
-          investment_type: item.type,
           amount,
           has_physical_card: hasPhysicalCard,
-          physical_card_cost: physicalCardCost,
           total_cost: totalCost,
-        } as any);
+          status: 'completed',
+        });
       });
 
       const results = await Promise.all(purchasePromises);

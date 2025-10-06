@@ -14,7 +14,146 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      coupons: {
+        Row: {
+          code: string
+          created_at: string | null
+          description: string | null
+          expires_at: string | null
+          id: string
+          status: string
+          title: string
+          used_at: string | null
+          user_id: string
+          value: number
+        }
+        Insert: {
+          code: string
+          created_at?: string | null
+          description?: string | null
+          expires_at?: string | null
+          id?: string
+          status?: string
+          title: string
+          used_at?: string | null
+          user_id: string
+          value: number
+        }
+        Update: {
+          code?: string
+          created_at?: string | null
+          description?: string | null
+          expires_at?: string | null
+          id?: string
+          status?: string
+          title?: string
+          used_at?: string | null
+          user_id?: string
+          value?: number
+        }
+        Relationships: []
+      }
+      gift_transfers: {
+        Row: {
+          accepted_at: string | null
+          created_at: string | null
+          from_user_id: string
+          id: string
+          message: string | null
+          purchase_id: string
+          status: string
+          to_email: string
+        }
+        Insert: {
+          accepted_at?: string | null
+          created_at?: string | null
+          from_user_id: string
+          id?: string
+          message?: string | null
+          purchase_id: string
+          status?: string
+          to_email: string
+        }
+        Update: {
+          accepted_at?: string | null
+          created_at?: string | null
+          from_user_id?: string
+          id?: string
+          message?: string | null
+          purchase_id?: string
+          status?: string
+          to_email?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "gift_transfers_purchase_id_fkey"
+            columns: ["purchase_id"]
+            isOneToOne: false
+            referencedRelation: "purchases"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string | null
+          display_name: string | null
+          id: string
+          updated_at: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string | null
+          display_name?: string | null
+          id: string
+          updated_at?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string | null
+          display_name?: string | null
+          id?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      purchases: {
+        Row: {
+          amount: number
+          created_at: string | null
+          has_physical_card: boolean | null
+          id: string
+          investment_id: string
+          investment_name: string
+          status: string
+          total_cost: number
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string | null
+          has_physical_card?: boolean | null
+          id?: string
+          investment_id: string
+          investment_name: string
+          status?: string
+          total_cost: number
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string | null
+          has_physical_card?: boolean | null
+          id?: string
+          investment_id?: string
+          investment_name?: string
+          status?: string
+          total_cost?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

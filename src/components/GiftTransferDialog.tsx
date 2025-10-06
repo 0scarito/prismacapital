@@ -42,13 +42,13 @@ const GiftTransferDialog = ({ open, onOpenChange, purchaseId, investmentName }: 
         throw new Error('Not authenticated');
       }
 
-      const { error } = await supabase.from('gift_transfers' as any).insert({
+      const { error } = await supabase.from('gift_transfers').insert({
         from_user_id: user.id,
         to_email: email,
         purchase_id: purchaseId,
         message: message || null,
         status: 'pending',
-      } as any);
+      });
 
       if (error) throw error;
 

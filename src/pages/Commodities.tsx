@@ -16,8 +16,9 @@ const Commodities = () => {
   ];
 
   const metrics = [
-    { label: 'YTD Performance', value: '+12%' },
-    { label: 'Volatility', value: 'High' },
+    { label: 'Projected CAGR', value: '12.3%' },
+    { label: 'Total Invested', value: '€19.7M' },
+    { label: '2-Year Gains', value: '+24.8%' },
   ];
 
   const addToBasket = (deal: { id: number; name: string }) => {
@@ -44,7 +45,7 @@ const Commodities = () => {
               <h1 className="text-5xl font-bold text-white">Commodities</h1>
               <Coins className="w-16 h-16 text-[#C87437]" />
             </div>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
+            <div className="grid grid-cols-3 gap-8 max-w-4xl mx-auto">
               {metrics.map((m) => (
                 <div key={m.label} className="text-center">
                   <div className="text-3xl font-bold text-amber-300">{m.value}</div>

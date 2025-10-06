@@ -51,8 +51,9 @@ const VentureCapital = () => {
   ];
 
   const metrics = [
-    { label: t('venture.portfolioIrr'), value: '28.5%' },
-    { label: t('venture.exits'), value: '12' },
+    { label: 'Projected CAGR', value: '28.5%' },
+    { label: 'Total Invested', value: '€102M' },
+    { label: '2-Year Gains', value: '+156%' },
   ];
 
   const addToBasket = (deal: Deal) => {
@@ -78,7 +79,7 @@ const VentureCapital = () => {
             <h1 className="text-4xl font-bold mb-8 text-center text-white">
               {t('venture.hero.title')}
             </h1>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
+            <div className="grid grid-cols-3 gap-8 max-w-4xl mx-auto">
               {metrics.map((m) => (
                 <div key={m.label} className="text-center">
                   <div className="text-3xl font-bold text-cyan-300">{m.value}</div>

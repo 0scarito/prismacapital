@@ -34,6 +34,7 @@ import EsgReports from "./pages/EsgReports";
 import Courses from "./pages/Courses";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
+import ScrollToTop from "./components/ScrollToTop";
 
 const queryClient = new QueryClient();
 
@@ -46,6 +47,7 @@ const App = () => (
           <Toaster />
           <Sonner />
           <BrowserRouter>
+            <ScrollToTop />
             <Routes>
               {/* Default routes (English) */}
               <Route path="/" element={<Index />} />

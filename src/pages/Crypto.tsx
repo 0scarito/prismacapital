@@ -16,8 +16,9 @@ const Crypto = () => {
   ];
 
   const metrics = [
-    { label: 'YTD Performance', value: '+68%' },
-    { label: 'Staking Rewards', value: '5%' },
+    { label: 'Projected CAGR', value: '42%' },
+    { label: 'Total Invested', value: '€28.4M' },
+    { label: '2-Year Gains', value: '+189%' },
   ];
 
   const addToBasket = (deal: { id: number; name: string }) => {
@@ -44,7 +45,7 @@ const Crypto = () => {
               <h1 className="text-4xl font-bold text-white">Crypto-assets</h1>
               <Coins className="w-16 h-16 text-cyan-300/80" />
             </div>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
+            <div className="grid grid-cols-3 gap-8 max-w-4xl mx-auto">
               {metrics.map((m) => (
                 <div key={m.label} className="text-center">
                   <div className="text-3xl font-bold text-cyan-300">{m.value}</div>

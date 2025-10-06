@@ -48,11 +48,14 @@ const PrivateEquity = () => {
     description: 'EBITDA €18.6M · IRR 24% · Dividend 7.7%'
   }];
   const metrics = [{
-    label: t('privateEquity.avgIrr'),
+    label: 'Projected CAGR',
     value: '23.4%'
   }, {
-    label: t('privateEquity.avgDividend'),
-    value: '7.1%'
+    label: 'Total Invested',
+    value: '€84.3M'
+  }, {
+    label: '2-Year Gains',
+    value: '+47.2%'
   }];
   const addToBasket = (deal: Deal) => {
     setBasket(prev => prev.find(d => d.id === deal.id) ? prev : [...prev, deal]);
@@ -75,7 +78,7 @@ const PrivateEquity = () => {
             <h1 className="text-4xl font-bold mb-8 text-center text-foreground">
               {t('privateEquity.hero.title')}
             </h1>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
+            <div className="grid grid-cols-3 gap-8 max-w-4xl mx-auto">
               {metrics.map((m) => (
                 <div key={m.label} className="text-center">
                   <div className="text-3xl font-bold text-foreground">{m.value}</div>

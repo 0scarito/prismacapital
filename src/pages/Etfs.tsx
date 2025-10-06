@@ -16,8 +16,9 @@ const Etfs = () => {
   ];
 
   const metrics = [
-    { label: 'Projected CAGR', value: '7%' },
-    { label: 'Avg Fee', value: '0.15%' },
+    { label: 'Projected CAGR', value: '7.2%' },
+    { label: 'Total Invested', value: '€32.8M' },
+    { label: '2-Year Gains', value: '+18.5%' },
   ];
 
   const addToBasket = (deal: { id: number; name: string }) => {
@@ -41,7 +42,7 @@ const Etfs = () => {
             </Button>
 
             <h1 className="text-4xl md:text-5xl font-bold mb-8 text-center text-white">ETF &amp; Indices</h1>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
+            <div className="grid grid-cols-3 gap-8 max-w-4xl mx-auto">
               {metrics.map((m) => (
                 <div key={m.label} className="text-center">
                   <div className="text-3xl font-bold text-purple-300">{m.value}</div>

@@ -100,14 +100,9 @@ const RealEstate = () => {
               {t('realEstate.back')}
             </Button>
 
-            <div className="text-center mb-8">
-              <h1 className="text-5xl font-bold text-white mb-4">
-                {t('realEstate.hero.title')}
-              </h1>
-              <p className="text-xl text-slate-300 max-w-3xl mx-auto">
-                {t('realEstate.hero.description')}
-              </p>
-            </div>
+            <h1 className="text-4xl font-bold mb-8 text-center text-white">
+              {t('realEstate.hero.title')}
+            </h1>
 
             <div className="grid grid-cols-3 gap-8 max-w-4xl mx-auto">
               <div className="text-center">

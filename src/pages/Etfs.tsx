@@ -41,7 +41,9 @@ const Etfs = () => {
               Back to investments
             </Button>
 
-            <h1 className="text-4xl md:text-5xl font-bold mb-8 text-center text-white">ETF &amp; Indices</h1>
+            <h1 className="text-4xl font-bold mb-8 text-center text-white">
+              ETF &amp; Indices
+            </h1>
             <div className="grid grid-cols-3 gap-8 max-w-4xl mx-auto">
               {metrics.map((m) => (
                 <div key={m.label} className="text-center">

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import InvestmentCard from '@/components/InvestmentCard';
-import { ArrowLeft, Coins } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const Crypto = () => {
@@ -41,10 +41,9 @@ const Crypto = () => {
               Back to investments
             </Button>
 
-            <div className="flex items-center justify-center gap-8 mb-8">
-              <h1 className="text-4xl font-bold text-white">Crypto-assets</h1>
-              <Coins className="w-16 h-16 text-cyan-300/80" />
-            </div>
+            <h1 className="text-4xl font-bold mb-8 text-center text-white">
+              Crypto-assets
+            </h1>
             <div className="grid grid-cols-3 gap-8 max-w-4xl mx-auto">
               {metrics.map((m) => (
                 <div key={m.label} className="text-center">

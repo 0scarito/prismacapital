@@ -34,6 +34,7 @@ import EsgReports from "./pages/EsgReports";
 import Courses from "./pages/Courses";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
+import Portfolio from "./pages/Portfolio";
 import ScrollToTop from "./components/ScrollToTop";
 
 const queryClient = new QueryClient();
@@ -65,6 +66,7 @@ const App = () => (
               <Route path="/payment" element={<Payment />} />
               <Route path="/cart" element={<Cart />} />
               <Route path="/checkout" element={<Checkout />} />
+              <Route path="/portfolio" element={<Portfolio />} />
               <Route path="/auth" element={<Auth />} />
               <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
               <Route path="/legal-notices" element={<LegalNotices />} />

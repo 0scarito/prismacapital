@@ -24,6 +24,7 @@ const CheckoutContent = () => {
   
   const [amounts, setAmounts] = useState<{ [key: string]: string }>({});
   const [physicalCards, setPhysicalCards] = useState<{ [key: string]: boolean }>({});
+  const [giftRecipient, setGiftRecipient] = useState('');
   const [loading, setLoading] = useState(false);
 
   const PHYSICAL_CARD_COST = 15.00;
@@ -54,7 +55,6 @@ const CheckoutContent = () => {
       return;
     }
 
-    // Validate all items have amounts
     const invalidItems = items.filter((item) => !amounts[item.id] || parseFloat(amounts[item.id]) <= 0);
     if (invalidItems.length > 0) {
       toast({
@@ -68,42 +68,35 @@ const CheckoutContent = () => {
     setLoading(true);
 
     try {
-      // Create purchases for each item
-      const purchasePromises = items.map((item) => {
-        const amount = parseFloat(amounts[item.id]);
-        const hasPhysicalCard = physicalCards[item.id] || false;
-        const physicalCardCost = hasPhysicalCard ? PHYSICAL_CARD_COST : 0;
-        const totalCost = amount + physicalCardCost;
+      const paymentItems = items.map((item) => ({
+        id: item.id,
+        name: item.name,
+        description: item.description,
+        amount: parseFloat(amounts[item.id]),
+        hasPhysicalCard: physicalCards[item.id] || false,
+      }));
 
-        return supabase.from('purchases').insert({
-          user_id: user.id,
-          investment_id: item.id,
-          investment_name: item.name,
-          amount,
-          has_physical_card: hasPhysicalCard,
-          total_cost: totalCost,
-          status: 'completed',
+      const { data, error } = await supabase.functions.invoke('create-payment', {
+        body: {
+          items: paymentItems,
+          giftRecipient: giftRecipient || null,
+        },
+      });
+
+      if (error) throw error;
+
+      if (data?.url) {
+        window.open(data.url, '_blank');
+        
+        toast({
+          title: 'Payment initiated',
+          description: 'Complete your payment in the new window',
         });
-      });
-
-      const results = await Promise.all(purchasePromises);
-      
-      const errors = results.filter((r) => r.error);
-      if (errors.length > 0) {
-        throw new Error('Failed to complete purchase');
       }
-
-      toast({
-        title: t('checkout.success') || 'Purchase Complete!',
-        description: t('checkout.successDescription') || 'Your investments have been added to your portfolio',
-      });
-
-      clearCart();
-      navigate('/dashboard');
     } catch (error) {
       toast({
         title: 'Error',
-        description: 'Failed to complete purchase. Please try again.',
+        description: 'Failed to initiate payment. Please try again.',
         variant: 'destructive',
       });
     } finally {
@@ -129,6 +122,28 @@ const CheckoutContent = () => {
 
             <div className="grid lg:grid-cols-3 gap-6">
               <div className="lg:col-span-2 space-y-6">
+                {/* Gift Option */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Gift This Investment</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div>
+                      <Label htmlFor="gift-recipient">Recipient Email (Optional)</Label>
+                      <Input
+                        id="gift-recipient"
+                        type="email"
+                        placeholder="friend@example.com"
+                        value={giftRecipient}
+                        onChange={(e) => setGiftRecipient(e.target.value)}
+                      />
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Leave empty to keep the investment for yourself
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+
                 {items.map((item) => (
                   <Card key={item.id}>
                     <CardHeader>

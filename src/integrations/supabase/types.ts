@@ -94,6 +94,59 @@ export type Database = {
           },
         ]
       }
+      portfolio_holdings: {
+        Row: {
+          amount: number
+          created_at: string
+          current_value: number
+          id: string
+          investment_id: string
+          investment_name: string
+          purchase_date: string
+          purchase_id: string
+          purchase_price: number
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          current_value: number
+          id?: string
+          investment_id: string
+          investment_name: string
+          purchase_date?: string
+          purchase_id: string
+          purchase_price: number
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          current_value?: number
+          id?: string
+          investment_id?: string
+          investment_name?: string
+          purchase_date?: string
+          purchase_id?: string
+          purchase_price?: number
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "portfolio_holdings_purchase_id_fkey"
+            columns: ["purchase_id"]
+            isOneToOne: false
+            referencedRelation: "purchases"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -150,6 +203,68 @@ export type Database = {
           investment_name?: string
           status?: string
           total_cost?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
+      transactions: {
+        Row: {
+          amount: number
+          created_at: string
+          description: string | null
+          id: string
+          related_holding_id: string | null
+          type: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          description?: string | null
+          id?: string
+          related_holding_id?: string | null
+          type: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          description?: string | null
+          id?: string
+          related_holding_id?: string | null
+          type?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "transactions_related_holding_id_fkey"
+            columns: ["related_holding_id"]
+            isOneToOne: false
+            referencedRelation: "portfolio_holdings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      wallets: {
+        Row: {
+          balance: number
+          created_at: string
+          id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          balance?: number
+          created_at?: string
+          id?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          balance?: number
+          created_at?: string
+          id?: string
+          updated_at?: string
           user_id?: string
         }
         Relationships: []

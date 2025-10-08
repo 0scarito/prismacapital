@@ -94,6 +94,45 @@ export type Database = {
           },
         ]
       }
+      market_prices: {
+        Row: {
+          created_at: string | null
+          currency: string
+          current_price: number
+          id: string
+          investment_id: string
+          investment_name: string
+          investment_type: string
+          last_updated: string | null
+          price_source: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          currency?: string
+          current_price: number
+          id?: string
+          investment_id: string
+          investment_name: string
+          investment_type: string
+          last_updated?: string | null
+          price_source: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          currency?: string
+          current_price?: number
+          id?: string
+          investment_id?: string
+          investment_name?: string
+          investment_type?: string
+          last_updated?: string | null
+          price_source?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       portfolio_holdings: {
         Row: {
           amount: number
@@ -146,6 +185,30 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      price_history: {
+        Row: {
+          currency: string
+          id: string
+          investment_id: string
+          price: number
+          recorded_at: string | null
+        }
+        Insert: {
+          currency?: string
+          id?: string
+          investment_id: string
+          price: number
+          recorded_at?: string | null
+        }
+        Update: {
+          currency?: string
+          id?: string
+          investment_id?: string
+          price?: number
+          recorded_at?: string | null
+        }
+        Relationships: []
       }
       profiles: {
         Row: {

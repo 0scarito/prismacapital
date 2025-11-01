@@ -51,27 +51,21 @@ const CheckoutContent = () => {
     
     setValidatingRecipient(true);
     try {
-      // Simple validation: check if a profile exists with matching email
-      // by querying auth.users through RPC or checking profiles
-      const { data: profiles } = await supabase
-        .from('profiles')
-        .select('id')
-        .limit(100);
-      
-      // Get all user IDs from profiles
-      const userIds = profiles?.map(p => p.id) || [];
-      
-      // Check each user to see if email matches
-      let userExists = false;
-      for (const userId of userIds) {
-        const { data: { user } } = await supabase.auth.admin.getUserById(userId);
-        if (user?.email === email) {
-          userExists = true;
-          break;
-        }
+      const { data, error } = await supabase.functions.invoke('validate-gift-recipient', {
+        body: { email }
+      });
+
+      if (error) {
+        console.error('Error validating recipient:', error);
+        toast({
+          title: 'Validation Error',
+          description: 'Could not validate recipient email',
+          variant: 'destructive',
+        });
+        return false;
       }
-      
-      if (!userExists) {
+
+      if (!data?.exists) {
         toast({
           title: 'Invalid Recipient',
           description: 'The recipient must have a registered Prisma Capital account',
@@ -79,6 +73,7 @@ const CheckoutContent = () => {
         });
         return false;
       }
+
       return true;
     } catch {
       toast({

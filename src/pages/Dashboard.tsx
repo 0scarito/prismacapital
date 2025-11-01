@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -7,7 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-import { LogOut, Gift, Calendar, Euro, QrCode, TrendingUp, TrendingDown } from 'lucide-react';
+import { LogOut, Gift, Calendar, Euro, QrCode, TrendingUp, TrendingDown, Loader2 } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import prismaLogo from '@/assets/prisma-logo.png';
@@ -44,10 +44,12 @@ const Dashboard = () => {
     loading
   } = useAuth();
   const { t, language } = useLanguage();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [coupons, setCoupons] = useState<Coupon[]>([]);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [investments, setInvestments] = useState<Investment[]>([]);
   const [loadingData, setLoadingData] = useState(true);
+  const [processingPayment, setProcessingPayment] = useState(false);
   const navigate = useNavigate();
   const {
     toast
@@ -63,6 +65,34 @@ const Dashboard = () => {
       fetchInvestmentData();
     }
   }, [user]);
+
+  useEffect(() => {
+    const paymentStatus = searchParams.get('payment');
+    const sessionId = searchParams.get('session_id');
+
+    if (paymentStatus === 'success' && sessionId && user) {
+      handlePaymentSuccess();
+    }
+  }, [searchParams, user]);
+
+  const handlePaymentSuccess = async () => {
+    setProcessingPayment(true);
+    
+    // Wait a moment for webhook to process
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    
+    toast({
+      title: t('dashboard.paymentSuccess') || "Payment successful!",
+      description: t('dashboard.paymentSuccessDesc') || "Your investment has been added to your portfolio.",
+    });
+
+    // Clear payment params from URL
+    setSearchParams({});
+    setProcessingPayment(false);
+    
+    // Refresh data
+    await fetchUserData();
+  };
   const fetchUserData = async () => {
     try {
       // Fetch profile
@@ -215,11 +245,13 @@ const Dashboard = () => {
         return status;
     }
   };
-  if (loading || loadingData) {
+  if (loading || loadingData || processingPayment) {
     return <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-muted-foreground">{t('dashboard.loading')}</p>
+          <Loader2 className="h-12 w-12 animate-spin text-primary mx-auto mb-4" />
+          <p className="text-muted-foreground">
+            {processingPayment ? (t('dashboard.processingPayment') || "Processing your payment...") : t('dashboard.loading')}
+          </p>
         </div>
       </div>;
   }

@@ -8,10 +8,12 @@ interface InvestmentCardProps {
   description: string;
   type: string;
   image?: string;
+  price?: number;
+  currency?: string;
   onAdd?: () => void;
 }
 
-const InvestmentCard = ({ id, title, description, type, image, onAdd }: InvestmentCardProps) => {
+const InvestmentCard = ({ id, title, description, type, image, price = 1.00, currency = 'EUR', onAdd }: InvestmentCardProps) => {
   const [showMore, setShowMore] = useState(false);
   const { addItem, items } = useCart();
   const isInCart = items.some(item => item.id === id);
@@ -35,6 +37,19 @@ const InvestmentCard = ({ id, title, description, type, image, onAdd }: Investme
         )}
       </div>
       <h3 className="font-bold text-slate-800 mb-2">{title}</h3>
+      
+      {/* Price Display */}
+      <div className="mb-3 pb-3 border-b border-slate-200">
+        <div className="flex items-baseline gap-2">
+          <span className="text-2xl font-bold text-primary">
+            {currency === 'EUR' ? '€' : currency === 'USD' ? '$' : currency}
+            {price.toFixed(2)}
+          </span>
+          <span className="text-xs text-slate-500">per unit</span>
+        </div>
+        <p className="text-xs text-slate-500 mt-1">€1 = 1 unit</p>
+      </div>
+      
       {showMore ? (
         <p className="text-sm text-slate-600 flex-1">{description}</p>
       ) : (

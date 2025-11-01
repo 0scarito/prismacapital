@@ -49,13 +49,16 @@ const Navigation = () => {
   }, {
     label: t('nav.security'),
     href: '/security'
-  }, user ? {
+  }, ...(user ? [{
+    label: 'My Coupons',
+    href: '/my-coupons'
+  }, {
     label: t('nav.mySpace'),
     href: '/dashboard'
-  } : {
+  }] : [{
     label: t('nav.joinUs'),
     href: '/auth'
-  }];
+  }])];
   // Handle navigation clicks - supports both routes and anchor links
   const handleNavigation = (href: string) => {
     if (href.startsWith('#')) {

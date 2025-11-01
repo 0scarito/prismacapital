@@ -264,10 +264,9 @@ const Dashboard = () => {
 
         {/* Main Content */}
         <Tabs defaultValue="overview" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="overview">{t('dashboard.tabs.overview')}</TabsTrigger>
-            <TabsTrigger value="coupons">{t('dashboard.tabs.coupons')}</TabsTrigger>
-            <TabsTrigger value="investments">{t('dashboard.tabs.investments')}</TabsTrigger>
+            <TabsTrigger value="trends">Trends</TabsTrigger>
           </TabsList>
 
           <TabsContent value="overview" className="space-y-6">
@@ -311,59 +310,7 @@ const Dashboard = () => {
             </div>
           </TabsContent>
 
-          <TabsContent value="coupons" className="space-y-6">
-            {/* Coupons Section */}
-            <Card>
-              <CardHeader>
-                  <CardTitle className="flex items-center">
-                  <QrCode className="h-5 w-5 mr-2" />
-                  {t('dashboard.coupons.title')}
-                </CardTitle>
-                <CardDescription>
-                  {t('dashboard.coupons.description')}
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                {coupons.length === 0 ? <div className="text-center py-8">
-                    <Gift className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                    <h3 className="text-lg font-medium mb-2">{t('dashboard.coupons.none')}</h3>
-                    <p className="text-muted-foreground">
-                      {t('dashboard.coupons.empty')}
-                    </p>
-                  </div> : <div className="space-y-4">
-                    {coupons.map(coupon => <div key={coupon.id} className="border rounded-lg p-4 hover:bg-accent/50 transition-colors">
-                        <div className="flex justify-between items-start mb-2">
-                          <div>
-                            <h4 className="font-semibold">{coupon.title}</h4>
-                            {coupon.description && <p className="text-sm text-muted-foreground">{coupon.description}</p>}
-                          </div>
-                          <Badge className={getStatusColor(coupon.status)}>
-                            {getStatusText(coupon.status)}
-                          </Badge>
-                        </div>
-                        
-                        <div className="flex justify-between items-center">
-                          <div className="flex items-center space-x-4">
-                            <span className="text-lg font-bold text-primary">
-                              {coupon.value.toFixed(2)}€
-                            </span>
-                            <code className="bg-muted px-2 py-1 rounded text-sm">
-                              {coupon.code}
-                            </code>
-                          </div>
-                          
-                          <div className="text-xs text-muted-foreground">
-                            {coupon.expires_at && <p>{t('dashboard.coupon.expires')} {new Date(coupon.expires_at).toLocaleDateString(language === 'fr' ? 'fr-FR' : 'en-US')}</p>}
-                            {coupon.used_at && <p>{t('dashboard.coupon.used')} {new Date(coupon.used_at).toLocaleDateString(language === 'fr' ? 'fr-FR' : 'en-US')}</p>}
-                          </div>
-                        </div>
-                      </div>)}
-                  </div>}
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="investments" className="space-y-6">
+          <TabsContent value="trends" className="space-y-6">
             {/* Investments Section */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {investments.map(investment => <Card key={investment.id}>

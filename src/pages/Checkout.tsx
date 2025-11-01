@@ -22,14 +22,15 @@ const CheckoutContent = () => {
   const { toast } = useToast();
   const { t } = useLanguage();
   
-  const [amounts, setAmounts] = useState<{ [key: string]: string }>({});
+  const [amounts, setAmounts] = useState<{ [key: string]: number }>({});
   const [physicalCards, setPhysicalCards] = useState<{ [key: string]: boolean }>({});
   const [giftRecipient, setGiftRecipient] = useState('');
   const [loading, setLoading] = useState(false);
+  const [validatingRecipient, setValidatingRecipient] = useState(false);
 
   const PHYSICAL_CARD_COST = 15.00;
 
-  const handleAmountChange = (itemId: string, value: string) => {
+  const handleAmountChange = (itemId: string, value: number) => {
     setAmounts((prev) => ({ ...prev, [itemId]: value }));
   };
 
@@ -39,10 +40,56 @@ const CheckoutContent = () => {
 
   const calculateTotal = () => {
     return items.reduce((total, item) => {
-      const amount = parseFloat(amounts[item.id] || '0');
+      const amount = amounts[item.id] || 0;
       const cardCost = physicalCards[item.id] ? PHYSICAL_CARD_COST : 0;
       return total + amount + cardCost;
     }, 0);
+  };
+
+  const validateRecipient = async (email: string): Promise<boolean> => {
+    if (!email) return true; // Empty is valid (goes to buyer)
+    
+    setValidatingRecipient(true);
+    try {
+      // Simple validation: check if a profile exists with matching email
+      // by querying auth.users through RPC or checking profiles
+      const { data: profiles } = await supabase
+        .from('profiles')
+        .select('id')
+        .limit(100);
+      
+      // Get all user IDs from profiles
+      const userIds = profiles?.map(p => p.id) || [];
+      
+      // Check each user to see if email matches
+      let userExists = false;
+      for (const userId of userIds) {
+        const { data: { user } } = await supabase.auth.admin.getUserById(userId);
+        if (user?.email === email) {
+          userExists = true;
+          break;
+        }
+      }
+      
+      if (!userExists) {
+        toast({
+          title: 'Invalid Recipient',
+          description: 'The recipient must have a registered Prisma Capital account',
+          variant: 'destructive',
+        });
+        return false;
+      }
+      return true;
+    } catch {
+      toast({
+        title: 'Validation Error',
+        description: 'Could not validate recipient email',
+        variant: 'destructive',
+      });
+      return false;
+    } finally {
+      setValidatingRecipient(false);
+    }
   };
 
   const handlePurchase = async () => {
@@ -55,13 +102,18 @@ const CheckoutContent = () => {
       return;
     }
 
-    const invalidItems = items.filter((item) => !amounts[item.id] || parseFloat(amounts[item.id]) <= 0);
+    const invalidItems = items.filter((item) => !amounts[item.id] || amounts[item.id] < 100);
     if (invalidItems.length > 0) {
       toast({
         title: 'Error',
-        description: 'Please enter valid amounts for all items',
+        description: 'Please select an investment amount (minimum €100) for all items',
         variant: 'destructive',
       });
+      return;
+    }
+
+    // Validate recipient if provided
+    if (giftRecipient && !(await validateRecipient(giftRecipient))) {
       return;
     }
 
@@ -72,7 +124,7 @@ const CheckoutContent = () => {
         id: item.id,
         name: item.name,
         description: item.description,
-        amount: parseFloat(amounts[item.id]),
+        amount: amounts[item.id],
         hasPhysicalCard: physicalCards[item.id] || false,
       }));
 
@@ -136,9 +188,10 @@ const CheckoutContent = () => {
                         placeholder="friend@example.com"
                         value={giftRecipient}
                         onChange={(e) => setGiftRecipient(e.target.value)}
+                        className="bg-white text-black border-2 border-primary focus:border-primary focus:ring-primary"
                       />
                       <p className="text-xs text-muted-foreground mt-1">
-                        Leave empty to keep the investment for yourself
+                        Recipient must have a registered Prisma Capital account. Leave empty to keep for yourself.
                       </p>
                     </div>
                   </CardContent>
@@ -154,17 +207,21 @@ const CheckoutContent = () => {
                         <Label htmlFor={`amount-${item.id}`}>
                           {t('checkout.investmentAmount') || 'Investment Amount (€)'}
                         </Label>
-                        <Input
-                          id={`amount-${item.id}`}
-                          type="number"
-                          min="100"
-                          step="100"
-                          placeholder="1000"
-                          value={amounts[item.id] || ''}
-                          onChange={(e) => handleAmountChange(item.id, e.target.value)}
-                        />
-                        <p className="text-xs text-muted-foreground mt-1">
-                          {t('checkout.minimumAmount') || 'Minimum: €100'}
+                        <div className="grid grid-cols-2 gap-3 mt-2">
+                          {[100, 250, 500, 1000].map((value) => (
+                            <Button
+                              key={value}
+                              type="button"
+                              variant={amounts[item.id] === value ? "default" : "outline"}
+                              className={amounts[item.id] === value ? "" : "bg-white text-black border-2 border-primary hover:bg-primary/10"}
+                              onClick={() => handleAmountChange(item.id, value)}
+                            >
+                              €{value}
+                            </Button>
+                          ))}
+                        </div>
+                        <p className="text-xs text-muted-foreground mt-2">
+                          Select your investment amount (Minimum: €100)
                         </p>
                       </div>
 
@@ -212,7 +269,7 @@ const CheckoutContent = () => {
                   <CardContent className="space-y-4">
                     <div className="space-y-2">
                       {items.map((item) => {
-                        const amount = parseFloat(amounts[item.id] || '0');
+                        const amount = amounts[item.id] || 0;
                         const cardCost = physicalCards[item.id] ? PHYSICAL_CARD_COST : 0;
                         return (
                           <div key={item.id} className="text-sm">
@@ -242,10 +299,10 @@ const CheckoutContent = () => {
                       className="w-full"
                       size="lg"
                       onClick={handlePurchase}
-                      disabled={loading || calculateTotal() === 0}
+                      disabled={loading || validatingRecipient || calculateTotal() === 0}
                     >
                       <CreditCard className="w-4 h-4 mr-2" />
-                      {loading ? (t('checkout.processing') || 'Processing...') : (t('checkout.completePurchase') || 'Complete Purchase')}
+                      {loading || validatingRecipient ? (t('checkout.processing') || 'Processing...') : (t('checkout.completePurchase') || 'Complete Purchase')}
                     </Button>
                   </CardContent>
                 </Card>

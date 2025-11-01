@@ -115,13 +115,6 @@ const CheckoutContent = () => {
     setLoading(true);
 
     try {
-      // Get current session for authentication
-      const { data: { session } } = await supabase.auth.getSession();
-      
-      if (!session?.access_token) {
-        throw new Error('No valid session found');
-      }
-
       const paymentItems = items.map((item) => ({
         id: item.id,
         name: item.name,
@@ -134,9 +127,6 @@ const CheckoutContent = () => {
         body: {
           items: paymentItems,
           giftRecipient: giftRecipient || null,
-        },
-        headers: {
-          Authorization: `Bearer ${session.access_token}`,
         },
       });
 

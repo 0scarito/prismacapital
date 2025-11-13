@@ -41,7 +41,7 @@ serve(async (req) => {
     if (error) {
       console.error("Error checking user:", error);
       return new Response(
-        JSON.stringify({ exists: false, error: "Failed to validate recipient" }),
+        JSON.stringify({ exists: false, error: "Failed to validate recipient. Please try again." }),
         {
           headers: { ...corsHeaders, "Content-Type": "application/json" },
           status: 500,
@@ -60,9 +60,8 @@ serve(async (req) => {
     );
   } catch (error) {
     console.error("Error validating recipient:", error);
-    const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
     return new Response(
-      JSON.stringify({ exists: false, error: errorMessage }),
+      JSON.stringify({ exists: false, error: "Failed to validate recipient. Please try again." }),
       {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
         status: 500,

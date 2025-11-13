@@ -1,6 +1,20 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import Stripe from "https://esm.sh/stripe@18.5.0";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.2";
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
+
+const paymentItemSchema = z.object({
+  id: z.string().min(1),
+  name: z.string().min(1).max(200),
+  description: z.string().optional(),
+  amount: z.number().min(100).max(1000000),
+  hasPhysicalCard: z.boolean().optional(),
+});
+
+const requestSchema = z.object({
+  items: z.array(paymentItemSchema).min(1).max(10),
+  giftRecipient: z.string().email().max(255).optional().nullable(),
+});
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -27,7 +41,21 @@ serve(async (req) => {
       throw new Error("User not authenticated");
     }
 
-    const { items, giftRecipient } = await req.json();
+    const body = await req.json();
+    
+    // Validate request body
+    const validation = requestSchema.safeParse(body);
+    if (!validation.success) {
+      return new Response(
+        JSON.stringify({ error: "Invalid request data. Please check your inputs." }),
+        {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+          status: 400,
+        }
+      );
+    }
+    
+    const { items, giftRecipient } = validation.data;
 
     const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", {
       apiVersion: "2025-08-27.basil",

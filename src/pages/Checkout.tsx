@@ -14,6 +14,12 @@ import { useToast } from '@/hooks/use-toast';
 import { CreditCard, Package } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import ProtectedRoute from '@/components/ProtectedRoute';
+import { z } from 'zod';
+
+const checkoutSchema = z.object({
+  giftRecipient: z.string().email('Invalid email format').max(255, 'Email too long').optional().or(z.literal('')),
+  amounts: z.record(z.number().min(100, 'Minimum investment is €100').max(1000000, 'Amount too large')),
+});
 
 const CheckoutContent = () => {
   const { items, clearCart } = useCart();
@@ -102,6 +108,17 @@ const CheckoutContent = () => {
       toast({
         title: 'Error',
         description: 'Please select an investment amount (minimum €100) for all items',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    // Validate inputs with zod
+    const validation = checkoutSchema.safeParse({ giftRecipient, amounts });
+    if (!validation.success) {
+      toast({
+        title: 'Validation Error',
+        description: validation.error.errors[0].message,
         variant: 'destructive',
       });
       return;

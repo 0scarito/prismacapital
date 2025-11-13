@@ -29,14 +29,9 @@ serve(async (req) => {
       );
     }
 
-    // Check if user exists by looking up in auth.users via profiles
-    const { data: users } = await supabaseClient
-      .from("profiles")
-      .select("id")
-      .limit(1);
-
-    // Get the user by email from auth
-    const { data, error } = await supabaseClient.auth.admin.listUsers();
+    // Check if user exists using secure database function
+    const { data: userExists, error } = await supabaseClient
+      .rpc('check_user_exists_by_email', { user_email: email });
     
     if (error) {
       console.error("Error checking user:", error);
@@ -48,8 +43,6 @@ serve(async (req) => {
         }
       );
     }
-
-    const userExists = data.users.some(user => user.email === email);
 
     return new Response(
       JSON.stringify({ exists: userExists }),

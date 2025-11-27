@@ -35,17 +35,14 @@ const Navigation = () => {
     label: t('nav.home'),
     href: '/'
   }, {
-    label: t('nav.investments'),
+    label: t('nav.investments') || 'Products',
     href: '/investments'
+  }, {
+    label: t('nav.partners') || 'Partners',
+    href: '/partners'
   }, {
     label: t('nav.whatWeDo'),
     href: '/how-it-works'
-  }, {
-    label: t('nav.courses'),
-    href: '/courses'
-  }, {
-    label: t('nav.partners'),
-    href: '/partners'
   }, {
     label: t('nav.security'),
     href: '/security'

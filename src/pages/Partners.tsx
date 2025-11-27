@@ -1,78 +1,81 @@
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
-import { Shield, Award, CheckCircle, Building, Users, Globe } from 'lucide-react';
+import { Shield, Award, CheckCircle, Building, Users, TrendingUp, Package, BarChart3 } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { Button } from '@/components/ui/button';
 
 const Partners = () => {
   const { t } = useLanguage();
-  const partnerCategories = [
+  
+  const partnerBenefits = [
     {
-      title: t('partners.category.regulatory'),
-      icon: <Shield className="w-8 h-8 text-metallic-gold" />,
-      partners: [
-        {
-          name: "Autorité des Marchés Financiers (AMF)",
-          role: t('partners.role.regulator'),
-          description: t('partners.description.amf'),
-          logo: "🏛️",
-          status: t('partners.status.licensed')
-        },
-        {
-          name: "ACPR - Banque de France",
-          role: t('partners.role.prudential'),
-          description: t('partners.description.acpr'),
-          logo: "🏦",
-          status: t('partners.status.supervised')
-        }
-      ]
+      title: t('partners.benefits.distribution.title') || 'Expand Distribution',
+      description: t('partners.benefits.distribution.desc') || 'Offer curated investment products through your existing network without operational burden.',
+      icon: Users,
+      stat: '€15M+ AUM potential'
     },
     {
-      title: t('partners.category.technology'),
-      icon: <Building className="w-8 h-8 text-metallic-gold" />,
-      partners: [
-        {
-          name: "Stripe",
-          role: t('partners.role.processor'),
-          description: t('partners.description.stripe'),
-          logo: "💳",
-          status: t('partners.status.certified')
-        },
-        {
-          name: "AWS",
-          role: t('partners.role.infrastructure'),
-          description: t('partners.description.aws'),
-          logo: "☁️",
-          status: t('partners.status.compliant')
-        }
-      ]
+      title: t('partners.benefits.revenue.title') || 'Revenue Share',
+      description: t('partners.benefits.revenue.desc') || 'Earn commissions on every coupon distributed and redeemed by your clients.',
+      icon: TrendingUp,
+      stat: 'Up to 25% commission'
     },
     {
-      title: t('partners.category.investment'),
-      icon: <Users className="w-8 h-8 text-metallic-gold" />,
-      partners: [
-        {
-          name: "BPI France",
-          role: t('partners.role.coinvest'),
-          description: t('partners.description.bpi'),
-          logo: "🇫🇷",
-          status: t('partners.status.partner')
-        },
-        {
-          name: "French Tech",
-          role: t('partners.role.ecosystem'),
-          description: t('partners.description.frenchtech'),
-          logo: "🚀",
-          status: t('partners.status.member')
-        }
-      ]
+      title: t('partners.benefits.whitelabel.title') || 'White-Label Ready',
+      description: t('partners.benefits.whitelabel.desc') || 'Customize coupons with your branding, integrate via API, or use our partner portal.',
+      icon: Package,
+      stat: 'Full customization'
+    },
+    {
+      title: t('partners.benefits.analytics.title') || 'Real-Time Analytics',
+      description: t('partners.benefits.analytics.desc') || 'Track distribution, redemption rates, and portfolio performance in your dashboard.',
+      icon: BarChart3,
+      stat: 'Live tracking'
     }
   ];
 
-  const certifications = [
-    { name: t('partners.cert.psd2'), icon: '🔒' },
-    { name: t('partners.cert.gdpr'), icon: '🛡️' },
-    { name: t('partners.cert.iso'), icon: '🏆' },
-    { name: t('partners.cert.amf'), icon: '✅' }
+  const partnerTypes = [
+    {
+      type: t('partners.types.banks.title') || 'Banks & Wealth Managers',
+      description: t('partners.types.banks.desc') || 'Expand your product shelf with alternative investments for HNW clients.',
+      icon: Building,
+      benefits: ['White-label platform', 'API integration', 'Compliance support']
+    },
+    {
+      type: t('partners.types.insurance.title') || 'Insurance Companies',
+      description: t('partners.types.insurance.desc') || 'Diversify unit-linked products with curated investment coupons.',
+      icon: Shield,
+      benefits: ['Unit-linked integration', 'ESG compliant products', 'Regulatory oversight']
+    },
+    {
+      type: t('partners.types.wealth.title') || 'Family Offices',
+      description: t('partners.types.wealth.desc') || 'Access institutional-grade products for your portfolio.',
+      icon: Users,
+      benefits: ['Bespoke mandates', 'Bulk pricing', 'Dedicated support']
+    }
+  ];
+
+  const howItWorks = [
+    {
+      step: '1',
+      title: t('partners.process.step1.title') || 'Create Your Mandate',
+      description: t('partners.process.step1.desc') || 'Define your needs - volume, product mix, pricing. We craft a personalized distribution agreement.'
+    },
+    {
+      step: '2',
+      title: t('partners.process.step2.title') || 'Receive Inventory',
+      description: t('partners.process.step2.desc') || 'Get your coupon inventory delivered to your Partner Portal. Each coupon is ready for distribution.'
+    },
+    {
+      step: '3',
+      title: t('partners.process.step3.title') || 'Distribute to Clients',
+      description: t('partners.process.step3.desc') || 'Give coupons to your end clients through your existing channels - branches, advisors, digital platforms.'
+    },
+    {
+      step: '4',
+      title: t('partners.process.step4.title') || 'Track Performance',
+      description: t('partners.process.step4.desc') || 'Monitor redemption rates, portfolio values, and client engagement in real-time.'
+    }
   ];
 
   return (
@@ -85,149 +88,78 @@ const Partners = () => {
           <div className="section-container">
             <div className="text-center max-w-4xl mx-auto">
               <h1 className="font-serif font-bold text-5xl lg:text-7xl text-warm-white mb-8 leading-tight">
-                {t('partners.hero.title')}
+                {t('partners.hero.title') || 'Become a Distribution Partner'}
               </h1>
-              <p className="font-sans text-xl text-light-gray mb-12 leading-relaxed">
-                {t('partners.hero.subtitle')}
+              <p className="font-sans text-xl text-light-gray mb-12 leading-relaxed max-w-3xl mx-auto">
+                {t('partners.hero.subtitle') || 'Enable your clients to access institutional-grade investments through bulk coupon distribution. Expand your product offering without operational complexity.'}
               </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Button size="lg" onClick={() => window.location.href = '/request-mandate'} className="bg-metallic-gold hover:bg-metallic-gold/90 text-deep-navy font-semibold">
+                  {t('partners.cta.requestMandate') || 'Request a Mandate'}
+                </Button>
+                <Button size="lg" variant="outline" onClick={() => window.location.href = '#how-it-works'} className="border-warm-white text-warm-white hover:bg-warm-white/10">
+                  {t('partners.cta.learnMore') || 'How It Works'}
+                </Button>
+              </div>
             </div>
           </div>
         </section>
 
-        {/* Certifications Banner */}
-        <section className="py-12 bg-warm-white border-b border-border/20">
-          <div className="section-container">
-            <div className="flex flex-wrap justify-center gap-8">
-              {certifications.map((cert, index) => (
-                <div key={index} className="flex items-center gap-3 bg-gradient-subtle rounded-lg px-6 py-3">
-                  <span className="text-2xl">{cert.icon}</span>
-                  <span className="font-sans font-medium text-deep-navy">{cert.name}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Partners Sections */}
+        {/* Partner Benefits */}
         <section className="py-20 bg-warm-white">
           <div className="section-container">
-            <div className="space-y-20">
-              {partnerCategories.map((category, categoryIndex) => (
-                <div key={categoryIndex}>
-                  <div className="text-center mb-12">
-                    <div className="flex items-center justify-center gap-3 mb-4">
-                      {category.icon}
-                      <h2 className="font-serif font-bold text-3xl text-deep-navy">
-                        {category.title}
-                      </h2>
-                    </div>
-                  </div>
-
-                  <div className="grid md:grid-cols-2 gap-8">
-                    {category.partners.map((partner, partnerIndex) => (
-                      <div key={partnerIndex} className="bg-gradient-subtle rounded-2xl p-8 border border-border/20 hover:shadow-lg transition-all duration-300">
-                        <div className="flex items-start gap-4 mb-6">
-                          <div className="text-4xl">{partner.logo}</div>
-                          <div className="flex-1">
-                            <div className="flex items-center gap-3 mb-2">
-                              <h3 className="font-serif font-bold text-xl text-deep-navy">
-                                {partner.name}
-                              </h3>
-                              <span className="bg-metallic-gold/20 text-metallic-gold px-2 py-1 rounded-full text-xs font-medium">
-                                {partner.status}
-                              </span>
-                            </div>
-                            <p className="font-sans text-sm text-metallic-gold font-medium mb-3">
-                              {partner.role}
-                            </p>
-                          </div>
-                        </div>
-                        <p className="font-sans text-deep-navy/80 leading-relaxed">
-                          {partner.description}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
+            <h2 className="font-serif font-bold text-4xl text-deep-navy text-center mb-12">
+              {t('partners.benefits.title') || 'Why Partner With Us'}
+            </h2>
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {partnerBenefits.map((benefit, index) => (
+                <div key={index} className="bg-gradient-subtle rounded-xl p-6 border border-border/20 hover:shadow-lg transition-all">
+                  <benefit.icon className="w-10 h-10 text-metallic-gold mb-4" />
+                  <h3 className="font-serif font-bold text-xl text-deep-navy mb-3">{benefit.title}</h3>
+                  <p className="font-sans text-deep-navy/80 text-sm mb-3">{benefit.description}</p>
+                  <div className="text-metallic-gold font-semibold text-sm">{benefit.stat}</div>
                 </div>
               ))}
             </div>
           </div>
         </section>
 
-        {/* Trust Section */}
-        <section className="py-20 bg-deep-navy">
-          <div className="section-container">
-            <div className="grid lg:grid-cols-2 gap-12 items-center">
-              <div>
-                <h2 className="font-serif font-bold text-4xl text-warm-white mb-8">
-                  {t('partners.trust.title')}
-                </h2>
-                <div className="space-y-6">
-                  <div className="flex items-start gap-4">
-                    <CheckCircle className="w-6 h-6 text-metallic-gold flex-shrink-0 mt-1" />
-                    <div>
-                      <h3 className="font-sans font-medium text-warm-white mb-2">
-                        {t('partners.trust.supervision.title')}
-                      </h3>
-                      <p className="font-sans text-light-gray text-sm">
-                        {t('partners.trust.supervision.desc')}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-4">
-                    <CheckCircle className="w-6 h-6 text-metallic-gold flex-shrink-0 mt-1" />
-                    <div>
-                      <h3 className="font-sans font-medium text-warm-white mb-2">
-                        {t('partners.trust.security.title')}
-                      </h3>
-                      <p className="font-sans text-light-gray text-sm">
-                        {t('partners.trust.security.desc')}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-4">
-                    <CheckCircle className="w-6 h-6 text-metallic-gold flex-shrink-0 mt-1" />
-                    <div>
-                      <h3 className="font-sans font-medium text-warm-white mb-2">
-                        {t('partners.trust.leaders.title')}
-                      </h3>
-                      <p className="font-sans text-light-gray text-sm">
-                        {t('partners.trust.leaders.desc')}
-                      </p>
-                    </div>
-                  </div>
-                </div>
+        {/* Social Proof */}
+        <section className="py-20 bg-gradient-subtle">
+          <div className="section-container text-center">
+            <h2 className="font-serif font-bold text-3xl text-deep-navy mb-8">
+              {t('partners.trust.title') || 'Trusted by Leading Institutions'}
+            </h2>
+            <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+              <div className="text-center">
+                <div className="text-4xl font-bold text-metallic-gold mb-2">€50M+</div>
+                <div className="text-deep-navy/70">{t('partners.stats.aum') || 'Assets Under Distribution'}</div>
               </div>
-              <div className="bg-gradient-subtle rounded-2xl p-8 text-center">
-                <Award className="w-16 h-16 text-metallic-gold mx-auto mb-6" />
-                <h3 className="font-serif font-bold text-2xl text-deep-navy mb-4">
-                  {t('partners.award.title')}
-                </h3>
-                <p className="font-sans text-deep-navy/80 mb-6">
-                  {t('partners.award.desc')}
-                </p>
-                <div className="text-xs text-deep-navy/60 font-mono">
-                  {t('partners.award.number')}
-                </div>
+              <div className="text-center">
+                <div className="text-4xl font-bold text-metallic-gold mb-2">25+</div>
+                <div className="text-deep-navy/70">{t('partners.stats.partners') || 'Active Partners'}</div>
+              </div>
+              <div className="text-center">
+                <div className="text-4xl font-bold text-metallic-gold mb-2">15K+</div>
+                <div className="text-deep-navy/70">{t('partners.stats.coupons') || 'Coupons Distributed'}</div>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Contact CTA */}
-        <section className="py-20 bg-gradient-warm">
+        {/* Final CTA */}
+        <section className="py-20 bg-gradient-hero">
           <div className="section-container">
-            <div className="text-center">
-              <h2 className="font-serif font-bold text-4xl text-warm-white mb-6">
-                {t('partners.cta.title')}
+            <div className="text-center max-w-3xl mx-auto">
+              <h2 className="font-serif font-bold text-4xl lg:text-5xl text-warm-white mb-6">
+                {t('partners.cta.title') || 'Ready to Get Started?'}
               </h2>
-              <p className="font-sans text-xl text-light-gray mb-8 max-w-2xl mx-auto">
-                {t('partners.cta.subtitle')}
+              <p className="font-sans text-xl text-light-gray mb-8">
+                {t('partners.cta.subtitle') || 'Request a personalized mandate and start distributing investment coupons to your clients.'}
               </p>
-              <button className="btn-primary inline-flex items-center gap-2">
-                <Building className="w-5 h-5" />
-                {t('partners.cta.button')}
-              </button>
+              <Button size="lg" onClick={() => window.location.href = '/request-mandate'} className="bg-metallic-gold hover:bg-metallic-gold/90 text-deep-navy font-semibold">
+                {t('partners.cta.requestMandate') || 'Request a Mandate'}
+              </Button>
             </div>
           </div>
         </section>

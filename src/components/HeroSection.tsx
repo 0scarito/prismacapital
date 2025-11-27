@@ -52,11 +52,11 @@ const HeroSection = () => {
 
               {/* CTA Buttons */}
               <div className="flex flex-col sm:flex-row gap-6 justify-center lg:justify-start mb-20">
-                <button onClick={() => window.location.href = '/investments'} className="btn-primary text-lg">
-                  {t('hero.chooseGift')}
+                <button onClick={() => window.location.href = '/partners'} className="btn-primary text-lg">
+                  {t('hero.becomePartner') || 'Become a Partner'}
                 </button>
-                <button onClick={() => scrollToSection('#how-it-works')} className="btn-ghost text-lg">
-                  {t('hero.whatWeDo')}
+                <button onClick={() => window.location.href = '/investments'} className="btn-ghost text-lg">
+                  {t('hero.viewProducts') || 'View Products'}
                 </button>
               </div>
 

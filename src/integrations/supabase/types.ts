@@ -133,6 +133,146 @@ export type Database = {
         }
         Relationships: []
       }
+      partner_coupons: {
+        Row: {
+          code: string
+          created_at: string
+          distributed_at: string | null
+          distributed_to_ref: string | null
+          face_value: number
+          id: string
+          mandate_id: string | null
+          partner_id: string
+          product_type: string
+          redeemed_at: string | null
+          redeemed_by_user_id: string | null
+          status: string
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          distributed_at?: string | null
+          distributed_to_ref?: string | null
+          face_value: number
+          id?: string
+          mandate_id?: string | null
+          partner_id: string
+          product_type: string
+          redeemed_at?: string | null
+          redeemed_by_user_id?: string | null
+          status?: string
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          distributed_at?: string | null
+          distributed_to_ref?: string | null
+          face_value?: number
+          id?: string
+          mandate_id?: string | null
+          partner_id?: string
+          product_type?: string
+          redeemed_at?: string | null
+          redeemed_by_user_id?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "partner_coupons_mandate_id_fkey"
+            columns: ["mandate_id"]
+            isOneToOne: false
+            referencedRelation: "partner_mandates"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "partner_coupons_partner_id_fkey"
+            columns: ["partner_id"]
+            isOneToOne: false
+            referencedRelation: "partner_organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      partner_mandates: {
+        Row: {
+          coupon_count: number
+          created_at: string
+          expires_at: string | null
+          id: string
+          partner_id: string
+          pricing_tier: string
+          product_mix: Json | null
+          status: string
+          total_value: number
+          updated_at: string
+        }
+        Insert: {
+          coupon_count: number
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          partner_id: string
+          pricing_tier?: string
+          product_mix?: Json | null
+          status?: string
+          total_value: number
+          updated_at?: string
+        }
+        Update: {
+          coupon_count?: number
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          partner_id?: string
+          pricing_tier?: string
+          product_mix?: Json | null
+          status?: string
+          total_value?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "partner_mandates_partner_id_fkey"
+            columns: ["partner_id"]
+            isOneToOne: false
+            referencedRelation: "partner_organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      partner_organizations: {
+        Row: {
+          contact_email: string
+          contact_person: string | null
+          created_at: string
+          id: string
+          name: string
+          status: string
+          type: string
+          updated_at: string
+        }
+        Insert: {
+          contact_email: string
+          contact_person?: string | null
+          created_at?: string
+          id?: string
+          name: string
+          status?: string
+          type: string
+          updated_at?: string
+        }
+        Update: {
+          contact_email?: string
+          contact_person?: string | null
+          created_at?: string
+          id?: string
+          name?: string
+          status?: string
+          type?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       portfolio_holdings: {
         Row: {
           amount: number
@@ -216,6 +356,8 @@ export type Database = {
           created_at: string | null
           display_name: string | null
           id: string
+          is_partner_user: boolean | null
+          partner_id: string | null
           updated_at: string | null
         }
         Insert: {
@@ -223,6 +365,8 @@ export type Database = {
           created_at?: string | null
           display_name?: string | null
           id: string
+          is_partner_user?: boolean | null
+          partner_id?: string | null
           updated_at?: string | null
         }
         Update: {
@@ -230,9 +374,19 @@ export type Database = {
           created_at?: string | null
           display_name?: string | null
           id?: string
+          is_partner_user?: boolean | null
+          partner_id?: string | null
           updated_at?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "profiles_partner_id_fkey"
+            columns: ["partner_id"]
+            isOneToOne: false
+            referencedRelation: "partner_organizations"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       purchases: {
         Row: {

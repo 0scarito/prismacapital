@@ -36,6 +36,7 @@ import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import Portfolio from "./pages/Portfolio";
 import MyCoupons from "./pages/MyCoupons";
+import RequestMandate from "./pages/RequestMandate";
 import ScrollToTop from "./components/ScrollToTop";
 
 const queryClient = new QueryClient();
@@ -62,6 +63,7 @@ const App = () => (
               <Route path="/investments/etfs" element={<Etfs />} />
               <Route path="/investments/crypto" element={<Crypto />} />
               <Route path="/partners" element={<Partners />} />
+              <Route path="/request-mandate" element={<RequestMandate />} />
               <Route path="/security" element={<Security />} />
               <Route path="/faq" element={<FAQ />} />
               <Route path="/payment" element={<Payment />} />

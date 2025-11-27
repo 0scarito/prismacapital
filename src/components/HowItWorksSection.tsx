@@ -10,34 +10,27 @@ const HowItWorksSection = () => {
   const [hoveredStep, setHoveredStep] = useState<number | null>(null);
   const { t } = useLanguage();
   
-  // Three core steps of the platform
+  // B2B Partnership steps
   const steps = [
     {
       number: "1",
-      title: "Éduquez",
-      description:
-        "Ce n'est pas qu'un simple investissement, ce n'est pas non plus juste un cadeau. " +
-        "C'est aussi une opportunité d'aller chercher la curiosité, de s'ouvrir à de nouveaux horizons. " +
-        "C'est l'occasion de découvrir de nouvelles façons de gérer son argent, le tout de manière intelligente mais aussi entraînante.",
+      title: t('howItWorks.steps.0.title') || "Create Your Mandate",
+      description: t('howItWorks.steps.0.description') || 
+        "Define your needs - volume, product mix, and pricing. Our team crafts a personalized distribution agreement tailored to your client base and investment strategy.",
       icon: Target
     },
     {
       number: "2",
-      title: "Investissez",
-      description:
-        "C'est sécurisé, simple, rapide et facile. Vous avez la possibilité de choisir parmi 6 différents secteurs " +
-        "des investissements soigneusement choisis par nous afin de transformer votre argent initial en petite fortune. " +
-        "En 25 ans, le marché a plus que triplé. 88% des millionnaires se sont enrichis en investissant dans un ou plusieurs types d'actifs. " +
-        "Chaque année depuis 40 ans, le marché a pris en moyenne un peu moins de 10%.",
+      title: t('howItWorks.steps.1.title') || "Receive Inventory",
+      description: t('howItWorks.steps.1.description') || 
+        "Get your bulk coupon inventory delivered to your Partner Portal. Each coupon is pre-loaded, ready for distribution, and can be customized with your branding.",
       icon: Gift
     },
     {
       number: "3",
-      title: "Transmettez",
-      description:
-        "Ce n'est pas juste un investissement, c'est un cadeau, c'est une opportunité qui ne perd pas sa valeur au bout de quelques jours. " +
-        "66% des Français qui ne trouvent pas d'utilité à leurs cadeaux ou ne les aiment pas finissent par les ranger au fond d'un placard dans les 3 premiers mois. " +
-        "En moyenne, les cadeaux perdent jusqu'à 55% de leur valeur au bout du premier mois après avoir été offerts.",
+      title: t('howItWorks.steps.2.title') || "Distribute to Clients",
+      description: t('howItWorks.steps.2.description') || 
+        "Give coupons to your end clients through your existing channels - branches, advisors, or digital platforms. Track distribution via your dashboard.",
       icon: Users
     }
   ];

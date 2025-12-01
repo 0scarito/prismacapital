@@ -18,6 +18,35 @@ serve(async (req) => {
   );
 
   try {
+    // Authenticate user
+    const authHeader = req.headers.get("Authorization");
+    if (!authHeader) {
+      console.error("Missing authorization header");
+      return new Response(
+        JSON.stringify({ error: "Authentication required" }),
+        {
+          status: 401,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        }
+      );
+    }
+
+    const token = authHeader.replace("Bearer ", "");
+    const { data: { user }, error: authError } = await supabaseClient.auth.getUser(token);
+
+    if (authError || !user) {
+      console.error("Authentication error:", authError);
+      return new Response(
+        JSON.stringify({ error: "Invalid authentication" }),
+        {
+          status: 401,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        }
+      );
+    }
+
+    console.log(`Payment verification request from user: ${user.id}`);
+
     const { sessionId } = await req.json();
 
     const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", {
@@ -29,8 +58,23 @@ serve(async (req) => {
     if (session.payment_status === "paid") {
       const metadata = session.metadata;
       const userId = metadata?.user_id;
+      
+      // Validate that the authenticated user matches the session user
+      if (userId !== user.id) {
+        console.error(`User mismatch: authenticated ${user.id}, session ${userId}`);
+        return new Response(
+          JSON.stringify({ error: "Unauthorized: You can only verify your own payments" }),
+          {
+            status: 403,
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+          }
+        );
+      }
+
       const items = JSON.parse(metadata?.items || "[]");
       const giftRecipient = metadata?.gift_recipient;
+
+      console.log(`Processing payment for user ${userId}: ${items.length} items`);
 
       // Create purchases and portfolio holdings
       for (const item of items) {

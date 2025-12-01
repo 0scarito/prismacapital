@@ -12,7 +12,7 @@ interface LanguageContextType {
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
-const translations: Record<Language, Record<string, string>> = { fr, en };
+const translations: Record<Language, Record<string, string | Record<string, string>>> = { fr, en };
 
 /**
  * Language Provider - Manages i18n state and translations
@@ -23,7 +23,24 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
   // Translation function - returns translated string or fallback
   const t = (key: string): string => {
-    return translations[language][key] || translations.fr[key] || key;
+    const keys = key.split('.');
+    let value: any = translations[language];
+    
+    for (const k of keys) {
+      value = value?.[k];
+      if (value === undefined) break;
+    }
+    
+    // Try fallback to French if not found
+    if (value === undefined) {
+      value = translations.fr;
+      for (const k of keys) {
+        value = value?.[k];
+        if (value === undefined) break;
+      }
+    }
+    
+    return typeof value === 'string' ? value : key;
   };
 
   // Update document metadata when language changes

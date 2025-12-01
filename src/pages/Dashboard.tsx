@@ -289,7 +289,12 @@ const Dashboard = () => {
               alt="Prisma Capital Logo" 
               className="h-14 w-auto object-contain"
             />
-            <span className="text-slate-50">{t('dashboard.personalSpace')}</span>
+            <div className="flex items-center gap-3">
+              <span className="text-slate-50">{t('dashboard.personalSpace')}</span>
+              <Badge variant="outline" className="bg-blue-500/10 text-blue-500 border-blue-500/20">
+                Client Account
+              </Badge>
+            </div>
           </div>
           <div className="flex items-center space-x-4">
             

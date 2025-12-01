@@ -206,7 +206,12 @@ const PartnerDashboard = () => {
               className="h-14 w-auto object-contain"
             />
             <div>
-              <span className="text-slate-50 font-semibold">Partner Dashboard</span>
+              <div className="flex items-center gap-3">
+                <span className="text-slate-50 font-semibold">Partner Dashboard</span>
+                <Badge variant="outline" className="bg-purple-500/10 text-purple-500 border-purple-500/20">
+                  Professional Account
+                </Badge>
+              </div>
               <p className="text-sm text-muted-foreground">{organization.name}</p>
             </div>
           </div>

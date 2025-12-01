@@ -84,6 +84,22 @@ const PartnerDashboard = () => {
 
   const fetchPartnerData = async () => {
     try {
+      // First, verify user has wealth_manager role
+      const { data: userRole, error: roleError } = await supabase
+        .rpc('get_user_role', { _user_id: user?.id });
+
+      if (roleError) {
+        console.error('Error checking user role:', roleError);
+        throw roleError;
+      }
+
+      // If not a wealth manager, redirect to regular dashboard
+      if (userRole !== 'wealth_manager') {
+        console.log('User is not a wealth manager, redirecting to dashboard');
+        navigate('/dashboard');
+        return;
+      }
+
       const { data: profile, error: profileError } = await supabase
         .from('profiles')
         .select('partner_id, is_partner_user, display_name')
@@ -92,14 +108,10 @@ const PartnerDashboard = () => {
 
       if (profileError) throw profileError;
 
-      // If not a partner user, redirect to regular dashboard
-      if (!profile?.is_partner_user) {
-        navigate('/dashboard');
-        return;
-      }
-
-      // If partner user but no organization, create one
+      // If wealth manager but no organization, create one
       if (!profile?.partner_id) {
+        console.log('Creating new partner organization for user:', user?.id);
+        
         const { data: newOrg, error: orgCreateError } = await supabase
           .from('partner_organizations')
           .insert({
@@ -122,16 +134,26 @@ const PartnerDashboard = () => {
           return;
         }
 
+        // Update profile with new partner_id only (is_partner_user should already be set)
         const { error: profileUpdateError } = await supabase
           .from('profiles')
           .update({
-            partner_id: newOrg.id,
-            is_partner_user: true
+            partner_id: newOrg.id
           })
           .eq('id', user?.id);
 
-        if (profileUpdateError) throw profileUpdateError;
+        if (profileUpdateError) {
+          console.error('Profile update error:', profileUpdateError);
+          // Organization was created but profile update failed
+          // This is not critical - they can try again
+          toast({
+            title: "Partial Setup",
+            description: "Organization created but profile link failed. Please refresh the page.",
+            variant: 'destructive'
+          });
+        }
 
+        console.log('Partner organization created successfully:', newOrg.id);
         setOrganization(newOrg);
         setMandates([]);
         setCouponStats(INITIAL_COUPON_STATS);

@@ -5,10 +5,13 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
+import { useLanguage } from '@/contexts/LanguageContext';
 import prismaLogo from '@/assets/prisma-logo-blue.png';
 import { z } from 'zod';
+import { Briefcase, User } from 'lucide-react';
 
 const signInSchema = z.object({
   email: z.string().email('Invalid email format').max(255, 'Email too long'),
@@ -25,9 +28,11 @@ const Auth = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [displayName, setDisplayName] = useState('');
+  const [role, setRole] = useState<'client' | 'wealth_manager'>('client');
   const [loading, setLoading] = useState(false);
   const { signIn, signUp, user } = useAuth();
   const { toast } = useToast();
+  const { t } = useLanguage();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -84,7 +89,7 @@ const Auth = () => {
       return;
     }
     
-    const { error } = await signUp(email, password, displayName);
+    const { error } = await signUp(email, password, displayName, role);
     
     if (error) {
       toast({
@@ -161,6 +166,32 @@ const Auth = () => {
             
             <TabsContent value="signup">
               <form onSubmit={handleSignUp} className="space-y-4">
+                <div className="space-y-3">
+                  <Label>{t('auth.roleSelection') || 'Je suis'}</Label>
+                  <RadioGroup value={role} onValueChange={(value) => setRole(value as 'client' | 'wealth_manager')}>
+                    <div className="flex items-center space-x-2 p-4 border rounded-lg cursor-pointer hover:bg-accent/50 transition-colors">
+                      <RadioGroupItem value="client" id="client" />
+                      <Label htmlFor="client" className="flex items-center gap-2 cursor-pointer flex-1">
+                        <User className="h-5 w-5" />
+                        <div>
+                          <div className="font-medium">{t('auth.client') || 'Un particulier'}</div>
+                          <div className="text-xs text-muted-foreground">{t('auth.clientDesc') || 'Investir pour mon compte'}</div>
+                        </div>
+                      </Label>
+                    </div>
+                    <div className="flex items-center space-x-2 p-4 border rounded-lg cursor-pointer hover:bg-accent/50 transition-colors">
+                      <RadioGroupItem value="wealth_manager" id="wealth_manager" />
+                      <Label htmlFor="wealth_manager" className="flex items-center gap-2 cursor-pointer flex-1">
+                        <Briefcase className="h-5 w-5" />
+                        <div>
+                          <div className="font-medium">{t('auth.wealthManager') || 'Un CGP / Établissement financier'}</div>
+                          <div className="text-xs text-muted-foreground">{t('auth.wealthManagerDesc') || 'Distribuer des coupons à mes clients'}</div>
+                        </div>
+                      </Label>
+                    </div>
+                  </RadioGroup>
+                </div>
+                
                 <div className="space-y-2">
                   <Label htmlFor="signup-name">Nom d'affichage</Label>
                   <Input

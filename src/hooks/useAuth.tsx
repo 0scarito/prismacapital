@@ -6,6 +6,7 @@ interface AuthContextType {
   user: User | null;
   session: Session | null;
   loading: boolean;
+  userRole: 'client' | 'wealth_manager' | null;
   signIn: (
     email: string,
     password: string
@@ -13,7 +14,8 @@ interface AuthContextType {
   signUp: (
     email: string,
     password: string,
-    displayName?: string
+    displayName?: string,
+    role?: 'client' | 'wealth_manager'
   ) => Promise<{ error: AuthError | null }>;
   signOut: () => Promise<void>;
 }
@@ -27,6 +29,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
+  const [userRole, setUserRole] = useState<'client' | 'wealth_manager' | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -35,6 +38,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       (_event, session) => {
         setSession(session);
         setUser(session?.user ?? null);
+        
+        // Fetch user role when session changes
+        if (session?.user) {
+          setTimeout(() => {
+            fetchUserRole(session.user.id);
+          }, 0);
+        } else {
+          setUserRole(null);
+        }
+        
         setLoading(false);
       }
     );
@@ -43,11 +56,32 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setUser(session?.user ?? null);
+      
+      if (session?.user) {
+        fetchUserRole(session.user.id);
+      }
+      
       setLoading(false);
     });
 
     return () => subscription.unsubscribe();
   }, []);
+
+  const fetchUserRole = async (userId: string) => {
+    try {
+      const { data, error } = await supabase
+        .from('user_roles')
+        .select('role')
+        .eq('user_id', userId)
+        .single();
+      
+      if (!error && data) {
+        setUserRole(data.role as 'client' | 'wealth_manager');
+      }
+    } catch (err) {
+      console.error('Error fetching user role:', err);
+    }
+  };
 
   /**
    * Sign in with email and password
@@ -70,18 +104,33 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const signUp = async (
     email: string,
     password: string,
-    displayName?: string
+    displayName?: string,
+    role: 'client' | 'wealth_manager' = 'client'
   ): Promise<{ error: AuthError | null }> => {
-    const { error } = await supabase.auth.signUp({
+    const redirectUrl = `${window.location.origin}/`;
+    
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
-        emailRedirectTo: `${window.location.origin}/`,
+        emailRedirectTo: redirectUrl,
         data: {
           display_name: displayName,
         },
       },
     });
+    
+    // Insert role after signup
+    if (!error && data.user) {
+      const { error: roleError } = await supabase
+        .from('user_roles')
+        .insert({ user_id: data.user.id, role });
+      
+      if (roleError) {
+        console.error('Error inserting role:', roleError);
+      }
+    }
+
     return { error };
   };
 
@@ -96,6 +145,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     user,
     session,
     loading,
+    userRole,
     signIn,
     signUp,
     signOut,

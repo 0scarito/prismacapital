@@ -140,37 +140,35 @@ const PortfolioContent = () => {
 
     toast({
       title: 'Withdrawal Initiated',
-      description: `Withdrawing €${wallet.balance.toFixed(2)} to your bank account`,
+      description: `Processing withdrawal of €${wallet.balance.toFixed(2)}...`,
     });
 
-    // In production, you'd call a withdrawal endpoint here
-    // For now, just update the wallet balance to 0
     try {
-      const { error } = await supabase
-        .from('wallets')
-        .update({ balance: 0 })
-        .eq('id', wallet.id);
-
-      if (error) throw error;
-
-      await supabase.from('transactions').insert({
-        user_id: user?.id,
-        type: 'withdrawal',
-        amount: -wallet.balance,
-        description: 'Withdrawal to bank account',
+      const { data, error } = await supabase.functions.invoke('withdraw-funds', {
+        body: {},
       });
 
-      setWallet({ ...wallet, balance: 0 });
+      if (error) {
+        console.error('Withdrawal error:', error);
+        throw error;
+      }
+
+      if (!data.success) {
+        throw new Error(data.error || 'Withdrawal failed');
+      }
+
+      // Update local state with new balance
+      setWallet({ ...wallet, balance: data.newBalance });
 
       toast({
         title: 'Withdrawal Complete',
-        description: 'Funds have been transferred to your bank account',
+        description: data.message || `€${data.withdrawalAmount.toFixed(2)} transferred to your bank account`,
       });
     } catch (error) {
       console.error('Error withdrawing:', error);
       toast({
         title: 'Error',
-        description: 'Failed to process withdrawal',
+        description: 'Failed to process withdrawal. Please try again.',
         variant: 'destructive',
       });
     }

@@ -19,6 +19,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
+import { Json } from '@/integrations/supabase/types';
+import { getOrganizationStatusVariant } from '@/lib/badgeStyles';
+
 interface PartnerOrganization {
   id: string;
   name: string;
@@ -36,7 +39,7 @@ interface Mandate {
   pricing_tier: string;
   created_at: string;
   expires_at: string | null;
-  product_mix: any;
+  product_mix: Json | null;
 }
 
 interface CouponStats {
@@ -48,19 +51,21 @@ interface CouponStats {
   redeemed_value: number;
 }
 
+const INITIAL_COUPON_STATS: CouponStats = {
+  total: 0,
+  in_stock: 0,
+  distributed: 0,
+  redeemed: 0,
+  total_value: 0,
+  redeemed_value: 0
+};
+
 const PartnerDashboard = () => {
   const { user, signOut, loading } = useAuth();
   const { t } = useLanguage();
   const [organization, setOrganization] = useState<PartnerOrganization | null>(null);
   const [mandates, setMandates] = useState<Mandate[]>([]);
-  const [couponStats, setCouponStats] = useState<CouponStats>({
-    total: 0,
-    in_stock: 0,
-    distributed: 0,
-    redeemed: 0,
-    total_value: 0,
-    redeemed_value: 0
-  });
+  const [couponStats, setCouponStats] = useState<CouponStats>(INITIAL_COUPON_STATS);
   const [loadingData, setLoadingData] = useState(true);
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -79,24 +84,15 @@ const PartnerDashboard = () => {
 
   const fetchPartnerData = async () => {
     try {
-      console.log('[PartnerDashboard] Fetching partner data for user:', user?.id);
-      
-      // Get user's partner_id from profile
       const { data: profile, error: profileError } = await supabase
         .from('profiles')
         .select('partner_id, is_partner_user, display_name')
         .eq('id', user?.id)
         .maybeSingle();
 
-      console.log('[PartnerDashboard] Profile fetched:', profile, 'Error:', profileError);
-
       if (profileError) throw profileError;
 
-      // If no partner setup exists yet, create one
       if (!profile?.is_partner_user || !profile?.partner_id) {
-        console.log('[PartnerDashboard] No partner setup, creating organization');
-        
-        // Create partner organization for this user
         const { data: newOrg, error: orgCreateError } = await supabase
           .from('partner_organizations')
           .insert({
@@ -108,8 +104,6 @@ const PartnerDashboard = () => {
           .select()
           .single();
 
-        console.log('[PartnerDashboard] Organization created:', newOrg, 'Error:', orgCreateError);
-
         if (orgCreateError) {
           toast({
             title: "Setup Error",
@@ -120,7 +114,6 @@ const PartnerDashboard = () => {
           return;
         }
 
-        // Update profile with partner_id
         const { error: profileUpdateError } = await supabase
           .from('profiles')
           .update({
@@ -129,34 +122,20 @@ const PartnerDashboard = () => {
           })
           .eq('id', user?.id);
 
-        console.log('[PartnerDashboard] Profile updated, error:', profileUpdateError);
-
         if (profileUpdateError) throw profileUpdateError;
 
         setOrganization(newOrg);
         setMandates([]);
-        setCouponStats({
-          total: 0,
-          in_stock: 0,
-          distributed: 0,
-          redeemed: 0,
-          total_value: 0,
-          redeemed_value: 0
-        });
+        setCouponStats(INITIAL_COUPON_STATS);
         setLoadingData(false);
         return;
       }
 
-      console.log('[PartnerDashboard] Partner setup exists, fetching organization');
-      
-      // Fetch organization details
       const { data: orgData, error: orgError } = await supabase
         .from('partner_organizations')
         .select('*')
         .eq('id', profile.partner_id)
         .maybeSingle();
-
-      console.log('[PartnerDashboard] Organization data:', orgData, 'Error:', orgError);
 
       if (orgError) throw orgError;
       
@@ -202,14 +181,7 @@ const PartnerDashboard = () => {
         }
         
         return acc;
-      }, {
-        total: 0,
-        in_stock: 0,
-        distributed: 0,
-        redeemed: 0,
-        total_value: 0,
-        redeemed_value: 0
-      });
+      }, { ...INITIAL_COUPON_STATS });
 
       setCouponStats(stats);
     } catch (error) {
@@ -231,16 +203,6 @@ const PartnerDashboard = () => {
 
   const handleGoHome = () => {
     navigate('/');
-  };
-
-  const getStatusBadge = (status: string) => {
-    const variants: Record<string, string> = {
-      active: 'bg-green-500/10 text-green-500 border-green-500/20',
-      draft: 'bg-gray-500/10 text-gray-500 border-gray-500/20',
-      completed: 'bg-blue-500/10 text-blue-500 border-blue-500/20',
-      prospect: 'bg-yellow-500/10 text-yellow-500 border-yellow-500/20'
-    };
-    return variants[status] || 'bg-primary/10 text-primary border-primary/20';
   };
 
   if (loading || loadingData) {
@@ -305,7 +267,7 @@ const PartnerDashboard = () => {
                   </CardDescription>
                 </div>
               </div>
-              <Badge className={getStatusBadge(organization.status)}>
+              <Badge className={getOrganizationStatusVariant(organization.status)}>
                 {organization.status}
               </Badge>
             </div>
@@ -403,9 +365,9 @@ const PartnerDashboard = () => {
                       {mandates.map((mandate) => (
                         <TableRow key={mandate.id}>
                           <TableCell>
-                            <Badge className={getStatusBadge(mandate.status)}>
-                              {mandate.status}
-                            </Badge>
+                          <Badge className={getOrganizationStatusVariant(mandate.status)}>
+                            {mandate.status}
+                          </Badge>
                           </TableCell>
                           <TableCell className="font-medium">
                             {mandate.coupon_count}

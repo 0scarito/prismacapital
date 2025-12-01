@@ -47,9 +47,6 @@ const Navigation = () => {
     label: t('nav.security'),
     href: '/security'
   }, ...(user ? [{
-    label: 'My Coupons',
-    href: '/my-coupons'
-  }, {
     label: t('nav.mySpace'),
     href: '/dashboard'
   }] : [{

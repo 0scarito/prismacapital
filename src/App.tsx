@@ -35,7 +35,6 @@ import Courses from "./pages/Courses";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import Portfolio from "./pages/Portfolio";
-import MyCoupons from "./pages/MyCoupons";
 import RequestMandate from "./pages/RequestMandate";
 import ScrollToTop from "./components/ScrollToTop";
 
@@ -70,7 +69,6 @@ const App = () => (
               <Route path="/cart" element={<Cart />} />
               <Route path="/checkout" element={<Checkout />} />
               <Route path="/portfolio" element={<Portfolio />} />
-              <Route path="/my-coupons" element={<MyCoupons />} />
               <Route path="/auth" element={<Auth />} />
               <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
               <Route path="/legal-notices" element={<LegalNotices />} />

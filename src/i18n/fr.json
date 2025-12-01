@@ -387,10 +387,6 @@
   "venture.upcomingMilestones": "Jalons à venir",
   "venture.investNow": "Investir maintenant",
   "dashboard.personalSpace": "Espace Personnel",
-  "dashboard.accountType": {
-    "client": "Compte Client",
-    "professional": "Compte Professionnel"
-  },
   "dashboard.signOut": "Déconnexion",
   "dashboard.welcome": "Bienvenue",
   "dashboard.user": "Utilisateur",

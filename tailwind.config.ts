@@ -79,11 +79,10 @@ export default {
 				'gradient-card': 'var(--gradient-card)',
 				'gradient-subtle': 'var(--gradient-subtle)',
 			},
-		fontFamily: {
-			'sans': ['Inter', 'sans-serif'],
-			'serif': ['Playfair Display', 'serif'],
-			'heading': ['Playfair Display', 'serif'],
-		},
+			fontFamily: {
+				'sans': ['Inter', 'sans-serif'],
+				'serif': ['Playfair Display', 'serif'],
+			},
 			boxShadow: {
 				'prisma-card': 'var(--shadow-card)',
 				'prisma-button': 'var(--shadow-button)',

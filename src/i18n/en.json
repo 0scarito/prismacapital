@@ -388,10 +388,6 @@
   "venture.upcomingMilestones": "Upcoming Milestones",
   "venture.investNow": "Invest Now",
   "dashboard.personalSpace": "Personal Space",
-  "dashboard.accountType": {
-    "client": "Client Account",
-    "professional": "Professional Account"
-  },
   "dashboard.signOut": "Log out",
   "dashboard.welcome": "Welcome",
   "dashboard.user": "User",

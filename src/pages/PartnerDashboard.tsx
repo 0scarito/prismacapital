@@ -206,12 +206,7 @@ const PartnerDashboard = () => {
               className="h-14 w-auto object-contain"
             />
             <div>
-              <div className="flex items-center gap-2">
-                <span className="text-slate-50 font-semibold">Partner Dashboard</span>
-                <Badge variant="default" className="text-xs">
-                  {t('dashboard.accountType.professional')}
-                </Badge>
-              </div>
+              <span className="text-slate-50 font-semibold">Partner Dashboard</span>
               <p className="text-sm text-muted-foreground">{organization.name}</p>
             </div>
           </div>

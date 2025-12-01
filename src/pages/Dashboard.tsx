@@ -82,6 +82,7 @@ const Dashboard = () => {
       fetchInvestmentData();
     } catch (error) {
       console.error('Error checking user role:', error);
+      // Default to regular dashboard on error
       fetchUserData();
       fetchInvestmentData();
     }
@@ -117,32 +118,34 @@ const Dashboard = () => {
   const fetchUserData = async () => {
     try {
       // Fetch profile
-      const {
-        data: profileData,
-        error: profileError
-      } = await supabase.from('profiles').select('display_name').eq('id', user?.id).single();
+      const { data: profileData, error: profileError } = await supabase
+        .from('profiles')
+        .select('display_name')
+        .eq('id', user?.id)
+        .maybeSingle();
+        
       if (profileError) throw profileError;
-      setProfile(profileData);
+      setProfile(profileData || { display_name: user?.email?.split('@')[0] || 'User' });
 
       // Fetch coupons
-      const {
-        data: couponsData,
-        error: couponsError
-      } = await supabase.from('coupons').select('*').eq('user_id', user?.id).order('created_at', {
-        ascending: false
+      const { data: couponsData, error: couponsError } = await supabase
+        .from('coupons')
+        .select('*')
+        .eq('user_id', user?.id)
+        .order('created_at', { ascending: false });
+        
+      if (couponsError) throw couponsError;
+      setCoupons((couponsData || []) as Coupon[]);
+    } catch {
+      toast({
+        title: t('dashboard.errorTitle'),
+        description: t('dashboard.errorDescription'),
+        variant: 'destructive'
       });
-        if (couponsError) throw couponsError;
-        setCoupons((couponsData || []) as Coupon[]);
-      } catch {
-        toast({
-          title: t('dashboard.errorTitle'),
-          description: t('dashboard.errorDescription'),
-          variant: 'destructive'
-        });
-      } finally {
-        setLoadingData(false);
-      }
-    };
+    } finally {
+      setLoadingData(false);
+    }
+  };
   const fetchInvestmentData = async () => {
     // Simulation de données d'investissement (en réalité, on récupérerait ça d'une API)
     const mockInvestments: Investment[] = [{

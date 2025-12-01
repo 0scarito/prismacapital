@@ -78,9 +78,9 @@ const PortfolioContent = () => {
         .from('wallets')
         .select('*')
         .eq('user_id', user?.id)
-        .single();
+        .maybeSingle();
 
-      if (walletError && walletError.code !== 'PGRST116') throw walletError;
+      if (walletError) throw walletError;
       setWallet(walletData);
     } catch (error) {
       console.error('Error fetching portfolio:', error);

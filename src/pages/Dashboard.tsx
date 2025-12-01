@@ -11,6 +11,8 @@ import { LogOut, Gift, Calendar, Euro, QrCode, TrendingUp, TrendingDown, Loader2
 import { useLanguage } from '@/contexts/LanguageContext';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import prismaLogo from '@/assets/prisma-logo.png';
+import { getCouponStatusVariant } from '@/lib/badgeStyles';
+
 interface Coupon {
   id: string;
   title: string;
@@ -55,14 +57,12 @@ const Dashboard = () => {
     toast
   } = useToast();
   useEffect(() => {
-    console.log('[Dashboard] User changed:', user?.id, 'Loading:', loading);
     if (!loading && !user) {
-      console.log('[Dashboard] No user, redirecting to auth');
       navigate('/auth');
     }
   }, [user, loading, navigate]);
+
   useEffect(() => {
-    console.log('[Dashboard] Checking if should check role, user:', !!user);
     if (user) {
       checkUserRole();
     }
@@ -70,26 +70,19 @@ const Dashboard = () => {
 
   const checkUserRole = async () => {
     try {
-      console.log('[Dashboard] Checking user role for:', user?.id);
       const { data: role, error } = await supabase.rpc('get_user_role', {
         _user_id: user?.id
       });
 
-      console.log('[Dashboard] Role fetched:', role, 'Error:', error);
-
       if (!error && role === 'wealth_manager') {
-        console.log('[Dashboard] Wealth manager detected, redirecting to partner dashboard');
         navigate('/partner-dashboard');
         return;
       }
 
-      console.log('[Dashboard] Regular client, fetching dashboard data');
-      // Regular users continue to regular dashboard
       fetchUserData();
       fetchInvestmentData();
     } catch (error) {
-      console.error('[Dashboard] Error checking user role:', error);
-      // Default to regular dashboard on error
+      console.error('Error checking user role:', error);
       fetchUserData();
       fetchInvestmentData();
     }
@@ -154,95 +147,58 @@ const Dashboard = () => {
     }
   };
   const fetchInvestmentData = async () => {
-    // Simulation de données d'investissement (en réalité, on récupérerait ça d'une API)
-    const mockInvestments: Investment[] = [{
-      id: '1',
-      name: 'Or',
-      symbol: 'GOLD',
-      currentPrice: 1987.50,
-      change24h: 12.50,
-      changePercent24h: 0.63,
-      historicalData: [{
-        date: '2024-01-01',
-        price: 1950
-      }, {
-        date: '2024-01-02',
-        price: 1965
-      }, {
-        date: '2024-01-03',
-        price: 1955
-      }, {
-        date: '2024-01-04',
-        price: 1970
-      }, {
-        date: '2024-01-05',
-        price: 1975
-      }, {
-        date: '2024-01-06',
-        price: 1980
-      }, {
-        date: '2024-01-07',
-        price: 1987.50
-      }]
-    }, {
-      id: '2',
-      name: 'S&P 500 ETF',
-      symbol: 'SPY',
-      currentPrice: 485.23,
-      change24h: -2.15,
-      changePercent24h: -0.44,
-      historicalData: [{
-        date: '2024-01-01',
-        price: 480
-      }, {
-        date: '2024-01-02',
-        price: 482
-      }, {
-        date: '2024-01-03',
-        price: 478
-      }, {
-        date: '2024-01-04',
-        price: 487
-      }, {
-        date: '2024-01-05',
-        price: 490
-      }, {
-        date: '2024-01-06',
-        price: 487.38
-      }, {
-        date: '2024-01-07',
-        price: 485.23
-      }]
-    }, {
-      id: '3',
-      name: 'Bitcoin ETF',
-      symbol: 'BTCETF',
-      currentPrice: 42850.00,
-      change24h: 1250.00,
-      changePercent24h: 3.01,
-      historicalData: [{
-        date: '2024-01-01',
-        price: 41000
-      }, {
-        date: '2024-01-02',
-        price: 41500
-      }, {
-        date: '2024-01-03',
-        price: 40800
-      }, {
-        date: '2024-01-04',
-        price: 41800
-      }, {
-        date: '2024-01-05',
-        price: 41600
-      }, {
-        date: '2024-01-06',
-        price: 42200
-      }, {
-        date: '2024-01-07',
-        price: 42850
-      }]
-    }];
+    const generateHistoricalData = (basePrice: number, volatility: number, days: number = 7) => {
+      const data = [];
+      let price = basePrice;
+      const today = new Date();
+      
+      for (let i = days - 1; i >= 0; i--) {
+        const date = new Date(today);
+        date.setDate(date.getDate() - i);
+        price = price * (1 + (Math.random() - 0.5) * volatility);
+        data.push({
+          date: date.toISOString().split('T')[0],
+          price: Number(price.toFixed(2))
+        });
+      }
+      
+      return { data, finalPrice: data[data.length - 1].price, change: data[data.length - 1].price - basePrice };
+    };
+
+    const goldData = generateHistoricalData(1975, 0.01);
+    const spyData = generateHistoricalData(483, 0.008);
+    const btcData = generateHistoricalData(41600, 0.025);
+
+    const mockInvestments: Investment[] = [
+      {
+        id: '1',
+        name: 'Or',
+        symbol: 'GOLD',
+        currentPrice: goldData.finalPrice,
+        change24h: goldData.change,
+        changePercent24h: (goldData.change / 1975) * 100,
+        historicalData: goldData.data
+      },
+      {
+        id: '2',
+        name: 'S&P 500 ETF',
+        symbol: 'SPY',
+        currentPrice: spyData.finalPrice,
+        change24h: spyData.change,
+        changePercent24h: (spyData.change / 483) * 100,
+        historicalData: spyData.data
+      },
+      {
+        id: '3',
+        name: 'Bitcoin ETF',
+        symbol: 'BTCETF',
+        currentPrice: btcData.finalPrice,
+        change24h: btcData.change,
+        changePercent24h: (btcData.change / 41600) * 100,
+        historicalData: btcData.data
+      }
+    ];
+
     setInvestments(mockInvestments);
   };
   const handleSignOut = async () => {
@@ -252,18 +208,7 @@ const Dashboard = () => {
   const handleGoHome = () => {
     navigate('/');
   };
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'active':
-        return 'bg-green-500/10 text-green-500 border-green-500/20';
-      case 'used':
-        return 'bg-gray-500/10 text-gray-500 border-gray-500/20';
-      case 'expired':
-        return 'bg-red-500/10 text-red-500 border-red-500/20';
-      default:
-        return 'bg-primary/10 text-primary border-primary/20';
-    }
-  };
+
   const getStatusText = (status: string) => {
     switch (status) {
       case 'active':

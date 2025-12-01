@@ -83,9 +83,70 @@ const HowItWorks = () => {
           </div>
         </section>
 
-        {/* Steps Section */}
+        {/* B2B Partner Process Section */}
+        <section className="py-20 bg-card">
+          <div className="section-container">
+            <div className="text-center mb-16">
+              <h2 className="font-serif font-bold text-4xl lg:text-5xl text-card-foreground mb-6">
+                {t('howItWorks.partner.title') || "For Partners: Your Distribution Journey"}
+              </h2>
+              <p className="font-sans text-xl text-muted-foreground max-w-3xl mx-auto">
+                {t('howItWorks.partner.subtitle') || "A streamlined process to bring institutional-grade investments to your clients"}
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-8">
+              <div className="bg-gradient-subtle rounded-2xl p-8 border border-border/20">
+                <div className="w-16 h-16 rounded-full bg-primary/10 border-2 border-primary flex items-center justify-center mb-6 mx-auto">
+                  <span className="font-sans font-bold text-2xl text-primary">1</span>
+                </div>
+                <h3 className="font-serif font-bold text-2xl text-card-foreground mb-4 text-center">
+                  {t('howItWorks.partner.steps.0.title') || "Create Your Mandate"}
+                </h3>
+                <p className="font-sans text-muted-foreground text-center">
+                  {t('howItWorks.partner.steps.0.description') || "Define volume, product mix, and pricing. We craft a personalized distribution agreement."}
+                </p>
+              </div>
+
+              <div className="bg-gradient-subtle rounded-2xl p-8 border border-border/20">
+                <div className="w-16 h-16 rounded-full bg-primary/10 border-2 border-primary flex items-center justify-center mb-6 mx-auto">
+                  <span className="font-sans font-bold text-2xl text-primary">2</span>
+                </div>
+                <h3 className="font-serif font-bold text-2xl text-card-foreground mb-4 text-center">
+                  {t('howItWorks.partner.steps.1.title') || "Receive Inventory"}
+                </h3>
+                <p className="font-sans text-muted-foreground text-center">
+                  {t('howItWorks.partner.steps.1.description') || "Get your coupon inventory in your Partner Portal, ready for distribution."}
+                </p>
+              </div>
+
+              <div className="bg-gradient-subtle rounded-2xl p-8 border border-border/20">
+                <div className="w-16 h-16 rounded-full bg-primary/10 border-2 border-primary flex items-center justify-center mb-6 mx-auto">
+                  <span className="font-sans font-bold text-2xl text-primary">3</span>
+                </div>
+                <h3 className="font-serif font-bold text-2xl text-card-foreground mb-4 text-center">
+                  {t('howItWorks.partner.steps.2.title') || "Distribute & Track"}
+                </h3>
+                <p className="font-sans text-muted-foreground text-center">
+                  {t('howItWorks.partner.steps.2.description') || "Give coupons to your clients and monitor redemption rates in real-time."}
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Client Steps Section */}
         <section className="py-20 bg-warm-white">
           <div className="section-container">
+            <div className="text-center mb-16">
+              <h2 className="font-serif font-bold text-4xl lg:text-5xl text-deep-navy mb-6">
+                {t('howItWorks.client.title') || "For Your Clients: The Investment Journey"}
+              </h2>
+              <p className="font-sans text-xl text-deep-navy/80 max-w-3xl mx-auto">
+                {t('howItWorks.client.subtitle') || "How your end clients will experience and benefit from their investment coupons"}
+              </p>
+            </div>
+
             <div className="space-y-20">
               {steps.map((step, index) => (
                 <div key={step.number} className={`grid lg:grid-cols-2 gap-12 items-center ${

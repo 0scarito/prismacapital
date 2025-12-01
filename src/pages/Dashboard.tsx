@@ -55,11 +55,14 @@ const Dashboard = () => {
     toast
   } = useToast();
   useEffect(() => {
+    console.log('[Dashboard] User changed:', user?.id, 'Loading:', loading);
     if (!loading && !user) {
+      console.log('[Dashboard] No user, redirecting to auth');
       navigate('/auth');
     }
   }, [user, loading, navigate]);
   useEffect(() => {
+    console.log('[Dashboard] Checking if should check role, user:', !!user);
     if (user) {
       checkUserRole();
     }
@@ -67,21 +70,25 @@ const Dashboard = () => {
 
   const checkUserRole = async () => {
     try {
+      console.log('[Dashboard] Checking user role for:', user?.id);
       const { data: role, error } = await supabase.rpc('get_user_role', {
         _user_id: user?.id
       });
 
+      console.log('[Dashboard] Role fetched:', role, 'Error:', error);
+
       if (!error && role === 'wealth_manager') {
-        // Redirect wealth managers to partner dashboard
+        console.log('[Dashboard] Wealth manager detected, redirecting to partner dashboard');
         navigate('/partner-dashboard');
         return;
       }
 
+      console.log('[Dashboard] Regular client, fetching dashboard data');
       // Regular users continue to regular dashboard
       fetchUserData();
       fetchInvestmentData();
     } catch (error) {
-      console.error('Error checking user role:', error);
+      console.error('[Dashboard] Error checking user role:', error);
       // Default to regular dashboard on error
       fetchUserData();
       fetchInvestmentData();

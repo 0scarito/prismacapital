@@ -79,6 +79,8 @@ const PartnerDashboard = () => {
 
   const fetchPartnerData = async () => {
     try {
+      console.log('[PartnerDashboard] Fetching partner data for user:', user?.id);
+      
       // Get user's partner_id from profile
       const { data: profile, error: profileError } = await supabase
         .from('profiles')
@@ -86,10 +88,14 @@ const PartnerDashboard = () => {
         .eq('id', user?.id)
         .maybeSingle();
 
+      console.log('[PartnerDashboard] Profile fetched:', profile, 'Error:', profileError);
+
       if (profileError) throw profileError;
 
       // If no partner setup exists yet, create one
       if (!profile?.is_partner_user || !profile?.partner_id) {
+        console.log('[PartnerDashboard] No partner setup, creating organization');
+        
         // Create partner organization for this user
         const { data: newOrg, error: orgCreateError } = await supabase
           .from('partner_organizations')
@@ -101,6 +107,8 @@ const PartnerDashboard = () => {
           })
           .select()
           .single();
+
+        console.log('[PartnerDashboard] Organization created:', newOrg, 'Error:', orgCreateError);
 
         if (orgCreateError) {
           toast({
@@ -121,6 +129,8 @@ const PartnerDashboard = () => {
           })
           .eq('id', user?.id);
 
+        console.log('[PartnerDashboard] Profile updated, error:', profileUpdateError);
+
         if (profileUpdateError) throw profileUpdateError;
 
         setOrganization(newOrg);
@@ -137,12 +147,16 @@ const PartnerDashboard = () => {
         return;
       }
 
+      console.log('[PartnerDashboard] Partner setup exists, fetching organization');
+      
       // Fetch organization details
       const { data: orgData, error: orgError } = await supabase
         .from('partner_organizations')
         .select('*')
         .eq('id', profile.partner_id)
         .maybeSingle();
+
+      console.log('[PartnerDashboard] Organization data:', orgData, 'Error:', orgError);
 
       if (orgError) throw orgError;
       

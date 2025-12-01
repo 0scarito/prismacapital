@@ -82,19 +82,58 @@ const PartnerDashboard = () => {
       // Get user's partner_id from profile
       const { data: profile, error: profileError } = await supabase
         .from('profiles')
-        .select('partner_id, is_partner_user')
+        .select('partner_id, is_partner_user, display_name')
         .eq('id', user?.id)
-        .single();
+        .maybeSingle();
 
       if (profileError) throw profileError;
 
+      // If no partner setup exists yet, create one
       if (!profile?.is_partner_user || !profile?.partner_id) {
-        toast({
-          title: "Access Denied",
-          description: "You don't have partner access.",
-          variant: 'destructive'
+        // Create partner organization for this user
+        const { data: newOrg, error: orgCreateError } = await supabase
+          .from('partner_organizations')
+          .insert({
+            name: profile?.display_name || user?.email?.split('@')[0] || 'Partner Organization',
+            type: 'wealth_manager',
+            contact_email: user?.email || '',
+            status: 'active'
+          })
+          .select()
+          .single();
+
+        if (orgCreateError) {
+          toast({
+            title: "Setup Error",
+            description: "Failed to create partner organization. Please contact support.",
+            variant: 'destructive'
+          });
+          navigate('/dashboard');
+          return;
+        }
+
+        // Update profile with partner_id
+        const { error: profileUpdateError } = await supabase
+          .from('profiles')
+          .update({
+            partner_id: newOrg.id,
+            is_partner_user: true
+          })
+          .eq('id', user?.id);
+
+        if (profileUpdateError) throw profileUpdateError;
+
+        setOrganization(newOrg);
+        setMandates([]);
+        setCouponStats({
+          total: 0,
+          in_stock: 0,
+          distributed: 0,
+          redeemed: 0,
+          total_value: 0,
+          redeemed_value: 0
         });
-        navigate('/dashboard');
+        setLoadingData(false);
         return;
       }
 
@@ -103,9 +142,20 @@ const PartnerDashboard = () => {
         .from('partner_organizations')
         .select('*')
         .eq('id', profile.partner_id)
-        .single();
+        .maybeSingle();
 
       if (orgError) throw orgError;
+      
+      if (!orgData) {
+        toast({
+          title: "Organization Not Found",
+          description: "Your partner organization was not found. Please contact support.",
+          variant: 'destructive'
+        });
+        navigate('/dashboard');
+        return;
+      }
+      
       setOrganization(orgData);
 
       // Fetch mandates

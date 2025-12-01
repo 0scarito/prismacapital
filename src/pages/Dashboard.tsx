@@ -61,10 +61,31 @@ const Dashboard = () => {
   }, [user, loading, navigate]);
   useEffect(() => {
     if (user) {
+      checkUserRole();
+    }
+  }, [user]);
+
+  const checkUserRole = async () => {
+    try {
+      const { data: role, error } = await supabase.rpc('get_user_role', {
+        _user_id: user?.id
+      });
+
+      if (!error && role === 'wealth_manager') {
+        // Redirect wealth managers to partner dashboard
+        navigate('/partner-dashboard');
+        return;
+      }
+
+      // Regular users continue to regular dashboard
+      fetchUserData();
+      fetchInvestmentData();
+    } catch (error) {
+      console.error('Error checking user role:', error);
       fetchUserData();
       fetchInvestmentData();
     }
-  }, [user]);
+  };
 
   useEffect(() => {
     const paymentStatus = searchParams.get('payment');

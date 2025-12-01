@@ -92,7 +92,14 @@ const PartnerDashboard = () => {
 
       if (profileError) throw profileError;
 
-      if (!profile?.is_partner_user || !profile?.partner_id) {
+      // If not a partner user, redirect to regular dashboard
+      if (!profile?.is_partner_user) {
+        navigate('/dashboard');
+        return;
+      }
+
+      // If partner user but no organization, create one
+      if (!profile?.partner_id) {
         const { data: newOrg, error: orgCreateError } = await supabase
           .from('partner_organizations')
           .insert({
@@ -105,12 +112,13 @@ const PartnerDashboard = () => {
           .single();
 
         if (orgCreateError) {
+          console.error('Organization creation error:', orgCreateError);
           toast({
             title: "Setup Error",
-            description: "Failed to create partner organization. Please contact support.",
+            description: "Unable to set up partner account. Please try again or contact support.",
             variant: 'destructive'
           });
-          navigate('/dashboard');
+          setLoadingData(false);
           return;
         }
 

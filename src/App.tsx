@@ -14,6 +14,7 @@ import Security from "./pages/Security";
 import FAQ from "./pages/FAQ";
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
+import PartnerDashboard from "./pages/PartnerDashboard";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import PrivateEquity from "./pages/PrivateEquity";
 import VentureCapital from "./pages/VentureCapital";
@@ -71,6 +72,7 @@ const App = () => (
               <Route path="/portfolio" element={<Portfolio />} />
               <Route path="/auth" element={<Auth />} />
               <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+              <Route path="/partner-dashboard" element={<ProtectedRoute><PartnerDashboard /></ProtectedRoute>} />
               <Route path="/legal-notices" element={<LegalNotices />} />
               <Route path="/risk-disclosure" element={<RiskDisclosure />} />
               <Route path="/privacy-policy" element={<PrivacyPolicy />} />
@@ -97,6 +99,7 @@ const App = () => (
               <Route path="/fr/payment" element={<Payment />} />
               <Route path="/fr/auth" element={<Auth />} />
               <Route path="/fr/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+              <Route path="/fr/partner-dashboard" element={<ProtectedRoute><PartnerDashboard /></ProtectedRoute>} />
               <Route path="/fr/legal-notices" element={<LegalNotices />} />
               <Route path="/fr/risk-disclosure" element={<RiskDisclosure />} />
               <Route path="/fr/privacy-policy" element={<PrivacyPolicy />} />
@@ -122,6 +125,7 @@ const App = () => (
               <Route path="/en/payment" element={<Payment />} />
               <Route path="/en/auth" element={<Auth />} />
               <Route path="/en/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+              <Route path="/en/partner-dashboard" element={<ProtectedRoute><PartnerDashboard /></ProtectedRoute>} />
               <Route path="/en/legal-notices" element={<LegalNotices />} />
               <Route path="/en/risk-disclosure" element={<RiskDisclosure />} />
               <Route path="/en/privacy-policy" element={<PrivacyPolicy />} />

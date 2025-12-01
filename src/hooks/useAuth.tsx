@@ -70,13 +70,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const fetchUserRole = async (userId: string) => {
     try {
       const { data, error } = await supabase
-        .from('user_roles')
-        .select('role')
-        .eq('user_id', userId)
-        .single();
+        .rpc('get_user_role', { _user_id: userId });
       
       if (!error && data) {
-        setUserRole(data.role as 'client' | 'wealth_manager');
+        setUserRole(data as 'client' | 'wealth_manager');
       }
     } catch (err) {
       console.error('Error fetching user role:', err);
@@ -120,14 +117,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       },
     });
     
-    // Insert role after signup
-    if (!error && data.user) {
+    // Update role if it's not the default 'client' role
+    // The trigger will have already created a 'client' role
+    if (!error && data.user && role === 'wealth_manager') {
       const { error: roleError } = await supabase
         .from('user_roles')
-        .insert({ user_id: data.user.id, role });
+        .update({ role: 'wealth_manager' })
+        .eq('user_id', data.user.id);
       
       if (roleError) {
-        console.error('Error inserting role:', roleError);
+        console.error('Error updating role:', roleError);
       }
     }
 

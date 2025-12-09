@@ -2,18 +2,15 @@ import { useState } from 'react';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import InvestmentCard from '@/components/InvestmentCard';
+import InvestmentDetailDialog from '@/components/InvestmentDetailDialog';
 import { ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { investments, heroImages, Investment } from '@/data/investments';
 
 const Etfs = () => {
-  const [basket, setBasket] = useState<{ id: number; name: string }[]>([]);
-
-  const deals = [
-    { id: 1, name: 'Global Equity ETF', description: 'Broad exposure to developed market equities.' },
-    { id: 2, name: 'Climate Action ETF', description: 'Focused on companies driving the energy transition.' },
-    { id: 3, name: 'Health Tech ETF', description: 'Innovators in biotech and medical technology.' },
-    { id: 4, name: 'Cybersecurity ETF', description: 'Firms securing the digital economy.' },
-  ];
+  const [selectedInvestment, setSelectedInvestment] = useState<Investment | null>(null);
+  
+  const etfInvestments = investments.etfs;
 
   const metrics = [
     { label: 'Projected CAGR', value: '7.2%' },
@@ -21,21 +18,21 @@ const Etfs = () => {
     { label: '2-Year Gains', value: '+18.5%' },
   ];
 
-  const addToBasket = (deal: { id: number; name: string }) => {
-    setBasket((prev) => (prev.find((d) => d.id === deal.id) ? prev : [...prev, deal]));
-  };
-
   return (
-    <div className="min-h-screen bg-[#18202C] text-warm-white">
+    <div className="min-h-screen bg-background">
       <Navigation />
 
       <main className="pt-24 pb-16">
-        <section className="bg-gradient-to-r from-purple-900/30 to-pink-900/30 py-8 mb-12">
-          <div className="section-container">
+        <section 
+          className="relative py-16 mb-12 bg-cover bg-center"
+          style={{ backgroundImage: `url(${heroImages.etfs})` }}
+        >
+          <div className="absolute inset-0 bg-gradient-to-r from-purple-900/80 to-pink-900/70" />
+          <div className="section-container relative z-10">
             <Button 
               onClick={() => window.history.back()}
               variant="outline"
-              className="bg-white text-primary hover:bg-white/90 border-primary/20 mb-6"
+              className="bg-white/10 text-white hover:bg-white/20 border-white/30 mb-6 backdrop-blur-sm"
             >
               <ArrowLeft className="w-4 h-4" />
               Back to investments
@@ -48,7 +45,7 @@ const Etfs = () => {
               {metrics.map((m) => (
                 <div key={m.label} className="text-center">
                   <div className="text-3xl font-bold text-purple-300">{m.value}</div>
-                  <div className="text-sm text-slate-300 mt-1">{m.label}</div>
+                  <div className="text-sm text-white/80 mt-1">{m.label}</div>
                 </div>
               ))}
             </div>
@@ -57,27 +54,34 @@ const Etfs = () => {
 
         <section className="py-12">
           <div className="section-container">
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
-              {deals.map((deal) => (
+            <div className="grid sm:grid-cols-2 gap-8 max-w-4xl mx-auto">
+              {etfInvestments.map((investment) => (
                 <InvestmentCard
-                  key={deal.id}
-                  id={`etf-${deal.id}`}
-                  title={deal.name}
-                  description={deal.description}
+                  key={investment.id}
+                  id={investment.id}
+                  title={investment.name}
+                  description={investment.shortDescription}
                   type="ETFs"
-                  onAdd={() => addToBasket(deal)}
+                  image={investment.image}
+                  expectedReturn={investment.expectedReturn}
+                  riskLevel={investment.riskLevel}
+                  onClick={() => setSelectedInvestment(investment)}
                 />
               ))}
             </div>
           </div>
         </section>
-
       </main>
 
       <Footer riskCategory="risk.etf" />
+
+      <InvestmentDetailDialog
+        investment={selectedInvestment}
+        open={!!selectedInvestment}
+        onOpenChange={(open) => !open && setSelectedInvestment(null)}
+      />
     </div>
   );
 };
 
 export default Etfs;
-

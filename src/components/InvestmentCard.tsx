@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { Plus, Check } from 'lucide-react';
+import { Plus, Check, TrendingUp, Shield } from 'lucide-react';
 import { useCart } from '@/contexts/CartContext';
+import { Badge } from '@/components/ui/badge';
 
 interface InvestmentCardProps {
   id: string;
@@ -8,17 +9,28 @@ interface InvestmentCardProps {
   description: string;
   type: string;
   image?: string;
-  price?: number;
-  currency?: string;
+  expectedReturn?: string;
+  riskLevel?: 'Low' | 'Medium' | 'High';
+  onClick?: () => void;
   onAdd?: () => void;
 }
 
-const InvestmentCard = ({ id, title, description, type, image, price = 1.00, currency = 'EUR', onAdd }: InvestmentCardProps) => {
-  const [showMore, setShowMore] = useState(false);
+const InvestmentCard = ({ 
+  id, 
+  title, 
+  description, 
+  type, 
+  image, 
+  expectedReturn,
+  riskLevel,
+  onClick,
+  onAdd 
+}: InvestmentCardProps) => {
   const { addItem, items } = useCart();
   const isInCart = items.some(item => item.id === id);
 
-  const handleAdd = () => {
+  const handleAdd = (e: React.MouseEvent) => {
+    e.stopPropagation();
     if (!isInCart) {
       addItem({ id, name: title, description, type, image });
     }
@@ -27,60 +39,75 @@ const InvestmentCard = ({ id, title, description, type, image, price = 1.00, cur
     }
   };
 
+  const getRiskColor = (risk?: string) => {
+    switch (risk) {
+      case 'Low': return 'bg-green-500/10 text-green-600 border-green-500/20';
+      case 'Medium': return 'bg-yellow-500/10 text-yellow-600 border-yellow-500/20';
+      case 'High': return 'bg-red-500/10 text-red-600 border-red-500/20';
+      default: return 'bg-muted text-muted-foreground';
+    }
+  };
+
   return (
-    <div className="bg-white rounded-xl shadow p-4 flex flex-col">
-      <div className="w-full h-32 bg-slate-200 rounded mb-4 overflow-hidden flex items-center justify-center">
-        {image ? (
-          <img src={image} alt={title} className="w-full h-full object-cover" />
-        ) : (
-          <span className="text-slate-500 text-sm">Image Placeholder</span>
+    <div 
+      className="bg-card rounded-xl shadow-lg overflow-hidden flex flex-col cursor-pointer transition-all duration-300 hover:shadow-xl hover:-translate-y-1 border border-border"
+      onClick={onClick}
+    >
+      {/* Image */}
+      <div className="w-full h-48 bg-muted overflow-hidden relative">
+        <img 
+          src={image} 
+          alt={title} 
+          className="w-full h-full object-cover transition-transform duration-300 hover:scale-105" 
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-background/60 to-transparent" />
+        {riskLevel && (
+          <Badge className={`absolute top-3 right-3 ${getRiskColor(riskLevel)}`}>
+            {riskLevel} Risk
+          </Badge>
         )}
       </div>
-      <h3 className="font-bold text-slate-800 mb-2">{title}</h3>
-      
-      {/* Price Display */}
-      <div className="mb-3 pb-3 border-b border-slate-200">
-        <div className="flex items-baseline gap-2">
-          <span className="text-2xl font-bold text-primary">
-            {currency === 'EUR' ? '€' : currency === 'USD' ? '$' : currency}
-            {price.toFixed(2)}
-          </span>
-          <span className="text-xs text-slate-500">per unit</span>
+
+      {/* Content */}
+      <div className="p-5 flex flex-col flex-1">
+        <h3 className="font-bold text-lg text-foreground mb-2 line-clamp-2">{title}</h3>
+        
+        {/* Metrics Row */}
+        {expectedReturn && (
+          <div className="flex items-center gap-4 mb-3 pb-3 border-b border-border">
+            <div className="flex items-center gap-1.5">
+              <TrendingUp className="w-4 h-4 text-primary" />
+              <span className="text-sm font-semibold text-primary">{expectedReturn}</span>
+            </div>
+            {riskLevel && (
+              <div className="flex items-center gap-1.5">
+                <Shield className="w-4 h-4 text-muted-foreground" />
+                <span className="text-sm text-muted-foreground">{riskLevel}</span>
+              </div>
+            )}
+          </div>
+        )}
+        
+        <p className="text-sm text-muted-foreground flex-1 line-clamp-3">{description}</p>
+        
+        <div className="mt-4 flex justify-between items-center">
+          <span className="text-xs text-muted-foreground font-medium">{type}</span>
+          <button
+            onClick={handleAdd}
+            disabled={isInCart}
+            className={`px-4 py-2 rounded-lg flex items-center gap-1.5 transition-colors text-sm font-medium ${
+              isInCart 
+                ? 'bg-green-500 text-white cursor-default' 
+                : 'bg-primary text-primary-foreground hover:bg-primary/90'
+            }`}
+          >
+            {isInCart ? <Check className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
+            <span>{isInCart ? 'Added' : 'Add'}</span>
+          </button>
         </div>
-        <p className="text-xs text-slate-500 mt-1">€1 = 1 unit</p>
-      </div>
-      
-      {showMore ? (
-        <p className="text-sm text-slate-600 flex-1">{description}</p>
-      ) : (
-        <p className="text-sm text-slate-600 flex-1">
-          {description.slice(0, 80)}
-          {description.length > 80 ? '...' : ''}
-        </p>
-      )}
-      <div className="mt-4 flex justify-between items-center">
-        <button
-          onClick={() => setShowMore(!showMore)}
-          className="text-sm text-blue-600 hover:underline"
-        >
-          {showMore ? 'Less' : 'More'}
-        </button>
-        <button
-          onClick={handleAdd}
-          disabled={isInCart}
-          className={`px-3 py-1 rounded flex items-center gap-1 transition-colors ${
-            isInCart 
-              ? 'bg-green-500 text-white cursor-default' 
-              : 'bg-metallic-gold text-deep-navy hover:bg-metallic-gold/90'
-          }`}
-        >
-          {isInCart ? <Check className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
-          <span>{isInCart ? 'Added' : 'Add'}</span>
-        </button>
       </div>
     </div>
   );
 };
 
 export default InvestmentCard;
-

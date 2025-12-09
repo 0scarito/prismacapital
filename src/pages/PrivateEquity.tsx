@@ -2,86 +2,66 @@ import { useState } from 'react';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import InvestmentCard from '@/components/InvestmentCard';
+import InvestmentDetailDialog from '@/components/InvestmentDetailDialog';
 import { ArrowLeft } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Button } from '@/components/ui/button';
-interface Deal {
-  id: number;
-  name: string;
-  description: string;
-  image?: string;
-}
+import { investments, heroImages, type Investment } from '@/data/investments';
+
 const PrivateEquity = () => {
   const { t } = useLanguage();
-  const [basket, setBasket] = useState<Deal[]>([]);
-  const deals: Deal[] = [{
-    id: 1,
-    name: 'TechCorp SAS',
-    description: 'EBITDA €8.2M · IRR 18% · Dividend 6.2%'
-  }, {
-    id: 2,
-    name: 'MedDevice Ltd',
-    description: 'EBITDA €12.1M · IRR 22% · Dividend 5.8%'
-  }, {
-    id: 3,
-    name: 'GreenEnergy Co',
-    description: 'EBITDA €15.3M · IRR 25% · Dividend 7.1%'
-  }, {
-    id: 4,
-    name: 'LogiFlow Systems',
-    description: 'EBITDA €6.8M · IRR 19% · Dividend 5.5%'
-  }, {
-    id: 5,
-    name: 'DataCrunch Analytics',
-    description: 'EBITDA €22.4M · IRR 28% · Dividend 8.3%'
-  }, {
-    id: 6,
-    name: 'CloudSecure Pro',
-    description: 'EBITDA €9.7M · IRR 21% · Dividend 6.9%'
-  }, {
-    id: 7,
-    name: 'FinTech Innovations',
-    description: 'EBITDA €31.2M · IRR 35% · Dividend 9.4%'
-  }, {
-    id: 8,
-    name: 'AutoTech Solutions',
-    description: 'EBITDA €18.6M · IRR 24% · Dividend 7.7%'
-  }];
-  const metrics = [{
-    label: 'Projected CAGR',
-    value: '23.4%'
-  }, {
-    label: 'Total Invested',
-    value: '€84.3M'
-  }, {
-    label: '2-Year Gains',
-    value: '+47.2%'
-  }];
-  const addToBasket = (deal: Deal) => {
-    setBasket(prev => prev.find(d => d.id === deal.id) ? prev : [...prev, deal]);
+  const [selectedInvestment, setSelectedInvestment] = useState<Investment | null>(null);
+  const [dialogOpen, setDialogOpen] = useState(false);
+
+  const deals = investments.privateEquity;
+
+  const metrics = [
+    { label: 'Average IRR', value: '20.5%' },
+    { label: 'Total AUM', value: '€2.4B' },
+    { label: 'Track Record', value: '15+ Years' }
+  ];
+
+  const handleCardClick = (investment: Investment) => {
+    setSelectedInvestment(investment);
+    setDialogOpen(true);
   };
-  return <div className="min-h-screen bg-background">
+
+  return (
+    <div className="min-h-screen bg-background">
       <Navigation />
 
       <main className="pt-24 pb-16">
-        <section className="bg-gradient-to-r from-primary/10 to-primary/5 py-8 mb-12">
-          <div className="section-container">
+        {/* Hero Section with Background Image */}
+        <section 
+          className="relative py-16 mb-12 overflow-hidden"
+          style={{
+            backgroundImage: `url(${heroImages.privateEquity})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+          }}
+        >
+          <div className="absolute inset-0 bg-gradient-to-r from-background/95 via-background/80 to-background/60" />
+          <div className="section-container relative z-10">
             <Button 
               onClick={() => window.history.back()} 
               variant="outline"
-              className="bg-white text-primary hover:bg-white/90 border-primary/20 mb-6"
+              className="bg-background/80 backdrop-blur border-border mb-6 hover:bg-background"
             >
-              <ArrowLeft className="w-4 h-4" />
+              <ArrowLeft className="w-4 h-4 mr-2" />
               {t('privateEquity.back')}
             </Button>
 
-            <h1 className="text-4xl font-bold mb-8 text-center text-foreground">
+            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-foreground">
               {t('privateEquity.hero.title')}
             </h1>
-            <div className="grid grid-cols-3 gap-8 max-w-4xl mx-auto">
+            <p className="text-lg text-muted-foreground mb-8 max-w-2xl">
+              Institutional-quality private equity investments in established European companies
+            </p>
+            
+            <div className="grid grid-cols-3 gap-8 max-w-3xl">
               {metrics.map((m) => (
-                <div key={m.label} className="text-center">
-                  <div className="text-3xl font-bold text-foreground">{m.value}</div>
+                <div key={m.label} className="bg-background/80 backdrop-blur rounded-lg p-4 text-center">
+                  <div className="text-2xl md:text-3xl font-bold text-primary">{m.value}</div>
                   <div className="text-sm text-muted-foreground mt-1">{m.label}</div>
                 </div>
               ))}
@@ -89,17 +69,37 @@ const PrivateEquity = () => {
           </div>
         </section>
 
+        {/* Investment Cards */}
         <section className="py-12">
           <div className="section-container">
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
-              {deals.map(deal => <InvestmentCard key={deal.id} id={`pe-${deal.id}`} title={deal.name} description={deal.description} type="Private Equity" onAdd={() => addToBasket(deal)} />)}
+            <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+              {deals.map(investment => (
+                <InvestmentCard 
+                  key={investment.id} 
+                  id={investment.id} 
+                  title={investment.name} 
+                  description={investment.shortDescription} 
+                  type={investment.category}
+                  image={investment.image}
+                  expectedReturn={investment.expectedReturn}
+                  riskLevel={investment.riskLevel}
+                  onClick={() => handleCardClick(investment)}
+                />
+              ))}
             </div>
           </div>
         </section>
-
       </main>
 
+      <InvestmentDetailDialog 
+        investment={selectedInvestment}
+        open={dialogOpen}
+        onOpenChange={setDialogOpen}
+      />
+
       <Footer riskCategory="risk.privateEquity" />
-    </div>;
+    </div>
+  );
 };
+
 export default PrivateEquity;

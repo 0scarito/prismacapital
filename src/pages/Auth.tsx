@@ -116,7 +116,7 @@ const Auth = () => {
       >
         Retour
       </Button>
-      <Card className="w-full max-w-md">
+      <Card className="w-full max-w-md bg-card text-card-foreground">
         <CardHeader className="text-center">
           <div className="flex justify-center mb-4">
             <img 
@@ -125,7 +125,7 @@ const Auth = () => {
               className="h-16 w-auto object-contain"
             />
           </div>
-          <CardDescription>
+          <CardDescription className="text-muted-foreground">
             Accédez à votre espace personnel
           </CardDescription>
         </CardHeader>
@@ -139,7 +139,7 @@ const Auth = () => {
             <TabsContent value="signin">
               <form onSubmit={handleSignIn} className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="signin-email">Email</Label>
+                  <Label htmlFor="signin-email" className="text-foreground">Email</Label>
                   <Input
                     id="signin-email"
                     type="email"
@@ -149,7 +149,7 @@ const Auth = () => {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="signin-password">Mot de passe</Label>
+                  <Label htmlFor="signin-password" className="text-foreground">Mot de passe</Label>
                   <Input
                     id="signin-password"
                     type="password"
@@ -166,7 +166,7 @@ const Auth = () => {
             
             <TabsContent value="signup">
               <form onSubmit={handleSignUp} className="space-y-4">
-                <div className="space-y-3">
+                <div className="space-y-3 text-foreground">
                   <Label>{t('auth.roleSelection') || 'Je suis'}</Label>
                   <RadioGroup value={role} onValueChange={(value) => setRole(value as 'client' | 'wealth_manager')}>
                     <div className="flex items-center space-x-2 p-4 border rounded-lg cursor-pointer hover:bg-accent/50 transition-colors">
@@ -193,7 +193,7 @@ const Auth = () => {
                 </div>
                 
                 <div className="space-y-2">
-                  <Label htmlFor="signup-name">Nom d'affichage</Label>
+                  <Label htmlFor="signup-name" className="text-foreground">Nom d'affichage</Label>
                   <Input
                     id="signup-name"
                     type="text"
@@ -203,7 +203,7 @@ const Auth = () => {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="signup-email">Email</Label>
+                  <Label htmlFor="signup-email" className="text-foreground">Email</Label>
                   <Input
                     id="signup-email"
                     type="email"
@@ -213,7 +213,7 @@ const Auth = () => {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="signup-password">Mot de passe</Label>
+                  <Label htmlFor="signup-password" className="text-foreground">Mot de passe</Label>
                   <Input
                     id="signup-password"
                     type="password"

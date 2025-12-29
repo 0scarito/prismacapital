@@ -86,7 +86,7 @@ const RiskWarningSlider = ({ categoryKey }: RiskWarningSliderProps) => {
 
   return (
     <div
-      className="relative bg-red-900/30 rounded-xl p-6 border border-red-700 my-8 text-red-100"
+      className="relative bg-red-950/80 rounded-xl p-6 border border-red-700 my-8 text-red-100"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
     >
@@ -113,29 +113,29 @@ const RiskWarningSlider = ({ categoryKey }: RiskWarningSliderProps) => {
 
       {/* Content */}
       <div className="px-12">
-        <h4 className="font-heading text-lg text-red-200 mb-3 flex items-center justify-center gap-2">
+        <h4 className="font-heading text-lg text-red-100 mb-3 flex items-center justify-center gap-2">
           <span className="mr-2">⚠️</span>
           {t('footer.riskWarning.title')}
         </h4>
         <div className="text-center">
           <div className="md:grid md:grid-cols-3 gap-6 text-left mb-4">
             <div className="md:col-span-1 flex flex-col items-start md:items-center mb-4 md:mb-0">
-              <h5 className="font-semibold text-red-100 mb-2">
+              <h5 className="font-semibold text-white mb-2">
                 {filteredWarnings[currentSlide].category}
               </h5>
-              <span className="font-bold text-sm px-2 py-1 rounded bg-red-500/30 text-red-200">
+              <span className="font-bold text-sm px-2 py-1 rounded bg-red-600/40 text-white">
                 Risk {filteredWarnings[currentSlide].risk}
               </span>
             </div>
-            <div className="md:col-span-2 text-red-100/90 leading-relaxed whitespace-pre-line text-sm">
+            <div className="md:col-span-2 text-white/90 leading-relaxed whitespace-pre-line text-sm">
               {expanded
                 ? t(filteredWarnings[currentSlide].key)
                 : t(filteredWarnings[currentSlide].key).split(/(?<=[.!?])\s+/).slice(0,2).join(' ')}
               {t(filteredWarnings[currentSlide].key).split(/(?<=[.!?])\s+/).length > 2 && (
-                <button
-                  className="ml-2 text-red-200 underline"
-                  onClick={() => setExpanded(prev => !prev)}
-                >
+                  <button
+                    className="ml-2 text-white underline hover:text-red-200"
+                    onClick={() => setExpanded(prev => !prev)}
+                  >
                   {expanded ? 'Read less' : 'Read more'}
                 </button>
               )}

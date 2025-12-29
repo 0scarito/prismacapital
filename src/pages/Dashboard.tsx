@@ -98,15 +98,47 @@ const Dashboard = () => {
   }, [searchParams, user]);
 
   const handlePaymentSuccess = async () => {
+    const sessionId = searchParams.get('session_id');
+    if (!sessionId) {
+      setSearchParams({});
+      return;
+    }
+
     setProcessingPayment(true);
     
-    // Wait a moment for webhook to process
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    toast({
-      title: t('dashboard.paymentSuccess') || "Payment successful!",
-      description: t('dashboard.paymentSuccessDesc') || "Your investment has been added to your portfolio.",
-    });
+    try {
+      // Call verify-payment to ensure purchase and coupon are created
+      const { data, error } = await supabase.functions.invoke('verify-payment', {
+        body: { sessionId }
+      });
+
+      if (error) {
+        console.error('Payment verification error:', error);
+        toast({
+          title: "Error",
+          description: "Failed to verify payment. Please contact support.",
+          variant: "destructive",
+        });
+      } else if (data?.success) {
+        toast({
+          title: t('dashboard.paymentSuccess') || "Payment successful!",
+          description: t('dashboard.paymentSuccessDesc') || "Your investment has been added to your portfolio.",
+        });
+      } else {
+        console.log('Payment not yet complete:', data);
+        toast({
+          title: "Payment pending",
+          description: "Your payment is being processed. Please wait.",
+        });
+      }
+    } catch (err) {
+      console.error('Error calling verify-payment:', err);
+      toast({
+        title: "Error",
+        description: "Failed to verify payment. Please contact support.",
+        variant: "destructive",
+      });
+    }
 
     // Clear payment params from URL
     setSearchParams({});

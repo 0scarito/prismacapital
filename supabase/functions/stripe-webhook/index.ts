@@ -2,14 +2,21 @@ import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import Stripe from "https://esm.sh/stripe@18.5.0";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.2";
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, stripe-signature",
-};
+// No CORS headers - this is a server-to-server webhook only
+// Stripe webhooks should never be called from a browser
 
 serve(async (req) => {
+  // Reject CORS preflight - webhooks don't need browser access
   if (req.method === "OPTIONS") {
-    return new Response(null, { headers: corsHeaders });
+    return new Response(null, { status: 405 }); // Method Not Allowed
+  }
+
+  // Only accept POST requests
+  if (req.method !== "POST") {
+    return new Response(JSON.stringify({ error: "Method not allowed" }), {
+      status: 405,
+      headers: { "Content-Type": "application/json" },
+    });
   }
 
   const supabaseClient = createClient(
@@ -20,7 +27,11 @@ serve(async (req) => {
   try {
     const signature = req.headers.get("stripe-signature");
     if (!signature) {
-      throw new Error("No signature provided");
+      console.error("No Stripe signature provided");
+      return new Response(JSON.stringify({ error: "No signature provided" }), {
+        status: 400,
+        headers: { "Content-Type": "application/json" },
+      });
     }
 
     const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", {
@@ -31,10 +42,14 @@ serve(async (req) => {
     const webhookSecret = Deno.env.get("STRIPE_WEBHOOK_SECRET");
     
     if (!webhookSecret) {
-      throw new Error("Webhook secret not configured");
+      console.error("Webhook secret not configured");
+      return new Response(JSON.stringify({ error: "Webhook configuration error" }), {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+      });
     }
 
-    // Verify webhook signature
+    // Verify webhook signature - this is the security boundary
     const event = stripe.webhooks.constructEvent(body, signature, webhookSecret);
     
     console.log("Webhook event received:", event.type);
@@ -169,14 +184,14 @@ serve(async (req) => {
     }
 
     return new Response(JSON.stringify({ received: true }), {
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json" },
       status: 200,
     });
   } catch (error) {
     console.error("Webhook error:", error);
     const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
     return new Response(JSON.stringify({ error: errorMessage }), {
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json" },
       status: 400,
     });
   }

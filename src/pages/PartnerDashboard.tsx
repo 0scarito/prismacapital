@@ -7,7 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-import { LogOut, Package, TrendingUp, Users, Euro, Loader2, Building2, Plus, Eye } from 'lucide-react';
+import { LogOut, Package, TrendingUp, Users, Euro, Loader2, Building2, Plus, Eye, Send } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import prismaLogo from '@/assets/prisma-logo.png';
 import {
@@ -23,6 +23,7 @@ import { Json } from '@/integrations/supabase/types';
 import { getOrganizationStatusVariant } from '@/lib/badgeStyles';
 import { CreateMandateDialog } from '@/components/CreateMandateDialog';
 import { MandateDetailDialog } from '@/components/MandateDetailDialog';
+import { DistributeCouponsDialog } from '@/components/DistributeCouponsDialog';
 
 interface PartnerOrganization {
   id: string;
@@ -84,6 +85,7 @@ const PartnerDashboard = () => {
   const [couponStats, setCouponStats] = useState<CouponStats>(INITIAL_COUPON_STATS);
   const [loadingData, setLoadingData] = useState(true);
   const [showCreateMandate, setShowCreateMandate] = useState(false);
+  const [showDistributeCoupons, setShowDistributeCoupons] = useState(false);
   const [selectedMandate, setSelectedMandate] = useState<Mandate | null>(null);
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -334,15 +336,18 @@ const PartnerDashboard = () => {
             </CardContent>
           </Card>
 
-          <Card>
+          <Card 
+            className="cursor-pointer hover:bg-muted/50 transition-colors"
+            onClick={() => setShowDistributeCoupons(true)}
+          >
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">In Stock</CardTitle>
-              <Package className="h-4 w-4 text-blue-500" />
+              <Send className="h-4 w-4 text-blue-500" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{couponStats.in_stock}</div>
               <p className="text-xs text-muted-foreground mt-1">
-                Available to distribute
+                Click to distribute
               </p>
             </CardContent>
           </Card>
@@ -545,7 +550,18 @@ const PartnerDashboard = () => {
           onOpenChange={(open) => !open && setSelectedMandate(null)}
           mandate={selectedMandate}
           onMandateUpdated={fetchPartnerData}
+          organizationName={organization?.name || ''}
+          organizationEmail={organization?.contact_email || ''}
         />
+
+        {organization && (
+          <DistributeCouponsDialog
+            open={showDistributeCoupons}
+            onOpenChange={setShowDistributeCoupons}
+            partnerId={organization.id}
+            onDistributed={fetchPartnerData}
+          />
+        )}
       </div>
     </div>
   );

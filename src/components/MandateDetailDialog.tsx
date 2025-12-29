@@ -85,13 +85,17 @@ interface MandateDetailDialogProps {
   onOpenChange: (open: boolean) => void;
   mandate: Mandate | null;
   onMandateUpdated: () => void;
+  organizationName: string;
+  organizationEmail: string;
 }
 
 export function MandateDetailDialog({ 
   open, 
   onOpenChange, 
   mandate,
-  onMandateUpdated 
+  onMandateUpdated,
+  organizationName,
+  organizationEmail,
 }: MandateDetailDialogProps) {
   const [isUpdating, setIsUpdating] = useState(false);
   const [cancellationReason, setCancellationReason] = useState('');
@@ -109,6 +113,32 @@ export function MandateDetailDialog({
     }
   };
 
+  const sendNotification = async (type: 'activated' | 'cancelled' | 'created', reason?: string) => {
+    try {
+      const { error } = await supabase.functions.invoke('send-mandate-notification', {
+        body: {
+          type,
+          mandateId: mandate.id,
+          mandateName: mandate.name || 'Unnamed Mandate',
+          contractReference: mandate.contract_reference || 'N/A',
+          organizationName,
+          recipientEmail: organizationEmail,
+          totalValue: mandate.total_value,
+          couponCount: mandate.coupon_count,
+          cancellationReason: reason,
+        },
+      });
+      
+      if (error) {
+        console.error('Failed to send notification:', error);
+      } else {
+        console.log(`${type} notification sent successfully`);
+      }
+    } catch (err) {
+      console.error('Error sending notification:', err);
+    }
+  };
+
   const handleActivate = async () => {
     setIsUpdating(true);
     try {
@@ -121,6 +151,9 @@ export function MandateDetailDialog({
         .eq('id', mandate.id);
 
       if (error) throw error;
+
+      // Send email notification (don't await to not block UI)
+      sendNotification('activated');
 
       toast({
         title: 'Mandate Activated',
@@ -162,6 +195,9 @@ export function MandateDetailDialog({
         .eq('id', mandate.id);
 
       if (error) throw error;
+
+      // Send email notification (don't await to not block UI)
+      sendNotification('cancelled', cancellationReason);
 
       toast({
         title: 'Mandate Cancelled',

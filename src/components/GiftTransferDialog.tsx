@@ -8,6 +8,13 @@ import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Gift } from 'lucide-react';
+import { z } from 'zod';
+
+// Email validation schema
+const giftSchema = z.object({
+  email: z.string().email('Invalid email format').max(255, 'Email too long'),
+  message: z.string().max(500, 'Message too long').optional(),
+});
 
 interface GiftTransferDialogProps {
   open: boolean;
@@ -24,10 +31,14 @@ const GiftTransferDialog = ({ open, onOpenChange, purchaseId, investmentName }: 
   const { t } = useLanguage();
 
   const handleSendGift = async () => {
-    if (!email || !email.includes('@')) {
+    // Validate input with zod schema
+    const validationResult = giftSchema.safeParse({ email, message: message || undefined });
+    
+    if (!validationResult.success) {
+      const errorMessage = validationResult.error.errors[0]?.message || 'Invalid input';
       toast({
-        title: 'Error',
-        description: 'Please enter a valid email address',
+        title: 'Validation Error',
+        description: errorMessage,
         variant: 'destructive',
       });
       return;
@@ -42,11 +53,37 @@ const GiftTransferDialog = ({ open, onOpenChange, purchaseId, investmentName }: 
         throw new Error('Not authenticated');
       }
 
+      // Validate recipient exists using edge function
+      const { data: recipientData, error: recipientError } = await supabase.functions.invoke('validate-gift-recipient', {
+        body: { email: validationResult.data.email }
+      });
+
+      if (recipientError) {
+        console.error('Recipient validation error:', recipientError);
+        toast({
+          title: 'Validation Error',
+          description: 'Unable to validate recipient. Please try again.',
+          variant: 'destructive',
+        });
+        setLoading(false);
+        return;
+      }
+
+      if (!recipientData?.exists) {
+        toast({
+          title: 'Invalid Recipient',
+          description: 'The recipient must have a registered Prisma Capital account.',
+          variant: 'destructive',
+        });
+        setLoading(false);
+        return;
+      }
+
       const { error } = await supabase.from('gift_transfers').insert({
         from_user_id: user.id,
-        to_email: email,
+        to_email: validationResult.data.email,
         purchase_id: purchaseId,
-        message: message || null,
+        message: validationResult.data.message || null,
         status: 'pending',
       });
 
@@ -61,6 +98,7 @@ const GiftTransferDialog = ({ open, onOpenChange, purchaseId, investmentName }: 
       setMessage('');
       onOpenChange(false);
     } catch (error) {
+      console.error('Gift transfer error:', error);
       toast({
         title: 'Error',
         description: 'Failed to send gift. Please try again.',

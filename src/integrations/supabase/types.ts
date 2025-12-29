@@ -516,6 +516,10 @@ export type Database = {
         Args: { user_email: string }
         Returns: boolean
       }
+      create_partner_organization_for_wealth_manager: {
+        Args: { org_email: string; org_name: string }
+        Returns: string
+      }
       get_user_role: {
         Args: { _user_id: string }
         Returns: Database["public"]["Enums"]["app_role"]

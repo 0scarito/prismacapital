@@ -2,6 +2,11 @@ import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import { ArrowRight, CheckCircle, Gift, Smartphone, TrendingUp, Wallet } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
+import stepSelectImg from '@/assets/how-it-works/step-select.jpg';
+import stepPersonalizeImg from '@/assets/how-it-works/step-personalize.jpg';
+import stepActivateImg from '@/assets/how-it-works/step-activate.jpg';
+import stepEarnImg from '@/assets/how-it-works/step-earn.jpg';
+import stepCashoutImg from '@/assets/how-it-works/step-cashout.jpg';
 
 const HowItWorks = () => {
   const { t } = useLanguage();
@@ -12,6 +17,7 @@ const HowItWorks = () => {
       title: t('howItWorks.steps.0.title'),
       description: t('howItWorks.steps.0.description'),
       icon: <CheckCircle className="w-8 h-8 text-metallic-gold" />,
+      image: stepSelectImg,
       features: [
         t('howItWorks.steps.0.features.0'),
         t('howItWorks.steps.0.features.1'),
@@ -23,6 +29,7 @@ const HowItWorks = () => {
       title: t('howItWorks.steps.1.title'),
       description: t('howItWorks.steps.1.description'),
       icon: <Gift className="w-8 h-8 text-metallic-gold" />,
+      image: stepPersonalizeImg,
       features: [
         t('howItWorks.steps.1.features.0'),
         t('howItWorks.steps.1.features.1'),
@@ -34,6 +41,7 @@ const HowItWorks = () => {
       title: t('howItWorks.steps.2.title'),
       description: t('howItWorks.steps.2.description'),
       icon: <Smartphone className="w-8 h-8 text-metallic-gold" />,
+      image: stepActivateImg,
       features: [
         t('howItWorks.steps.2.features.0'),
         t('howItWorks.steps.2.features.1'),
@@ -45,6 +53,7 @@ const HowItWorks = () => {
       title: t('howItWorks.steps.3.title'),
       description: t('howItWorks.steps.3.description'),
       icon: <TrendingUp className="w-8 h-8 text-metallic-gold" />,
+      image: stepEarnImg,
       features: [
         t('howItWorks.steps.3.features.0'),
         t('howItWorks.steps.3.features.1'),
@@ -56,6 +65,7 @@ const HowItWorks = () => {
       title: t('howItWorks.steps.4.title'),
       description: t('howItWorks.steps.4.description'),
       icon: <Wallet className="w-8 h-8 text-metallic-gold" />,
+      image: stepCashoutImg,
       features: [
         t('howItWorks.steps.4.features.0'),
         t('howItWorks.steps.4.features.1'),
@@ -174,12 +184,14 @@ const HowItWorks = () => {
                       ))}
                     </ul>
                   </div>
-                  <div className={`bg-gradient-subtle rounded-2xl p-8 ${
+                  <div className={`bg-gradient-subtle rounded-2xl p-4 ${
                     index % 2 === 1 ? 'lg:col-start-1' : ''
                   }`}>
-                    <div className="aspect-video bg-deep-navy/5 rounded-xl flex items-center justify-center">
-                      <TrendingUp className="w-16 h-16 text-metallic-gold" />
-                    </div>
+                    <img 
+                      src={step.image} 
+                      alt={step.title}
+                      className="w-full h-auto rounded-xl shadow-lg"
+                    />
                   </div>
                 </div>
               ))}

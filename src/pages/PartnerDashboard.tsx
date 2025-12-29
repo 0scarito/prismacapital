@@ -108,20 +108,18 @@ const PartnerDashboard = () => {
 
       if (profileError) throw profileError;
 
-      // If wealth manager but no organization, create one
+      // If wealth manager but no organization, create one using secure function
       if (!profile?.partner_id) {
         console.log('Creating new partner organization for user:', user?.id);
         
-        const { data: newOrg, error: orgCreateError } = await supabase
-          .from('partner_organizations')
-          .insert({
-            name: profile?.display_name || user?.email?.split('@')[0] || 'Partner Organization',
-            type: 'wealth_manager',
-            contact_email: user?.email || '',
-            status: 'active'
-          })
-          .select()
-          .single();
+        const orgName = profile?.display_name || user?.email?.split('@')[0] || 'Partner Organization';
+        const orgEmail = user?.email || '';
+        
+        const { data: newOrgId, error: orgCreateError } = await supabase
+          .rpc('create_partner_organization_for_wealth_manager', {
+            org_name: orgName,
+            org_email: orgEmail
+          });
 
         if (orgCreateError) {
           console.error('Organization creation error:', orgCreateError);
@@ -134,26 +132,25 @@ const PartnerDashboard = () => {
           return;
         }
 
-        // Update profile with new partner_id only (is_partner_user should already be set)
-        const { error: profileUpdateError } = await supabase
-          .from('profiles')
-          .update({
-            partner_id: newOrg.id
-          })
-          .eq('id', user?.id);
+        // Fetch the newly created organization
+        const { data: newOrg, error: fetchOrgError } = await supabase
+          .from('partner_organizations')
+          .select('*')
+          .eq('id', newOrgId)
+          .single();
 
-        if (profileUpdateError) {
-          console.error('Profile update error:', profileUpdateError);
-          // Organization was created but profile update failed
-          // This is not critical - they can try again
+        if (fetchOrgError || !newOrg) {
+          console.error('Error fetching new organization:', fetchOrgError);
           toast({
-            title: "Partial Setup",
-            description: "Organization created but profile link failed. Please refresh the page.",
+            title: "Setup Error",
+            description: "Organization created but could not be loaded. Please refresh the page.",
             variant: 'destructive'
           });
+          setLoadingData(false);
+          return;
         }
 
-        console.log('Partner organization created successfully:', newOrg.id);
+        console.log('Partner organization created successfully:', newOrgId);
         setOrganization(newOrg);
         setMandates([]);
         setCouponStats(INITIAL_COUPON_STATS);

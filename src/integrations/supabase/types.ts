@@ -195,38 +195,80 @@ export type Database = {
       }
       partner_mandates: {
         Row: {
+          activated_at: string | null
+          cancellation_reason: string | null
+          cancelled_at: string | null
+          contract_reference: string | null
           coupon_count: number
           created_at: string
+          description: string | null
+          end_date: string | null
           expires_at: string | null
           id: string
+          investment_objectives: string | null
+          name: string | null
+          notes: string | null
           partner_id: string
           pricing_tier: string
           product_mix: Json | null
+          regulatory_compliance_confirmed: boolean | null
+          risk_disclosure_accepted: boolean | null
+          risk_tolerance: string | null
+          start_date: string | null
           status: string
+          terms_accepted_at: string | null
           total_value: number
           updated_at: string
         }
         Insert: {
+          activated_at?: string | null
+          cancellation_reason?: string | null
+          cancelled_at?: string | null
+          contract_reference?: string | null
           coupon_count: number
           created_at?: string
+          description?: string | null
+          end_date?: string | null
           expires_at?: string | null
           id?: string
+          investment_objectives?: string | null
+          name?: string | null
+          notes?: string | null
           partner_id: string
           pricing_tier?: string
           product_mix?: Json | null
+          regulatory_compliance_confirmed?: boolean | null
+          risk_disclosure_accepted?: boolean | null
+          risk_tolerance?: string | null
+          start_date?: string | null
           status?: string
+          terms_accepted_at?: string | null
           total_value: number
           updated_at?: string
         }
         Update: {
+          activated_at?: string | null
+          cancellation_reason?: string | null
+          cancelled_at?: string | null
+          contract_reference?: string | null
           coupon_count?: number
           created_at?: string
+          description?: string | null
+          end_date?: string | null
           expires_at?: string | null
           id?: string
+          investment_objectives?: string | null
+          name?: string | null
+          notes?: string | null
           partner_id?: string
           pricing_tier?: string
           product_mix?: Json | null
+          regulatory_compliance_confirmed?: boolean | null
+          risk_disclosure_accepted?: boolean | null
+          risk_tolerance?: string | null
+          start_date?: string | null
           status?: string
+          terms_accepted_at?: string | null
           total_value?: number
           updated_at?: string
         }
@@ -520,6 +562,7 @@ export type Database = {
         Args: { org_email: string; org_name: string }
         Returns: string
       }
+      generate_contract_reference: { Args: never; Returns: string }
       get_user_role: {
         Args: { _user_id: string }
         Returns: Database["public"]["Enums"]["app_role"]

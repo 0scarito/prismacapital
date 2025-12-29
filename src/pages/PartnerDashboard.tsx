@@ -7,7 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-import { LogOut, Package, TrendingUp, Users, Euro, Loader2, Building2 } from 'lucide-react';
+import { LogOut, Package, TrendingUp, Users, Euro, Loader2, Building2, Plus, Eye } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import prismaLogo from '@/assets/prisma-logo.png';
 import {
@@ -21,6 +21,8 @@ import {
 
 import { Json } from '@/integrations/supabase/types';
 import { getOrganizationStatusVariant } from '@/lib/badgeStyles';
+import { CreateMandateDialog } from '@/components/CreateMandateDialog';
+import { MandateDetailDialog } from '@/components/MandateDetailDialog';
 
 interface PartnerOrganization {
   id: string;
@@ -33,12 +35,26 @@ interface PartnerOrganization {
 
 interface Mandate {
   id: string;
+  name: string | null;
+  description: string | null;
+  contract_reference: string | null;
   coupon_count: number;
   total_value: number;
   status: string;
   pricing_tier: string;
+  risk_tolerance: string | null;
+  investment_objectives: string | null;
+  notes: string | null;
   created_at: string;
+  start_date: string | null;
+  end_date: string | null;
   expires_at: string | null;
+  activated_at: string | null;
+  cancelled_at: string | null;
+  cancellation_reason: string | null;
+  terms_accepted_at: string | null;
+  risk_disclosure_accepted: boolean | null;
+  regulatory_compliance_confirmed: boolean | null;
   product_mix: Json | null;
 }
 
@@ -67,6 +83,8 @@ const PartnerDashboard = () => {
   const [mandates, setMandates] = useState<Mandate[]>([]);
   const [couponStats, setCouponStats] = useState<CouponStats>(INITIAL_COUPON_STATS);
   const [loadingData, setLoadingData] = useState(true);
+  const [showCreateMandate, setShowCreateMandate] = useState(false);
+  const [selectedMandate, setSelectedMandate] = useState<Mandate | null>(null);
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -365,50 +383,64 @@ const PartnerDashboard = () => {
 
           <TabsContent value="mandates" className="space-y-6">
             <Card>
-              <CardHeader>
-                <CardTitle>Your Mandates</CardTitle>
-                <CardDescription>
-                  Overview of all coupon mandates purchased
-                </CardDescription>
+              <CardHeader className="flex flex-row items-center justify-between">
+                <div>
+                  <CardTitle>Your Mandates</CardTitle>
+                  <CardDescription>
+                    Overview of all coupon mandates
+                  </CardDescription>
+                </div>
+                <Button onClick={() => setShowCreateMandate(true)}>
+                  <Plus className="h-4 w-4 mr-2" />
+                  New Mandate
+                </Button>
               </CardHeader>
               <CardContent>
                 {mandates.length === 0 ? (
                   <div className="text-center py-8 text-muted-foreground">
-                    No mandates found. Contact Prisma Capital to set up your first mandate.
+                    <p>No mandates found.</p>
+                    <Button variant="link" onClick={() => setShowCreateMandate(true)}>
+                      Create your first mandate
+                    </Button>
                   </div>
                 ) : (
                   <Table>
                     <TableHeader>
                       <TableRow>
+                        <TableHead>Name</TableHead>
                         <TableHead>Status</TableHead>
-                        <TableHead>Coupon Count</TableHead>
+                        <TableHead>Coupons</TableHead>
                         <TableHead>Total Value</TableHead>
-                        <TableHead>Pricing Tier</TableHead>
+                        <TableHead>Tier</TableHead>
                         <TableHead>Created</TableHead>
-                        <TableHead>Expires</TableHead>
+                        <TableHead></TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
                       {mandates.map((mandate) => (
                         <TableRow key={mandate.id}>
-                          <TableCell>
-                          <Badge className={getOrganizationStatusVariant(mandate.status)}>
-                            {mandate.status}
-                          </Badge>
-                          </TableCell>
                           <TableCell className="font-medium">
-                            {mandate.coupon_count}
+                            {mandate.name || 'Unnamed Mandate'}
                           </TableCell>
-                          <TableCell>€{mandate.total_value.toFixed(2)}</TableCell>
+                          <TableCell>
+                            <Badge className={getOrganizationStatusVariant(mandate.status)}>
+                              {mandate.status}
+                            </Badge>
+                          </TableCell>
+                          <TableCell>{mandate.coupon_count}</TableCell>
+                          <TableCell>€{mandate.total_value.toLocaleString()}</TableCell>
                           <TableCell className="capitalize">{mandate.pricing_tier}</TableCell>
                           <TableCell>
                             {new Date(mandate.created_at).toLocaleDateString()}
                           </TableCell>
                           <TableCell>
-                            {mandate.expires_at 
-                              ? new Date(mandate.expires_at).toLocaleDateString()
-                              : 'No expiry'
-                            }
+                            <Button 
+                              variant="ghost" 
+                              size="sm"
+                              onClick={() => setSelectedMandate(mandate)}
+                            >
+                              <Eye className="h-4 w-4" />
+                            </Button>
                           </TableCell>
                         </TableRow>
                       ))}
@@ -497,6 +529,23 @@ const PartnerDashboard = () => {
             </div>
           </TabsContent>
         </Tabs>
+
+        {/* Dialogs */}
+        {organization && (
+          <CreateMandateDialog
+            open={showCreateMandate}
+            onOpenChange={setShowCreateMandate}
+            partnerId={organization.id}
+            onMandateCreated={fetchPartnerData}
+          />
+        )}
+
+        <MandateDetailDialog
+          open={!!selectedMandate}
+          onOpenChange={(open) => !open && setSelectedMandate(null)}
+          mandate={selectedMandate}
+          onMandateUpdated={fetchPartnerData}
+        />
       </div>
     </div>
   );

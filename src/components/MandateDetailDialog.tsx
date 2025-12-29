@@ -44,6 +44,8 @@ import {
 import { Textarea } from '@/components/ui/textarea';
 import { getOrganizationStatusVariant } from '@/lib/badgeStyles';
 
+import { Json } from '@/integrations/supabase/types';
+
 interface ProductMix {
   real_estate?: number;
   private_equity?: number;
@@ -75,7 +77,7 @@ interface Mandate {
   terms_accepted_at: string | null;
   risk_disclosure_accepted: boolean | null;
   regulatory_compliance_confirmed: boolean | null;
-  product_mix: ProductMix | null;
+  product_mix: Json | null;
 }
 
 interface MandateDetailDialogProps {
@@ -180,8 +182,8 @@ export function MandateDetailDialog({
     }
   };
 
-  const productMix = mandate.product_mix || {};
-  const productMixEntries = Object.entries(productMix).filter(([_, value]) => value && value > 0);
+  const productMix = (mandate.product_mix as ProductMix) || {};
+  const productMixEntries = Object.entries(productMix).filter(([_, value]) => typeof value === 'number' && value > 0);
 
   const formatDate = (dateString: string | null) => {
     if (!dateString) return 'N/A';

@@ -1,15 +1,41 @@
+import { useEffect, useRef, useState } from 'react';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import { ArrowRight, CheckCircle, Gift, Smartphone, TrendingUp, Wallet } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
-import stepSelectImg from '@/assets/how-it-works/step-select.jpg';
-import stepPersonalizeImg from '@/assets/how-it-works/step-personalize.jpg';
-import stepActivateImg from '@/assets/how-it-works/step-activate.jpg';
+import stepSelectImg from '@/assets/how-it-works/step-select.png';
+import stepPersonalizeImg from '@/assets/how-it-works/step-personalize.png';
+import stepActivateImg from '@/assets/how-it-works/step-activate.png';
 import stepEarnImg from '@/assets/how-it-works/step-earn.jpg';
 import stepCashoutImg from '@/assets/how-it-works/step-cashout.jpg';
 
 const HowItWorks = () => {
   const { t } = useLanguage();
+  const [visibleSteps, setVisibleSteps] = useState<Set<number>>(new Set());
+  const stepRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const index = parseInt(entry.target.getAttribute('data-index') || '0');
+          if (entry.isIntersecting) {
+            setVisibleSteps((prev) => new Set([...prev, index]));
+          }
+        });
+      },
+      {
+        threshold: 0.2,
+        rootMargin: '0px 0px -50px 0px'
+      }
+    );
+
+    stepRefs.current.forEach((ref) => {
+      if (ref) observer.observe(ref);
+    });
+
+    return () => observer.disconnect();
+  }, []);
 
   const steps = [
     {
@@ -106,7 +132,7 @@ const HowItWorks = () => {
             </div>
 
             <div className="grid md:grid-cols-3 gap-8">
-              <div className="bg-gradient-subtle rounded-2xl p-8 border border-border/20">
+              <div className="bg-gradient-subtle rounded-2xl p-8 border border-border/20 transition-all duration-500 hover:shadow-lg hover:-translate-y-1">
                 <div className="w-16 h-16 rounded-full bg-primary/10 border-2 border-primary flex items-center justify-center mb-6 mx-auto">
                   <span className="font-sans font-bold text-2xl text-primary">1</span>
                 </div>
@@ -118,7 +144,7 @@ const HowItWorks = () => {
                 </p>
               </div>
 
-              <div className="bg-gradient-subtle rounded-2xl p-8 border border-border/20">
+              <div className="bg-gradient-subtle rounded-2xl p-8 border border-border/20 transition-all duration-500 hover:shadow-lg hover:-translate-y-1">
                 <div className="w-16 h-16 rounded-full bg-primary/10 border-2 border-primary flex items-center justify-center mb-6 mx-auto">
                   <span className="font-sans font-bold text-2xl text-primary">2</span>
                 </div>
@@ -130,7 +156,7 @@ const HowItWorks = () => {
                 </p>
               </div>
 
-              <div className="bg-gradient-subtle rounded-2xl p-8 border border-border/20">
+              <div className="bg-gradient-subtle rounded-2xl p-8 border border-border/20 transition-all duration-500 hover:shadow-lg hover:-translate-y-1">
                 <div className="w-16 h-16 rounded-full bg-primary/10 border-2 border-primary flex items-center justify-center mb-6 mx-auto">
                   <span className="font-sans font-bold text-2xl text-primary">3</span>
                 </div>
@@ -146,7 +172,7 @@ const HowItWorks = () => {
         </section>
 
         {/* Client Steps Section */}
-        <section className="py-20 bg-warm-white">
+        <section className="py-20 bg-warm-white overflow-hidden">
           <div className="section-container">
             <div className="text-center mb-16">
               <h2 className="font-serif font-bold text-4xl lg:text-5xl text-deep-navy mb-6">
@@ -157,12 +183,26 @@ const HowItWorks = () => {
               </p>
             </div>
 
-            <div className="space-y-20">
+            <div className="space-y-24">
               {steps.map((step, index) => (
-                <div key={step.number} className={`grid lg:grid-cols-2 gap-12 items-center ${
-                  index % 2 === 1 ? 'lg:grid-flow-col-dense' : ''
-                }`}>
-                  <div className={index % 2 === 1 ? 'lg:col-start-2' : ''}>
+                <div 
+                  key={step.number} 
+                  ref={(el) => (stepRefs.current[index] = el)}
+                  data-index={index}
+                  className={`grid lg:grid-cols-2 gap-12 items-center transition-all duration-700 ${
+                    index % 2 === 1 ? 'lg:grid-flow-col-dense' : ''
+                  } ${
+                    visibleSteps.has(index) 
+                      ? 'opacity-100 translate-y-0' 
+                      : 'opacity-0 translate-y-16'
+                  }`}
+                  style={{ transitionDelay: `${index * 100}ms` }}
+                >
+                  <div className={`${index % 2 === 1 ? 'lg:col-start-2' : ''} transition-all duration-700 delay-200 ${
+                    visibleSteps.has(index) 
+                      ? 'opacity-100 translate-x-0' 
+                      : index % 2 === 1 ? 'opacity-0 translate-x-12' : 'opacity-0 -translate-x-12'
+                  }`}>
                     <div className="flex items-center gap-4 mb-6">
                       <span className="text-6xl font-serif font-bold text-metallic-gold/20">
                         {step.number}
@@ -177,15 +217,27 @@ const HowItWorks = () => {
                     </p>
                     <ul className="space-y-3">
                       {step.features.map((feature, i) => (
-                        <li key={i} className="flex items-center gap-3 font-sans text-deep-navy">
-                          <CheckCircle className="w-5 h-5 text-metallic-gold" />
+                        <li 
+                          key={i} 
+                          className={`flex items-center gap-3 font-sans text-deep-navy transition-all duration-500 ${
+                            visibleSteps.has(index) 
+                              ? 'opacity-100 translate-x-0' 
+                              : 'opacity-0 -translate-x-4'
+                          }`}
+                          style={{ transitionDelay: `${400 + i * 100}ms` }}
+                        >
+                          <CheckCircle className="w-5 h-5 text-metallic-gold flex-shrink-0" />
                           {feature}
                         </li>
                       ))}
                     </ul>
                   </div>
-                  <div className={`bg-gradient-subtle rounded-2xl p-4 ${
+                  <div className={`bg-gradient-subtle rounded-2xl p-4 shadow-lg transition-all duration-700 delay-300 ${
                     index % 2 === 1 ? 'lg:col-start-1' : ''
+                  } ${
+                    visibleSteps.has(index) 
+                      ? 'opacity-100 translate-x-0 scale-100' 
+                      : index % 2 === 1 ? 'opacity-0 -translate-x-12 scale-95' : 'opacity-0 translate-x-12 scale-95'
                   }`}>
                     <img 
                       src={step.image} 

@@ -228,7 +228,7 @@ export function MandateDetailDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-3xl max-h-[90vh]">
+      <DialogContent className="max-w-3xl max-h-[90vh] bg-background text-foreground">
         <DialogHeader>
           <div className="flex items-center justify-between">
             <div>
@@ -266,42 +266,42 @@ export function MandateDetailDialog({
             <TabsContent value="overview" className="space-y-6">
               {/* Key Metrics */}
               <div className="grid grid-cols-3 gap-4">
-                <div className="bg-muted/50 rounded-lg p-4 text-center">
+                <div className="bg-muted rounded-lg p-4 text-center">
                   <Euro className="h-5 w-5 mx-auto mb-2 text-primary" />
-                  <div className="text-2xl font-bold">€{mandate.total_value.toLocaleString()}</div>
+                  <div className="text-2xl font-bold text-foreground">€{mandate.total_value.toLocaleString()}</div>
                   <div className="text-xs text-muted-foreground">Total Value</div>
                 </div>
-                <div className="bg-muted/50 rounded-lg p-4 text-center">
+                <div className="bg-muted rounded-lg p-4 text-center">
                   <Package className="h-5 w-5 mx-auto mb-2 text-blue-500" />
-                  <div className="text-2xl font-bold">{mandate.coupon_count}</div>
+                  <div className="text-2xl font-bold text-foreground">{mandate.coupon_count}</div>
                   <div className="text-xs text-muted-foreground">Coupons</div>
                 </div>
-                <div className="bg-muted/50 rounded-lg p-4 text-center">
+                <div className="bg-muted rounded-lg p-4 text-center">
                   <Calendar className="h-5 w-5 mx-auto mb-2 text-green-500" />
-                  <div className="text-lg font-bold">{mandate.pricing_tier}</div>
+                  <div className="text-lg font-bold text-foreground">{mandate.pricing_tier}</div>
                   <div className="text-xs text-muted-foreground">Pricing Tier</div>
                 </div>
               </div>
 
               {/* Description */}
               {mandate.description && (
-                <div>
+                <div className="text-foreground">
                   <h4 className="font-medium mb-2">Description</h4>
                   <p className="text-sm text-muted-foreground">{mandate.description}</p>
                 </div>
               )}
 
               {/* Investment Details */}
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 gap-4 text-foreground">
                 <div>
-                  <h4 className="font-medium mb-2">Risk Tolerance</h4>
+                  <h4 className="font-medium mb-2 text-foreground">Risk Tolerance</h4>
                   <Badge variant="outline" className="capitalize">
                     {mandate.risk_tolerance || 'moderate'}
                   </Badge>
                 </div>
                 <div>
-                  <h4 className="font-medium mb-2">Avg. Coupon Value</h4>
-                  <span className="text-lg font-semibold">
+                  <h4 className="font-medium mb-2 text-foreground">Avg. Coupon Value</h4>
+                  <span className="text-lg font-semibold text-foreground">
                     €{(mandate.total_value / mandate.coupon_count).toFixed(2)}
                   </span>
                 </div>
@@ -309,9 +309,9 @@ export function MandateDetailDialog({
 
               {/* Investment Objectives */}
               {mandate.investment_objectives && (
-                <div>
-                  <h4 className="font-medium mb-2">Investment Objectives</h4>
-                  <p className="text-sm text-muted-foreground bg-muted/50 p-3 rounded-lg">
+                <div className="text-foreground">
+                  <h4 className="font-medium mb-2 text-foreground">Investment Objectives</h4>
+                  <p className="text-sm text-muted-foreground bg-muted p-3 rounded-lg">
                     {mandate.investment_objectives}
                   </p>
                 </div>
@@ -319,23 +319,23 @@ export function MandateDetailDialog({
 
               {/* Notes */}
               {mandate.notes && (
-                <div>
-                  <h4 className="font-medium mb-2">Internal Notes</h4>
-                  <p className="text-sm text-muted-foreground bg-muted/50 p-3 rounded-lg">
+                <div className="text-foreground">
+                  <h4 className="font-medium mb-2 text-foreground">Internal Notes</h4>
+                  <p className="text-sm text-muted-foreground bg-muted p-3 rounded-lg">
                     {mandate.notes}
                   </p>
                 </div>
               )}
             </TabsContent>
 
-            <TabsContent value="products" className="space-y-6">
-              <div>
+            <TabsContent value="products" className="space-y-6 text-foreground">
+              <div className="text-foreground">
                 <h4 className="font-medium mb-4">Product Mix Allocation</h4>
                 {productMixEntries.length > 0 ? (
                   <div className="space-y-4">
                     {productMixEntries.map(([key, value]) => (
                       <div key={key} className="space-y-2">
-                        <div className="flex justify-between text-sm">
+                        <div className="flex justify-between text-sm text-foreground">
                           <span className="capitalize">{key.replace('_', ' ')}</span>
                           <span className="font-medium">{value}%</span>
                         </div>
@@ -353,17 +353,17 @@ export function MandateDetailDialog({
 
               <Separator />
 
-              <div>
-                <h4 className="font-medium mb-2">Coupon Breakdown</h4>
-                <div className="bg-muted/50 rounded-lg p-4">
-                  <div className="grid grid-cols-2 gap-4 text-sm">
+              <div className="text-foreground">
+                <h4 className="font-medium mb-2 text-foreground">Coupon Breakdown</h4>
+                <div className="bg-muted rounded-lg p-4">
+                  <div className="grid grid-cols-2 gap-4 text-sm text-foreground">
                     <div>
                       <span className="text-muted-foreground">Total Coupons:</span>
-                      <span className="ml-2 font-medium">{mandate.coupon_count}</span>
+                      <span className="ml-2 font-medium text-foreground">{mandate.coupon_count}</span>
                     </div>
                     <div>
                       <span className="text-muted-foreground">Value per Coupon:</span>
-                      <span className="ml-2 font-medium">
+                      <span className="ml-2 font-medium text-foreground">
                         €{(mandate.total_value / mandate.coupon_count).toFixed(2)}
                       </span>
                     </div>
@@ -372,14 +372,14 @@ export function MandateDetailDialog({
               </div>
             </TabsContent>
 
-            <TabsContent value="legal" className="space-y-6">
+            <TabsContent value="legal" className="space-y-6 text-foreground">
               {/* Compliance Status */}
-              <div className="space-y-4">
-                <h4 className="font-medium">Compliance Status</h4>
+              <div className="space-y-4 text-foreground">
+                <h4 className="font-medium text-foreground">Compliance Status</h4>
                 
                 <div className="space-y-3">
-                  <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
-                    <div className="flex items-center gap-2">
+                  <div className="flex items-center justify-between p-3 bg-muted rounded-lg">
+                    <div className="flex items-center gap-2 text-foreground">
                       <FileText className="h-4 w-4 text-primary" />
                       <span>Terms & Conditions</span>
                     </div>
@@ -396,8 +396,8 @@ export function MandateDetailDialog({
                     )}
                   </div>
 
-                  <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
-                    <div className="flex items-center gap-2">
+                  <div className="flex items-center justify-between p-3 bg-muted rounded-lg">
+                    <div className="flex items-center gap-2 text-foreground">
                       <AlertTriangle className="h-4 w-4 text-yellow-500" />
                       <span>Risk Disclosure</span>
                     </div>
@@ -414,8 +414,8 @@ export function MandateDetailDialog({
                     )}
                   </div>
 
-                  <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
-                    <div className="flex items-center gap-2">
+                  <div className="flex items-center justify-between p-3 bg-muted rounded-lg">
+                    <div className="flex items-center gap-2 text-foreground">
                       <Shield className="h-4 w-4 text-green-500" />
                       <span>Regulatory Compliance</span>
                     </div>
@@ -437,10 +437,10 @@ export function MandateDetailDialog({
               <Separator />
 
               {/* Contract Reference */}
-              <div>
-                <h4 className="font-medium mb-2">Contract Reference</h4>
+              <div className="text-foreground">
+                <h4 className="font-medium mb-2 text-foreground">Contract Reference</h4>
                 <div className="flex items-center gap-2">
-                  <code className="bg-muted px-3 py-2 rounded text-sm">
+                  <code className="bg-muted px-3 py-2 rounded text-sm text-foreground">
                     {mandate.contract_reference || 'Not assigned'}
                   </code>
                   {mandate.contract_reference && (

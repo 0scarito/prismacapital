@@ -43,9 +43,9 @@ const Commodities = () => {
             </h1>
             <div className="grid grid-cols-3 gap-8 max-w-4xl mx-auto">
               {metrics.map((m) => (
-                <div key={m.label} className="text-center">
+                <div key={m.label} className="text-center bg-black/20 backdrop-blur-sm rounded-lg p-4">
                   <div className="text-3xl font-bold text-amber-300">{m.value}</div>
-                  <div className="text-sm text-white/80 mt-1">{m.label}</div>
+                  <div className="text-sm text-white mt-1">{m.label}</div>
                 </div>
               ))}
             </div>

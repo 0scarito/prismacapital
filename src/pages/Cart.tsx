@@ -16,6 +16,8 @@ const Cart = () => {
 
   const handleCheckout = () => {
     if (!user) {
+      // Save intended destination before redirecting to auth
+      localStorage.setItem('redirectAfterLogin', '/checkout');
       navigate('/auth');
       return;
     }

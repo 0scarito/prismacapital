@@ -96,21 +96,27 @@ serve(async (req) => {
 
       const items = JSON.parse(metadata?.items || "[]");
       const giftRecipient = metadata?.gift_recipient;
+      const stripeSessionId = session.id;
 
-      console.log(`Processing payment for user ${userId}: ${items.length} items`);
+      console.log(`Processing payment for user ${userId}: ${items.length} items, session: ${stripeSessionId}`);
 
-      // Check for duplicate processing using session_id
-      const { data: existingPurchase } = await supabaseClient
-        .from("purchases")
-        .select("id")
-        .eq("user_id", userId)
-        .limit(1);
-
-      // Track if any items were already processed for this session
-      // Note: This is a backup verification - primary processing is via webhook
-
-      // Create purchases and portfolio holdings
+      // Create purchases, portfolio holdings, and coupons for each item
       for (const item of items) {
+        // Check if this item was already processed for this session (duplicate detection)
+        const { data: existingPurchase } = await supabaseClient
+          .from("purchases")
+          .select("id")
+          .eq("user_id", userId)
+          .eq("investment_id", item.id)
+          .eq("amount", item.amount)
+          .gte("created_at", new Date(Date.now() - 60000).toISOString()) // Within last minute
+          .limit(1);
+
+        if (existingPurchase && existingPurchase.length > 0) {
+          console.log(`Skipping duplicate purchase for item ${item.id}`);
+          continue;
+        }
+
         // Create purchase record
         const { data: purchase, error: purchaseError } = await supabaseClient
           .from("purchases")
@@ -126,7 +132,12 @@ serve(async (req) => {
           .select()
           .single();
 
-        if (purchaseError) throw purchaseError;
+        if (purchaseError) {
+          console.error(`Error creating purchase for ${item.name}:`, purchaseError);
+          throw purchaseError;
+        }
+
+        console.log(`Created purchase ${purchase.id} for ${item.name}`);
 
         // Create portfolio holding
         const { error: holdingError } = await supabaseClient
@@ -142,7 +153,10 @@ serve(async (req) => {
             status: giftRecipient ? "gifted" : "active",
           });
 
-        if (holdingError) throw holdingError;
+        if (holdingError) {
+          console.error(`Error creating holding for ${item.name}:`, holdingError);
+          throw holdingError;
+        }
 
         // Create transaction record
         const { error: transactionError } = await supabaseClient
@@ -154,7 +168,34 @@ serve(async (req) => {
             description: `Purchase of ${item.name}`,
           });
 
-        if (transactionError) throw transactionError;
+        if (transactionError) {
+          console.error(`Error creating transaction for ${item.name}:`, transactionError);
+          throw transactionError;
+        }
+
+        // Create coupon for this purchase
+        const couponCode = `PC-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).substring(2, 6).toUpperCase()}`;
+        const expiryDate = new Date();
+        expiryDate.setFullYear(expiryDate.getFullYear() + 2); // 2 year validity
+
+        const { error: couponError } = await supabaseClient
+          .from("coupons")
+          .insert({
+            user_id: userId,
+            code: couponCode,
+            title: `Coupon ${item.name}`,
+            description: `Investment coupon for ${item.name} - Value: €${item.amount}`,
+            value: item.amount,
+            status: "active",
+            expires_at: expiryDate.toISOString(),
+          });
+
+        if (couponError) {
+          console.error(`Error creating coupon for ${item.name}:`, couponError);
+          // Don't throw - coupon is secondary to purchase
+        } else {
+          console.log(`Created coupon ${couponCode} for ${item.name}`);
+        }
 
         // If gift, create gift transfer
         if (giftRecipient) {
@@ -168,7 +209,10 @@ serve(async (req) => {
               status: "pending",
             });
 
-          if (giftError) throw giftError;
+          if (giftError) {
+            console.error(`Error creating gift transfer for ${item.name}:`, giftError);
+            throw giftError;
+          }
         }
       }
 

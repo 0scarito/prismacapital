@@ -33,6 +33,34 @@ export interface Investment {
   minInvestment: number;
   features: string[];
   sector: string;
+  // Extended fields for detailed view
+  isin?: string;
+  legalStructure?: string;
+  domicile?: string;
+  currency?: string;
+  inceptionDate?: string;
+  totalAum?: string;
+  managementFee?: string;
+  performanceFee?: string;
+  liquidity?: string;
+  distributionPolicy?: string;
+  riskRating?: string;
+  regulatoryStatus?: string;
+  keyRisks?: string[];
+  historicalPerformance?: {
+    ytd?: string;
+    oneYear?: string;
+    threeYear?: string;
+    sinceInception?: string;
+  };
+  investmentTeam?: {
+    name: string;
+    role: string;
+  }[];
+  documents?: {
+    name: string;
+    type: string;
+  }[];
 }
 
 export const heroImages = {
@@ -63,7 +91,43 @@ export const investments: Record<string, Investment[]> = {
         'Regulated under Luxembourg SICAV structure',
         '15+ years track record in infrastructure'
       ],
-      sector: 'Clean Energy & Infrastructure'
+      sector: 'Clean Energy & Infrastructure',
+      isin: 'LU2345678901',
+      legalStructure: 'Luxembourg SICAV-RAIF',
+      domicile: 'Luxembourg',
+      currency: 'EUR',
+      inceptionDate: 'March 2019',
+      totalAum: '€847M',
+      managementFee: '1.75%',
+      performanceFee: '15% over 8% hurdle',
+      liquidity: 'Quarterly redemptions (90-day notice)',
+      distributionPolicy: 'Quarterly distributions',
+      riskRating: '6/7 (SRRI)',
+      regulatoryStatus: 'AIFMD Compliant',
+      keyRisks: [
+        'Illiquidity risk - limited secondary market',
+        'Concentration risk in energy sector',
+        'Regulatory and policy changes affecting renewables',
+        'Interest rate sensitivity on project financing',
+        'Currency risk for non-EUR projects'
+      ],
+      historicalPerformance: {
+        ytd: '+12.4%',
+        oneYear: '+18.2%',
+        threeYear: '+52.7% (cumulative)',
+        sinceInception: '+87.3% (cumulative)'
+      },
+      investmentTeam: [
+        { name: 'Dr. Klaus Richter', role: 'Fund Manager' },
+        { name: 'Marie Dubois', role: 'Senior Portfolio Analyst' },
+        { name: 'Thomas Lindberg', role: 'Risk Director' }
+      ],
+      documents: [
+        { name: 'Key Information Document (KID)', type: 'PDF' },
+        { name: 'Prospectus', type: 'PDF' },
+        { name: 'Annual Report 2023', type: 'PDF' },
+        { name: 'ESG Impact Report', type: 'PDF' }
+      ]
     },
     {
       id: 'pe-lvmh-luxury',
@@ -82,7 +146,43 @@ export const investments: Record<string, Investment[]> = {
         'Defensive positioning in market downturns',
         'Annual distributions from rental income'
       ],
-      sector: 'Luxury Retail & Consumer'
+      sector: 'Luxury Retail & Consumer',
+      isin: 'FR0014007LK8',
+      legalStructure: 'French FPCI',
+      domicile: 'France',
+      currency: 'EUR',
+      inceptionDate: 'September 2020',
+      totalAum: '€1.2B',
+      managementFee: '2.00%',
+      performanceFee: '20% over 10% hurdle',
+      liquidity: 'Semi-annual redemptions (180-day notice)',
+      distributionPolicy: 'Annual distributions',
+      riskRating: '6/7 (SRRI)',
+      regulatoryStatus: 'AMF Registered',
+      keyRisks: [
+        'Consumer discretionary spending sensitivity',
+        'Geographic concentration in Asia-Pacific',
+        'Brand reputation and management key person risk',
+        'Real estate market fluctuations',
+        'Currency exposure to CNY and JPY'
+      ],
+      historicalPerformance: {
+        ytd: '+15.8%',
+        oneYear: '+24.1%',
+        threeYear: '+68.4% (cumulative)',
+        sinceInception: '+94.2% (cumulative)'
+      },
+      investmentTeam: [
+        { name: 'Jean-Pierre Moreau', role: 'Managing Partner' },
+        { name: 'Sophie Chen', role: 'Asia-Pacific Director' },
+        { name: 'Alessandro Rossi', role: 'Retail Strategy Lead' }
+      ],
+      documents: [
+        { name: 'Key Information Document (KID)', type: 'PDF' },
+        { name: 'Offering Memorandum', type: 'PDF' },
+        { name: 'Q3 2024 Investor Update', type: 'PDF' },
+        { name: 'Valuation Policy', type: 'PDF' }
+      ]
     }
   ],
   ventureCapital: [
@@ -103,7 +203,44 @@ export const investments: Record<string, Investment[]> = {
         '$1B+ annual recurring revenue',
         'Market leader in generative AI'
       ],
-      sector: 'Artificial Intelligence'
+      sector: 'Artificial Intelligence',
+      isin: 'US68389X1054 (SPV)',
+      legalStructure: 'Delaware LP (SPV)',
+      domicile: 'United States',
+      currency: 'USD',
+      inceptionDate: 'January 2024',
+      totalAum: '$420M (SPV allocation)',
+      managementFee: '2.50%',
+      performanceFee: '20% carry',
+      liquidity: 'No liquidity until exit event',
+      distributionPolicy: 'Proceeds on exit',
+      riskRating: '7/7 (SRRI)',
+      regulatoryStatus: 'SEC Reg D Exempt',
+      keyRisks: [
+        'Complete capital loss possible',
+        'No liquidity - no secondary market',
+        'Valuation uncertainty in private markets',
+        'Regulatory risk around AI development',
+        'Competition from Google, Meta, Anthropic',
+        'Key person dependency on leadership'
+      ],
+      historicalPerformance: {
+        ytd: 'N/A - Private',
+        oneYear: 'N/A - Private',
+        threeYear: 'N/A - Private',
+        sinceInception: '+180% (implied valuation)'
+      },
+      investmentTeam: [
+        { name: 'Michael Torres', role: 'General Partner' },
+        { name: 'Dr. Sarah Kim', role: 'AI Sector Lead' },
+        { name: 'David Nakamura', role: 'Secondary Markets Head' }
+      ],
+      documents: [
+        { name: 'Private Placement Memorandum', type: 'PDF' },
+        { name: 'Risk Disclosure Statement', type: 'PDF' },
+        { name: 'Company Overview Deck', type: 'PDF' },
+        { name: 'Valuation Methodology', type: 'PDF' }
+      ]
     },
     {
       id: 'vc-spacex-starlink',
@@ -122,7 +259,44 @@ export const investments: Record<string, Investment[]> = {
         'Government and enterprise contracts',
         'First-mover advantage in space internet'
       ],
-      sector: 'Space Technology & Telecom'
+      sector: 'Space Technology & Telecom',
+      isin: 'KY2847561098 (SPV)',
+      legalStructure: 'Cayman Islands LP',
+      domicile: 'Cayman Islands',
+      currency: 'USD',
+      inceptionDate: 'June 2023',
+      totalAum: '$380M (SPV allocation)',
+      managementFee: '2.25%',
+      performanceFee: '20% carry',
+      liquidity: 'No liquidity until exit event',
+      distributionPolicy: 'Proceeds on exit',
+      riskRating: '7/7 (SRRI)',
+      regulatoryStatus: 'CIMA Registered',
+      keyRisks: [
+        'Complete capital loss possible',
+        'Space technology execution risks',
+        'Regulatory approvals across jurisdictions',
+        'Competition from Amazon Kuiper, OneWeb',
+        'Capital intensive - ongoing funding needs',
+        'IPO timing uncertainty'
+      ],
+      historicalPerformance: {
+        ytd: 'N/A - Private',
+        oneYear: 'N/A - Private',
+        threeYear: 'N/A - Private',
+        sinceInception: '+95% (implied valuation)'
+      },
+      investmentTeam: [
+        { name: 'Robert Chang', role: 'Managing Director' },
+        { name: 'Elena Volkova', role: 'Space Tech Analyst' },
+        { name: 'James McAllister', role: 'Infrastructure Lead' }
+      ],
+      documents: [
+        { name: 'Private Placement Memorandum', type: 'PDF' },
+        { name: 'Risk Disclosure Statement', type: 'PDF' },
+        { name: 'Market Analysis Report', type: 'PDF' },
+        { name: 'Technical Due Diligence', type: 'PDF' }
+      ]
     }
   ],
   realEstate: [
@@ -143,7 +317,43 @@ export const investments: Record<string, Investment[]> = {
         'Inflation-indexed rental agreements',
         'Triple-net lease structure'
       ],
-      sector: 'Luxury Residential'
+      sector: 'Luxury Residential',
+      isin: 'FR0012345678',
+      legalStructure: 'French OPCI',
+      domicile: 'France',
+      currency: 'EUR',
+      inceptionDate: 'January 2018',
+      totalAum: '€285M',
+      managementFee: '1.25%',
+      performanceFee: 'None',
+      liquidity: 'Bi-annual redemptions (60-day notice)',
+      distributionPolicy: 'Quarterly income distributions',
+      riskRating: '3/7 (SRRI)',
+      regulatoryStatus: 'AMF Approved OPCI',
+      keyRisks: [
+        'Real estate market cyclicality',
+        'Tenant concentration risk',
+        'Renovation and maintenance costs',
+        'Interest rate impact on valuations',
+        'Limited geographic diversification'
+      ],
+      historicalPerformance: {
+        ytd: '+6.8%',
+        oneYear: '+11.2%',
+        threeYear: '+29.5% (cumulative)',
+        sinceInception: '+58.4% (cumulative)'
+      },
+      investmentTeam: [
+        { name: 'Philippe Beaumont', role: 'Fund Director' },
+        { name: 'Camille Laurent', role: 'Asset Manager' },
+        { name: 'Marc Fontaine', role: 'Acquisitions Lead' }
+      ],
+      documents: [
+        { name: 'Key Information Document (KID)', type: 'PDF' },
+        { name: 'Prospectus', type: 'PDF' },
+        { name: 'Property Portfolio Report', type: 'PDF' },
+        { name: 'Annual Valuation Report', type: 'PDF' }
+      ]
     },
     {
       id: 're-frankfurt-campus',
@@ -162,7 +372,43 @@ export const investments: Record<string, Investment[]> = {
         'Strategic location near Frankfurt Airport',
         'Built-in expansion optionality'
       ],
-      sector: 'Commercial Office'
+      sector: 'Commercial Office',
+      isin: 'DE000A2E4K43',
+      legalStructure: 'German Spezial-AIF',
+      domicile: 'Germany',
+      currency: 'EUR',
+      inceptionDate: 'July 2021',
+      totalAum: '€195M',
+      managementFee: '1.40%',
+      performanceFee: '10% over 6% hurdle',
+      liquidity: 'Annual redemptions (90-day notice)',
+      distributionPolicy: 'Semi-annual distributions',
+      riskRating: '4/7 (SRRI)',
+      regulatoryStatus: 'BaFin Registered AIF',
+      keyRisks: [
+        'Office demand post-pandemic uncertainty',
+        'Single asset concentration',
+        'Construction completion risk (Phase 2)',
+        'Tenant default risk',
+        'ESG compliance ongoing costs'
+      ],
+      historicalPerformance: {
+        ytd: '+8.1%',
+        oneYear: '+12.5%',
+        threeYear: '+34.2% (cumulative)',
+        sinceInception: '+42.8% (cumulative)'
+      },
+      investmentTeam: [
+        { name: 'Stefan Mueller', role: 'Fund Manager' },
+        { name: 'Anna Schneider', role: 'Leasing Director' },
+        { name: 'Hans Weber', role: 'Development Manager' }
+      ],
+      documents: [
+        { name: 'Key Information Document (KID)', type: 'PDF' },
+        { name: 'Investment Memorandum', type: 'PDF' },
+        { name: 'Sustainability Report', type: 'PDF' },
+        { name: 'Construction Update Q4 2024', type: 'PDF' }
+      ]
     }
   ],
   commodities: [
@@ -183,7 +429,43 @@ export const investments: Record<string, Investment[]> = {
         'Quarterly independent audits',
         'Delivery option available'
       ],
-      sector: 'Precious Metals'
+      sector: 'Precious Metals',
+      isin: 'CH0012345678',
+      legalStructure: 'Swiss Collective Investment',
+      domicile: 'Switzerland',
+      currency: 'USD (Gold-backed)',
+      inceptionDate: 'November 2015',
+      totalAum: '$1.4B (equivalent)',
+      managementFee: '0.35%',
+      performanceFee: 'None',
+      liquidity: 'Daily liquidity (T+2 settlement)',
+      distributionPolicy: 'No distributions (accumulating)',
+      riskRating: '4/7 (SRRI)',
+      regulatoryStatus: 'FINMA Approved',
+      keyRisks: [
+        'Gold price volatility',
+        'No income generation',
+        'USD currency exposure',
+        'Storage and insurance costs',
+        'Central bank gold policy changes'
+      ],
+      historicalPerformance: {
+        ytd: '+14.2%',
+        oneYear: '+22.8%',
+        threeYear: '+38.5% (cumulative)',
+        sinceInception: '+87.3% (cumulative)'
+      },
+      investmentTeam: [
+        { name: 'Markus Huber', role: 'Fund Administrator' },
+        { name: 'Christine Bauer', role: 'Custody Operations' },
+        { name: 'Thomas Zellweger', role: 'Compliance Officer' }
+      ],
+      documents: [
+        { name: 'Key Information Document (KID)', type: 'PDF' },
+        { name: 'Prospectus', type: 'PDF' },
+        { name: 'Vault Audit Certificate', type: 'PDF' },
+        { name: 'Insurance Certificate', type: 'PDF' }
+      ]
     },
     {
       id: 'comm-agriculture',
@@ -202,7 +484,43 @@ export const investments: Record<string, Investment[]> = {
         'Carbon credit generation potential',
         'Diversified crop and geography mix'
       ],
-      sector: 'Agriculture & Food Security'
+      sector: 'Agriculture & Food Security',
+      isin: 'LU9876543210',
+      legalStructure: 'Luxembourg SCS SICAV-RAIF',
+      domicile: 'Luxembourg',
+      currency: 'EUR',
+      inceptionDate: 'April 2020',
+      totalAum: '€340M',
+      managementFee: '1.50%',
+      performanceFee: '15% over 7% hurdle',
+      liquidity: 'Annual redemptions (180-day notice)',
+      distributionPolicy: 'Annual harvest distributions',
+      riskRating: '5/7 (SRRI)',
+      regulatoryStatus: 'CSSF Registered RAIF',
+      keyRisks: [
+        'Weather and climate risks',
+        'Commodity price volatility',
+        'EU agricultural policy changes',
+        'Land value fluctuations',
+        'Operational farming risks'
+      ],
+      historicalPerformance: {
+        ytd: '+7.4%',
+        oneYear: '+11.8%',
+        threeYear: '+32.1% (cumulative)',
+        sinceInception: '+48.6% (cumulative)'
+      },
+      investmentTeam: [
+        { name: 'Pierre Lefebvre', role: 'Portfolio Manager' },
+        { name: 'Agnieszka Nowak', role: 'Land Acquisitions' },
+        { name: 'Dieter Schmidt', role: 'Agricultural Operations' }
+      ],
+      documents: [
+        { name: 'Key Information Document (KID)', type: 'PDF' },
+        { name: 'Offering Memorandum', type: 'PDF' },
+        { name: 'Farm Portfolio Overview', type: 'PDF' },
+        { name: 'Carbon Credit Strategy', type: 'PDF' }
+      ]
     }
   ],
   etfs: [
@@ -223,7 +541,43 @@ export const investments: Record<string, Investment[]> = {
         'SFDR Article 8 compliant',
         'Daily liquidity'
       ],
-      sector: 'Global Equities'
+      sector: 'Global Equities',
+      isin: 'IE00BFNM3J75',
+      legalStructure: 'Irish UCITS ETF',
+      domicile: 'Ireland',
+      currency: 'USD',
+      inceptionDate: 'October 2018',
+      totalAum: '$8.2B',
+      managementFee: '0.20%',
+      performanceFee: 'None',
+      liquidity: 'Continuous trading (exchange hours)',
+      distributionPolicy: 'Accumulating',
+      riskRating: '5/7 (SRRI)',
+      regulatoryStatus: 'UCITS V Compliant',
+      keyRisks: [
+        'Equity market volatility',
+        'Currency fluctuations (USD base)',
+        'ESG screening may limit returns',
+        'Index tracking error',
+        'Geopolitical risks in developed markets'
+      ],
+      historicalPerformance: {
+        ytd: '+18.4%',
+        oneYear: '+24.2%',
+        threeYear: '+28.7% (cumulative)',
+        sinceInception: '+72.5% (cumulative)'
+      },
+      investmentTeam: [
+        { name: 'BlackRock Index Team', role: 'Index Management' },
+        { name: 'Emily Watson', role: 'ESG Research Lead' },
+        { name: 'Patrick O\'Brien', role: 'Trading Desk' }
+      ],
+      documents: [
+        { name: 'Key Information Document (KID)', type: 'PDF' },
+        { name: 'Prospectus', type: 'PDF' },
+        { name: 'Monthly Factsheet', type: 'PDF' },
+        { name: 'ESG Characteristics Report', type: 'PDF' }
+      ]
     },
     {
       id: 'etf-vanguard-dividend',
@@ -242,7 +596,43 @@ export const investments: Record<string, Investment[]> = {
         'Quarterly distributions',
         '1,800+ global holdings'
       ],
-      sector: 'Dividend Income'
+      sector: 'Dividend Income',
+      isin: 'IE00B8GKDB10',
+      legalStructure: 'Irish UCITS ETF',
+      domicile: 'Ireland',
+      currency: 'USD',
+      inceptionDate: 'May 2013',
+      totalAum: '$4.6B',
+      managementFee: '0.29%',
+      performanceFee: 'None',
+      liquidity: 'Continuous trading (exchange hours)',
+      distributionPolicy: 'Quarterly distributions',
+      riskRating: '5/7 (SRRI)',
+      regulatoryStatus: 'UCITS V Compliant',
+      keyRisks: [
+        'Dividend cut risk in economic downturns',
+        'Value style underperformance periods',
+        'Emerging market exposure volatility',
+        'Currency fluctuations',
+        'Interest rate sensitivity'
+      ],
+      historicalPerformance: {
+        ytd: '+12.1%',
+        oneYear: '+16.8%',
+        threeYear: '+22.4% (cumulative)',
+        sinceInception: '+98.7% (cumulative)'
+      },
+      investmentTeam: [
+        { name: 'Vanguard Quantitative Equity Group', role: 'Index Management' },
+        { name: 'James Anderson', role: 'Portfolio Manager' },
+        { name: 'Rachel Cohen', role: 'Income Strategy' }
+      ],
+      documents: [
+        { name: 'Key Information Document (KID)', type: 'PDF' },
+        { name: 'Prospectus', type: 'PDF' },
+        { name: 'Monthly Factsheet', type: 'PDF' },
+        { name: 'Dividend History', type: 'PDF' }
+      ]
     }
   ],
   crypto: [
@@ -263,7 +653,44 @@ export const investments: Record<string, Investment[]> = {
         'No minimum lock-up period',
         'Compound staking rewards'
       ],
-      sector: 'Proof-of-Stake Networks'
+      sector: 'Proof-of-Stake Networks',
+      isin: 'N/A (Digital Asset)',
+      legalStructure: 'Jersey Trust',
+      domicile: 'Jersey, Channel Islands',
+      currency: 'ETH',
+      inceptionDate: 'December 2022',
+      totalAum: '45,000 ETH (~€145M)',
+      managementFee: '0.50% + 10% of staking rewards',
+      performanceFee: 'Included in management fee',
+      liquidity: 'Weekly redemptions (7-day notice)',
+      distributionPolicy: 'Staking rewards auto-compounded',
+      riskRating: '7/7 (SRRI)',
+      regulatoryStatus: 'JFSC Registered',
+      keyRisks: [
+        'Extreme price volatility (50%+ drawdowns possible)',
+        'Regulatory uncertainty globally',
+        'Smart contract and protocol risks',
+        'Slashing penalties for validator errors',
+        'Custody and cybersecurity risks',
+        'Market liquidity in stress scenarios'
+      ],
+      historicalPerformance: {
+        ytd: '+52.4% (ETH price + staking)',
+        oneYear: '+68.7%',
+        threeYear: '-12.4% (cumulative)',
+        sinceInception: '+78.2%'
+      },
+      investmentTeam: [
+        { name: 'Alex Petrov', role: 'Crypto Fund Manager' },
+        { name: 'Lisa Chen', role: 'Staking Operations' },
+        { name: 'Marcus Johansson', role: 'Security Lead' }
+      ],
+      documents: [
+        { name: 'Key Information Document (KID)', type: 'PDF' },
+        { name: 'Risk Disclosure Statement', type: 'PDF' },
+        { name: 'Staking Policy', type: 'PDF' },
+        { name: 'Custody & Insurance Cert', type: 'PDF' }
+      ]
     },
     {
       id: 'crypto-bitcoin',
@@ -282,7 +709,44 @@ export const investments: Record<string, Investment[]> = {
         'Full proof of reserves',
         'Regulated trust structure'
       ],
-      sector: 'Digital Store of Value'
+      sector: 'Digital Store of Value',
+      isin: 'N/A (Digital Asset)',
+      legalStructure: 'Swiss Trust',
+      domicile: 'Switzerland',
+      currency: 'BTC',
+      inceptionDate: 'June 2020',
+      totalAum: '2,850 BTC (~€175M)',
+      managementFee: '0.75%',
+      performanceFee: 'None',
+      liquidity: 'Daily redemptions (T+1 settlement)',
+      distributionPolicy: 'No distributions (accumulating)',
+      riskRating: '7/7 (SRRI)',
+      regulatoryStatus: 'FINMA Supervised',
+      keyRisks: [
+        'Extreme price volatility (70%+ drawdowns historical)',
+        'Regulatory crackdowns possible',
+        'Environmental concerns (energy usage)',
+        'Competition from other digital assets',
+        'Custodial and operational risks',
+        'No intrinsic value or income'
+      ],
+      historicalPerformance: {
+        ytd: '+124.8%',
+        oneYear: '+148.2%',
+        threeYear: '+42.8% (cumulative)',
+        sinceInception: '+385.4%'
+      },
+      investmentTeam: [
+        { name: 'Dr. Martin Keller', role: 'Trust Administrator' },
+        { name: 'Nina Hoffmann', role: 'Custody Operations' },
+        { name: 'Luca Bernasconi', role: 'Compliance Director' }
+      ],
+      documents: [
+        { name: 'Key Information Document (KID)', type: 'PDF' },
+        { name: 'Trust Deed', type: 'PDF' },
+        { name: 'Proof of Reserves Report', type: 'PDF' },
+        { name: 'Security Audit Report', type: 'PDF' }
+      ]
     }
   ]
 };

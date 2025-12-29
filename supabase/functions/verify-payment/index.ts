@@ -216,6 +216,64 @@ serve(async (req) => {
         }
       }
 
+      // Send email notifications (non-blocking)
+      const emailItems = items.map((item: any) => ({
+        name: item.name,
+        amount: item.amount,
+        couponCode: `PC-${Date.now().toString(36).toUpperCase()}`,
+      }));
+      
+      const totalAmount = items.reduce((sum: number, item: any) => sum + item.amount + (item.hasPhysicalCard ? 15 : 0), 0);
+      
+      // Send purchase confirmation to buyer
+      try {
+        const emailPayload = {
+          type: giftRecipient ? "gift_sent" : "purchase",
+          recipientEmail: user.email,
+          recipientName: user.user_metadata?.display_name,
+          items: emailItems,
+          totalAmount,
+        };
+        
+        await fetch(`${Deno.env.get("SUPABASE_URL")}/functions/v1/send-purchase-email`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${Deno.env.get("SUPABASE_ANON_KEY")}`,
+          },
+          body: JSON.stringify(emailPayload),
+        });
+        console.log("Purchase confirmation email sent to buyer");
+      } catch (emailError) {
+        console.error("Failed to send buyer email (non-critical):", emailError);
+      }
+      
+      // If gift, also send notification to recipient
+      if (giftRecipient) {
+        try {
+          const giftEmailPayload = {
+            type: "gift_received",
+            recipientEmail: giftRecipient,
+            items: emailItems,
+            totalAmount,
+            giftSenderName: user.user_metadata?.display_name || user.email,
+            giftMessage: `Gift of investment`,
+          };
+          
+          await fetch(`${Deno.env.get("SUPABASE_URL")}/functions/v1/send-purchase-email`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${Deno.env.get("SUPABASE_ANON_KEY")}`,
+            },
+            body: JSON.stringify(giftEmailPayload),
+          });
+          console.log("Gift notification email sent to recipient");
+        } catch (emailError) {
+          console.error("Failed to send gift recipient email (non-critical):", emailError);
+        }
+      }
+
       return new Response(JSON.stringify({ success: true }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
         status: 200,

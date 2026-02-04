@@ -16,7 +16,7 @@ const RiskDisclosure = () => {
             <h1 className="text-4xl font-bold text-foreground mb-4">
               {t('footer.riskDisclosure')}
             </h1>
-            <p className="text-muted-foreground mb-8">
+            <p className="text-foreground/70 mb-8">
               Veuillez lire attentivement ces informations avant d'investir.
             </p>
 
@@ -41,9 +41,9 @@ const RiskDisclosure = () => {
               <section className="bg-card rounded-lg p-8 border border-border">
                 <div className="flex items-center gap-3 mb-6">
                   <TrendingDown className="w-6 h-6 text-primary" />
-                  <h2 className="text-2xl font-semibold text-foreground m-0">Risques Généraux d'Investissement</h2>
+                  <h2 className="text-2xl font-semibold text-card-foreground m-0">Risques Généraux d'Investissement</h2>
                 </div>
-                <div className="space-y-4 text-muted-foreground">
+                <div className="space-y-4 text-card-foreground/80">
                   <ul className="list-disc pl-6 space-y-3">
                     <li><strong>Risque de perte en capital :</strong> Vous pouvez perdre tout ou partie de votre investissement initial.</li>
                     <li><strong>Risque de marché :</strong> La valeur des investissements peut fluctuer en fonction des conditions économiques et de marché.</li>
@@ -58,9 +58,9 @@ const RiskDisclosure = () => {
               <section className="bg-card rounded-lg p-8 border border-border">
                 <div className="flex items-center gap-3 mb-6">
                   <Landmark className="w-6 h-6 text-primary" />
-                  <h2 className="text-2xl font-semibold text-foreground m-0">Immobilier (Crowdfunding Immobilier)</h2>
+                  <h2 className="text-2xl font-semibold text-card-foreground m-0">Immobilier (Crowdfunding Immobilier)</h2>
                 </div>
-                <div className="space-y-4 text-muted-foreground">
+                <div className="space-y-4 text-card-foreground/80">
                   <p><strong>Niveau de risque : 5/7</strong> - Horizon recommandé : 3 à 7 ans</p>
                   <ul className="list-disc pl-6 space-y-3">
                     <li><strong>Risque de vacance locative :</strong> Les biens peuvent rester inoccupés, réduisant les revenus.</li>
@@ -76,14 +76,14 @@ const RiskDisclosure = () => {
               <section className="bg-card rounded-lg p-8 border border-border">
                 <div className="flex items-center gap-3 mb-6">
                   <AlertTriangle className="w-6 h-6 text-destructive" />
-                  <h2 className="text-2xl font-semibold text-foreground m-0">Crypto-actifs</h2>
+                  <h2 className="text-2xl font-semibold text-card-foreground m-0">Crypto-actifs</h2>
                 </div>
                 <div className="bg-destructive/5 border border-destructive/20 rounded p-4 mb-4">
                   <p className="text-destructive font-semibold">
                     ⚠️ Niveau de risque : 7/7 - Volatilité extrême - Perte totale du capital possible
                   </p>
                 </div>
-                <div className="space-y-4 text-muted-foreground">
+                <div className="space-y-4 text-card-foreground/80">
                   <ul className="list-disc pl-6 space-y-3">
                     <li><strong>Volatilité extrême :</strong> Les prix peuvent varier de manière très importante en quelques heures.</li>
                     <li><strong>Risque réglementaire :</strong> Les réglementations peuvent évoluer et impacter négativement les crypto-actifs.</li>
@@ -98,9 +98,9 @@ const RiskDisclosure = () => {
               <section className="bg-card rounded-lg p-8 border border-border">
                 <div className="flex items-center gap-3 mb-6">
                   <Scale className="w-6 h-6 text-primary" />
-                  <h2 className="text-2xl font-semibold text-foreground m-0">ETFs Diversifiés</h2>
+                  <h2 className="text-2xl font-semibold text-card-foreground m-0">ETFs Diversifiés</h2>
                 </div>
-                <div className="space-y-4 text-muted-foreground">
+                <div className="space-y-4 text-card-foreground/80">
                   <p><strong>Niveau de risque : 3/7</strong> - Horizon recommandé : moyen à long terme (≥ 5 ans)</p>
                   <ul className="list-disc pl-6 space-y-3">
                     <li><strong>Risque de marché :</strong> Les ETFs répliquent les variations de leur indice de référence.</li>
@@ -115,9 +115,9 @@ const RiskDisclosure = () => {
               <section className="bg-card rounded-lg p-8 border border-border">
                 <div className="flex items-center gap-3 mb-6">
                   <Lock className="w-6 h-6 text-primary" />
-                  <h2 className="text-2xl font-semibold text-foreground m-0">Private Equity</h2>
+                  <h2 className="text-2xl font-semibold text-card-foreground m-0">Private Equity</h2>
                 </div>
-                <div className="space-y-4 text-muted-foreground">
+                <div className="space-y-4 text-card-foreground/80">
                   <p><strong>Niveau de risque : 6/7</strong> - Risque élevé de perte en capital</p>
                   <ul className="list-disc pl-6 space-y-3">
                     <li><strong>Illiquidité élevée :</strong> Période de blocage généralement de 7 à 10 ans.</li>
@@ -133,9 +133,9 @@ const RiskDisclosure = () => {
               <section className="bg-card rounded-lg p-8 border border-border">
                 <div className="flex items-center gap-3 mb-6">
                   <AlertTriangle className="w-6 h-6 text-amber-500" />
-                  <h2 className="text-2xl font-semibold text-foreground m-0">Venture Capital</h2>
+                  <h2 className="text-2xl font-semibold text-card-foreground m-0">Venture Capital</h2>
                 </div>
-                <div className="space-y-4 text-muted-foreground">
+                <div className="space-y-4 text-card-foreground/80">
                   <p><strong>Niveau de risque : 7/7</strong> - Horizon recommandé : 7 à 12 ans minimum</p>
                   <ul className="list-disc pl-6 space-y-3">
                     <li><strong>Risque de perte totale :</strong> La majorité des startups échouent.</li>
@@ -151,9 +151,9 @@ const RiskDisclosure = () => {
               <section className="bg-card rounded-lg p-8 border border-border">
                 <div className="flex items-center gap-3 mb-6">
                   <Clock className="w-6 h-6 text-primary" />
-                  <h2 className="text-2xl font-semibold text-foreground m-0">Matières Premières</h2>
+                  <h2 className="text-2xl font-semibold text-card-foreground m-0">Matières Premières</h2>
                 </div>
-                <div className="space-y-4 text-muted-foreground">
+                <div className="space-y-4 text-card-foreground/80">
                   <p><strong>Niveau de risque : 5/7</strong> - Horizon recommandé : moyen à long terme (≥ 5 ans)</p>
                   <ul className="list-disc pl-6 space-y-3">
                     <li><strong>Volatilité :</strong> Prix influencés par l'offre, la demande, et les événements géopolitiques.</li>
@@ -166,8 +166,8 @@ const RiskDisclosure = () => {
 
               {/* Regulatory Information */}
               <section className="bg-card rounded-lg p-8 border border-border">
-                <h2 className="text-2xl font-semibold mb-6 text-foreground">Informations Réglementaires</h2>
-                <div className="space-y-4 text-muted-foreground">
+                <h2 className="text-2xl font-semibold mb-6 text-card-foreground">Informations Réglementaires</h2>
+                <div className="space-y-4 text-card-foreground/80">
                   <p>
                     Prisma Capital Cards SAS est enregistrée en tant que Prestataire de Services sur Actifs 
                     Numériques (PSAN) auprès de l'Autorité des Marchés Financiers (AMF).
@@ -186,8 +186,8 @@ const RiskDisclosure = () => {
 
               {/* Suitability */}
               <section className="bg-card rounded-lg p-8 border border-border">
-                <h2 className="text-2xl font-semibold mb-6 text-foreground">Adéquation et Profil Investisseur</h2>
-                <div className="space-y-4 text-muted-foreground">
+                <h2 className="text-2xl font-semibold mb-6 text-card-foreground">Adéquation et Profil Investisseur</h2>
+                <div className="space-y-4 text-card-foreground/80">
                   <p>
                     Les produits proposés peuvent ne pas convenir à tous les investisseurs. 
                     Avant d'investir, assurez-vous que :
@@ -204,8 +204,8 @@ const RiskDisclosure = () => {
 
               {/* Past Performance */}
               <section className="bg-card rounded-lg p-8 border border-border">
-                <h2 className="text-2xl font-semibold mb-6 text-foreground">Performances Passées</h2>
-                <div className="space-y-4 text-muted-foreground">
+                <h2 className="text-2xl font-semibold mb-6 text-card-foreground">Performances Passées</h2>
+                <div className="space-y-4 text-card-foreground/80">
                   <p className="font-semibold">
                     Les performances passées ne sont pas un indicateur fiable des performances futures.
                   </p>

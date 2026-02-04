@@ -15,13 +15,13 @@ const PrivacyPolicy = () => {
             <h1 className="text-4xl font-bold text-foreground mb-4">
               {t('footer.privacy')}
             </h1>
-            <p className="text-muted-foreground mb-8">Dernière mise à jour : 29 décembre 2024</p>
+            <p className="text-foreground/70 mb-8">Dernière mise à jour : 29 décembre 2024</p>
             
             <div className="prose prose-lg max-w-none space-y-8">
               {/* Introduction */}
               <section className="bg-card rounded-lg p-8 border border-border">
-                <h2 className="text-2xl font-semibold mb-6 text-foreground">Introduction</h2>
-                <div className="space-y-4 text-muted-foreground">
+                <h2 className="text-2xl font-semibold mb-6 text-card-foreground">Introduction</h2>
+                <div className="space-y-4 text-card-foreground/80">
                   <p>
                     Prisma Capital Cards SAS ("nous", "notre", "Prisma") s'engage à protéger la vie privée 
                     de ses utilisateurs. Cette politique de confidentialité explique comment nous collectons, 
@@ -33,8 +33,8 @@ const PrivacyPolicy = () => {
 
               {/* Data Controller */}
               <section className="bg-card rounded-lg p-8 border border-border">
-                <h2 className="text-2xl font-semibold mb-6 text-foreground">Responsable du Traitement</h2>
-                <div className="space-y-4 text-muted-foreground">
+                <h2 className="text-2xl font-semibold mb-6 text-card-foreground">Responsable du Traitement</h2>
+                <div className="space-y-4 text-card-foreground/80">
                   <p>Le responsable du traitement des données personnelles est :</p>
                   <div className="pl-4 border-l-2 border-primary">
                     <p><strong>Prisma Capital Cards SAS</strong></p>
@@ -46,8 +46,8 @@ const PrivacyPolicy = () => {
 
               {/* Data Collected */}
               <section className="bg-card rounded-lg p-8 border border-border">
-                <h2 className="text-2xl font-semibold mb-6 text-foreground">Données Collectées</h2>
-                <div className="space-y-4 text-muted-foreground">
+                <h2 className="text-2xl font-semibold mb-6 text-card-foreground">Données Collectées</h2>
+                <div className="space-y-4 text-card-foreground/80">
                   <p>Nous collectons les catégories de données suivantes :</p>
                   <ul className="list-disc pl-6 space-y-2">
                     <li><strong>Données d'identification :</strong> nom, prénom, adresse email, numéro de téléphone</li>
@@ -61,8 +61,8 @@ const PrivacyPolicy = () => {
 
               {/* Legal Basis */}
               <section className="bg-card rounded-lg p-8 border border-border">
-                <h2 className="text-2xl font-semibold mb-6 text-foreground">Base Légale du Traitement</h2>
-                <div className="space-y-4 text-muted-foreground">
+                <h2 className="text-2xl font-semibold mb-6 text-card-foreground">Base Légale du Traitement</h2>
+                <div className="space-y-4 text-card-foreground/80">
                   <p>Nous traitons vos données sur les bases légales suivantes :</p>
                   <ul className="list-disc pl-6 space-y-2">
                     <li><strong>Exécution du contrat :</strong> traitement nécessaire à la fourniture de nos services</li>
@@ -75,8 +75,8 @@ const PrivacyPolicy = () => {
 
               {/* Purpose of Processing */}
               <section className="bg-card rounded-lg p-8 border border-border">
-                <h2 className="text-2xl font-semibold mb-6 text-foreground">Finalités du Traitement</h2>
-                <div className="space-y-4 text-muted-foreground">
+                <h2 className="text-2xl font-semibold mb-6 text-card-foreground">Finalités du Traitement</h2>
+                <div className="space-y-4 text-card-foreground/80">
                   <ul className="list-disc pl-6 space-y-2">
                     <li>Gestion de votre compte et authentification</li>
                     <li>Traitement des achats et transactions</li>
@@ -91,8 +91,8 @@ const PrivacyPolicy = () => {
 
               {/* Data Retention */}
               <section className="bg-card rounded-lg p-8 border border-border">
-                <h2 className="text-2xl font-semibold mb-6 text-foreground">Durée de Conservation</h2>
-                <div className="space-y-4 text-muted-foreground">
+                <h2 className="text-2xl font-semibold mb-6 text-card-foreground">Durée de Conservation</h2>
+                <div className="space-y-4 text-card-foreground/80">
                   <ul className="list-disc pl-6 space-y-2">
                     <li><strong>Données de compte :</strong> durée de la relation commerciale + 3 ans</li>
                     <li><strong>Données de transaction :</strong> 10 ans (obligations comptables)</li>
@@ -105,8 +105,8 @@ const PrivacyPolicy = () => {
 
               {/* Your Rights */}
               <section className="bg-card rounded-lg p-8 border border-border">
-                <h2 className="text-2xl font-semibold mb-6 text-foreground">Vos Droits</h2>
-                <div className="space-y-4 text-muted-foreground">
+                <h2 className="text-2xl font-semibold mb-6 text-card-foreground">Vos Droits</h2>
+                <div className="space-y-4 text-card-foreground/80">
                   <p>Conformément au RGPD, vous disposez des droits suivants :</p>
                   <ul className="list-disc pl-6 space-y-2">
                     <li><strong>Droit d'accès :</strong> obtenir une copie de vos données personnelles</li>
@@ -124,8 +124,8 @@ const PrivacyPolicy = () => {
 
               {/* Data Sharing */}
               <section className="bg-card rounded-lg p-8 border border-border">
-                <h2 className="text-2xl font-semibold mb-6 text-foreground">Partage des Données</h2>
-                <div className="space-y-4 text-muted-foreground">
+                <h2 className="text-2xl font-semibold mb-6 text-card-foreground">Partage des Données</h2>
+                <div className="space-y-4 text-card-foreground/80">
                   <p>Vos données peuvent être partagées avec :</p>
                   <ul className="list-disc pl-6 space-y-2">
                     <li><strong>Prestataires de paiement :</strong> Stripe pour le traitement des paiements</li>
@@ -140,8 +140,8 @@ const PrivacyPolicy = () => {
 
               {/* International Transfers */}
               <section className="bg-card rounded-lg p-8 border border-border">
-                <h2 className="text-2xl font-semibold mb-6 text-foreground">Transferts Internationaux</h2>
-                <div className="space-y-4 text-muted-foreground">
+                <h2 className="text-2xl font-semibold mb-6 text-card-foreground">Transferts Internationaux</h2>
+                <div className="space-y-4 text-card-foreground/80">
                   <p>
                     Vos données sont principalement hébergées au sein de l'Union Européenne. 
                     En cas de transfert hors UE, nous nous assurons que des garanties appropriées 
@@ -152,8 +152,8 @@ const PrivacyPolicy = () => {
 
               {/* Security */}
               <section className="bg-card rounded-lg p-8 border border-border">
-                <h2 className="text-2xl font-semibold mb-6 text-foreground">Sécurité</h2>
-                <div className="space-y-4 text-muted-foreground">
+                <h2 className="text-2xl font-semibold mb-6 text-card-foreground">Sécurité</h2>
+                <div className="space-y-4 text-card-foreground/80">
                   <p>
                     Nous mettons en œuvre des mesures techniques et organisationnelles appropriées 
                     pour protéger vos données : chiffrement TLS, contrôle d'accès, audits réguliers, 
@@ -164,8 +164,8 @@ const PrivacyPolicy = () => {
 
               {/* Contact & Complaints */}
               <section className="bg-card rounded-lg p-8 border border-border">
-                <h2 className="text-2xl font-semibold mb-6 text-foreground">Contact et Réclamations</h2>
-                <div className="space-y-4 text-muted-foreground">
+                <h2 className="text-2xl font-semibold mb-6 text-card-foreground">Contact et Réclamations</h2>
+                <div className="space-y-4 text-card-foreground/80">
                   <p>
                     Pour toute question relative à cette politique ou pour exercer vos droits, 
                     contactez notre Délégué à la Protection des Données (DPO) :

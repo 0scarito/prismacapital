@@ -136,7 +136,7 @@ const CookieSettings = () => {
             <h1 className="text-4xl font-bold text-foreground mb-4">
               {t('footer.cookies')}
             </h1>
-            <p className="text-muted-foreground mb-8">
+            <p className="text-foreground/70 mb-8">
               Gérez vos préférences de cookies pour personnaliser votre expérience sur notre site.
             </p>
 
@@ -165,7 +165,7 @@ const CookieSettings = () => {
                         <div>
                           <CardTitle className="text-lg">{category.title}</CardTitle>
                           {category.required && (
-                            <span className="text-xs text-muted-foreground">Toujours actifs</span>
+                            <span className="text-xs text-card-foreground/60">Toujours actifs</span>
                           )}
                         </div>
                       </div>
@@ -185,20 +185,20 @@ const CookieSettings = () => {
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <div className="bg-muted/50 rounded-lg p-4">
-                      <h4 className="font-medium text-sm mb-3">Cookies utilisés :</h4>
+                    <div className="bg-gray-100 rounded-lg p-4">
+                      <h4 className="font-medium text-sm mb-3 text-card-foreground">Cookies utilisés :</h4>
                       <div className="space-y-2">
                         {category.cookies.map((cookie, index) => (
                           <div key={index} className="flex justify-between text-sm">
                             <div>
-                              <span className="font-mono text-xs bg-background px-2 py-1 rounded">
+                              <span className="font-mono text-xs bg-white text-card-foreground px-2 py-1 rounded">
                                 {cookie.name}
                               </span>
-                              <span className="text-muted-foreground ml-2">
+                              <span className="text-card-foreground/70 ml-2">
                                 {cookie.purpose}
                               </span>
                             </div>
-                            <span className="text-muted-foreground text-xs">
+                            <span className="text-card-foreground/60 text-xs">
                               {cookie.duration}
                             </span>
                           </div>
@@ -223,7 +223,7 @@ const CookieSettings = () => {
               <CardHeader>
                 <CardTitle>Plus d'informations</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4 text-muted-foreground">
+              <CardContent className="space-y-4 text-card-foreground/80">
                 <p>
                   Un cookie est un petit fichier texte stocké sur votre appareil lorsque vous 
                   visitez un site web. Les cookies sont largement utilisés pour faire fonctionner 

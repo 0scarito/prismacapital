@@ -20,10 +20,10 @@ const CredibilityBar = () => {
         <div className="flex items-center justify-between">
           {/* AMF Badge */}
           <div className="flex items-center gap-3">
-            <Shield className="w-6 h-6 text-electric-blue" />
+            <Shield className="w-6 h-6 text-metallic-gold" />
             <div className="text-sm">
-              <span className="font-medium text-deep-navy">AMF Regulated</span>
-              <span className="text-muted-foreground ml-2">FR-2024-XX</span>
+              <span className="font-medium text-card-foreground">AMF Regulated</span>
+              <span className="text-card-foreground/70 ml-2">FR-2024-XX</span>
             </div>
           </div>
 
@@ -33,7 +33,7 @@ const CredibilityBar = () => {
               {[...partners, ...partners].map((partner, index) => (
                 <div 
                   key={index}
-                  className="flex-shrink-0 text-sm font-medium text-deep-navy/60 hover:text-deep-navy transition-colors"
+                  className="flex-shrink-0 text-sm font-medium text-card-foreground/60 hover:text-card-foreground transition-colors"
                 >
                   {partner}
                 </div>
@@ -44,7 +44,7 @@ const CredibilityBar = () => {
           {/* Trust Indicator */}
           <div className="flex items-center gap-2">
             <CheckCircle className="w-5 h-5 text-metallic-gold" />
-            <span className="text-sm font-medium text-deep-navy">GDPR Secure</span>
+            <span className="text-sm font-medium text-card-foreground">GDPR Secure</span>
           </div>
         </div>
       </div>

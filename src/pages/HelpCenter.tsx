@@ -63,7 +63,7 @@ const HelpCenter = () => {
             <h1 className="text-4xl font-bold text-foreground mb-4">
               {t('footer.helpCenter')}
             </h1>
-            <p className="text-muted-foreground mb-8">
+            <p className="text-foreground/70 mb-8">
               Trouvez des réponses à vos questions et apprenez à utiliser notre plateforme.
             </p>
 
@@ -73,8 +73,8 @@ const HelpCenter = () => {
                 <Card key={index} className="cursor-pointer hover:border-primary transition-colors">
                   <CardContent className="flex flex-col items-center text-center p-6">
                     <category.icon className="w-8 h-8 text-primary mb-3" />
-                    <h3 className="font-semibold text-sm">{category.title}</h3>
-                    <p className="text-xs text-muted-foreground mt-1">{category.description}</p>
+                    <h3 className="font-semibold text-sm text-card-foreground">{category.title}</h3>
+                    <p className="text-xs text-card-foreground/60 mt-1">{category.description}</p>
                   </CardContent>
                 </Card>
               ))}
@@ -303,8 +303,8 @@ const HelpCenter = () => {
                 <div className="flex items-center gap-4">
                   <HelpCircle className="w-12 h-12 text-primary" />
                   <div>
-                    <h3 className="font-semibold text-lg">Vous n'avez pas trouvé votre réponse ?</h3>
-                    <p className="text-muted-foreground">Notre équipe support est là pour vous aider.</p>
+                    <h3 className="font-semibold text-lg text-card-foreground">Vous n'avez pas trouvé votre réponse ?</h3>
+                    <p className="text-card-foreground/70">Notre équipe support est là pour vous aider.</p>
                   </div>
                 </div>
                 <Button onClick={() => navigate('/contact-support')} size="lg">

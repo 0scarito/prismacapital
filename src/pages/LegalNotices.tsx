@@ -19,38 +19,38 @@ const LegalNotices = () => {
             <div className="prose prose-lg max-w-none space-y-8">
               {/* Company Information */}
               <section className="bg-card rounded-lg p-8 border border-border">
-                <h2 className="text-2xl font-semibold mb-6 text-foreground">Identification de l'Éditeur</h2>
-                <div className="space-y-4 text-muted-foreground">
+                <h2 className="text-2xl font-semibold mb-6 text-card-foreground">Identification de l'Éditeur</h2>
+                <div className="space-y-4 text-card-foreground/80">
                   <div>
-                    <strong className="text-foreground">Raison sociale :</strong>
+                    <strong className="text-card-foreground">Raison sociale :</strong>
                     <p>Prisma Capital Cards SAS</p>
                   </div>
                   <div>
-                    <strong className="text-foreground">Forme juridique :</strong>
+                    <strong className="text-card-foreground">Forme juridique :</strong>
                     <p>Société par Actions Simplifiée (SAS)</p>
                   </div>
                   <div>
-                    <strong className="text-foreground">Capital social :</strong>
+                    <strong className="text-card-foreground">Capital social :</strong>
                     <p>100 000 €</p>
                   </div>
                   <div>
-                    <strong className="text-foreground">Siège social :</strong>
+                    <strong className="text-card-foreground">Siège social :</strong>
                     <p>25 Avenue des Champs-Élysées, 75008 Paris, France</p>
                   </div>
                   <div>
-                    <strong className="text-foreground">RCS :</strong>
+                    <strong className="text-card-foreground">RCS :</strong>
                     <p>Paris B 123 456 789</p>
                   </div>
                   <div>
-                    <strong className="text-foreground">Numéro de TVA intracommunautaire :</strong>
+                    <strong className="text-card-foreground">Numéro de TVA intracommunautaire :</strong>
                     <p>FR 12 123456789</p>
                   </div>
                   <div>
-                    <strong className="text-foreground">Téléphone :</strong>
+                    <strong className="text-card-foreground">Téléphone :</strong>
                     <p>+33 1 23 45 67 89</p>
                   </div>
                   <div>
-                    <strong className="text-foreground">Email :</strong>
+                    <strong className="text-card-foreground">Email :</strong>
                     <p>contact@prismacapital.fr</p>
                   </div>
                 </div>
@@ -58,8 +58,8 @@ const LegalNotices = () => {
 
               {/* Regulatory Status */}
               <section className="bg-card rounded-lg p-8 border border-border">
-                <h2 className="text-2xl font-semibold mb-6 text-foreground">Statut Réglementaire</h2>
-                <div className="space-y-4 text-muted-foreground">
+                <h2 className="text-2xl font-semibold mb-6 text-card-foreground">Statut Réglementaire</h2>
+                <div className="space-y-4 text-card-foreground/80">
                   <p>
                     Prisma Capital Cards SAS est enregistrée en tant que Prestataire de Services sur Actifs Numériques (PSAN) 
                     auprès de l'Autorité des Marchés Financiers (AMF) sous le numéro E2024-XXX.
@@ -69,7 +69,7 @@ const LegalNotices = () => {
                     auprès de l'Autorité de Contrôle Prudentiel et de Résolution (ACPR).
                   </p>
                   <div className="mt-4">
-                    <strong className="text-foreground">Numéro ORIAS :</strong>
+                    <strong className="text-card-foreground">Numéro ORIAS :</strong>
                     <p>24 123 456</p>
                   </div>
                 </div>
@@ -77,22 +77,22 @@ const LegalNotices = () => {
 
               {/* Publication Director */}
               <section className="bg-card rounded-lg p-8 border border-border">
-                <h2 className="text-2xl font-semibold mb-6 text-foreground">Directeur de la Publication</h2>
-                <div className="text-muted-foreground">
+                <h2 className="text-2xl font-semibold mb-6 text-card-foreground">Directeur de la Publication</h2>
+                <div className="text-card-foreground/80">
                   <p>Le directeur de la publication est Monsieur Jean-Pierre Martin, Président de Prisma Capital Cards SAS.</p>
                 </div>
               </section>
 
               {/* Hosting Provider */}
               <section className="bg-card rounded-lg p-8 border border-border">
-                <h2 className="text-2xl font-semibold mb-6 text-foreground">Hébergement</h2>
-                <div className="space-y-4 text-muted-foreground">
+                <h2 className="text-2xl font-semibold mb-6 text-card-foreground">Hébergement</h2>
+                <div className="space-y-4 text-card-foreground/80">
                   <div>
-                    <strong className="text-foreground">Hébergeur :</strong>
+                    <strong className="text-card-foreground">Hébergeur :</strong>
                     <p>Supabase Inc.</p>
                   </div>
                   <div>
-                    <strong className="text-foreground">Adresse :</strong>
+                    <strong className="text-card-foreground">Adresse :</strong>
                     <p>970 Toa Payoh North, #07-04, Singapore 318992</p>
                   </div>
                   <p>
@@ -104,8 +104,8 @@ const LegalNotices = () => {
 
               {/* Intellectual Property */}
               <section className="bg-card rounded-lg p-8 border border-border">
-                <h2 className="text-2xl font-semibold mb-6 text-foreground">Propriété Intellectuelle</h2>
-                <div className="space-y-4 text-muted-foreground">
+                <h2 className="text-2xl font-semibold mb-6 text-card-foreground">Propriété Intellectuelle</h2>
+                <div className="space-y-4 text-card-foreground/80">
                   <p>
                     L'ensemble du contenu de ce site (textes, images, vidéos, logos, graphismes, etc.) 
                     est protégé par le droit d'auteur et le droit des marques.
@@ -124,8 +124,8 @@ const LegalNotices = () => {
 
               {/* Terms of Use */}
               <section className="bg-card rounded-lg p-8 border border-border">
-                <h2 className="text-2xl font-semibold mb-6 text-foreground">Conditions d'Utilisation</h2>
-                <div className="space-y-4 text-muted-foreground">
+                <h2 className="text-2xl font-semibold mb-6 text-card-foreground">Conditions d'Utilisation</h2>
+                <div className="space-y-4 text-card-foreground/80">
                   <p>
                     L'accès et l'utilisation du site sont soumis aux présentes mentions légales ainsi 
                     qu'aux lois et réglementations applicables. En accédant au site, vous acceptez 
@@ -140,8 +140,8 @@ const LegalNotices = () => {
 
               {/* Limitation of Liability */}
               <section className="bg-card rounded-lg p-8 border border-border">
-                <h2 className="text-2xl font-semibold mb-6 text-foreground">Limitation de Responsabilité</h2>
-                <div className="space-y-4 text-muted-foreground">
+                <h2 className="text-2xl font-semibold mb-6 text-card-foreground">Limitation de Responsabilité</h2>
+                <div className="space-y-4 text-card-foreground/80">
                   <p>
                     Prisma Capital Cards SAS s'efforce de fournir des informations exactes et à jour 
                     sur son site. Toutefois, elle ne peut garantir l'exactitude, la complétude ou 
@@ -157,8 +157,8 @@ const LegalNotices = () => {
 
               {/* Applicable Law */}
               <section className="bg-card rounded-lg p-8 border border-border">
-                <h2 className="text-2xl font-semibold mb-6 text-foreground">Droit Applicable</h2>
-                <div className="text-muted-foreground">
+                <h2 className="text-2xl font-semibold mb-6 text-card-foreground">Droit Applicable</h2>
+                <div className="text-card-foreground/80">
                   <p>
                     Les présentes mentions légales sont régies par le droit français. 
                     Tout litige relatif à l'utilisation du site sera soumis à la compétence 

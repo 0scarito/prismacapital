@@ -121,7 +121,7 @@ const Auth = () => {
         onClick={() => navigate(-1)}
         className="absolute left-4 top-4"
       >
-        Retour
+        {t('common.back')}
       </Button>
       <Card className="w-full max-w-md bg-card text-card-foreground">
         <CardHeader className="text-center">
@@ -137,16 +137,20 @@ const Auth = () => {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <Tabs defaultValue="signin" className="w-full">
+          <Tabs defaultValue="signin" className="w-full" onValueChange={() => {
+            setEmail('');
+            setPassword('');
+            setDisplayName('');
+          }}>
             <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="signin">Connexion</TabsTrigger>
-              <TabsTrigger value="signup">Inscription</TabsTrigger>
+              <TabsTrigger value="signin">{t('auth.signIn')}</TabsTrigger>
+              <TabsTrigger value="signup">{t('auth.signUp')}</TabsTrigger>
             </TabsList>
             
             <TabsContent value="signin">
               <form onSubmit={handleSignIn} className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="signin-email" className="text-foreground">Email</Label>
+                  <Label htmlFor="signin-email" className="text-foreground">{t('auth.email')}</Label>
                   <Input
                     id="signin-email"
                     type="email"
@@ -156,7 +160,7 @@ const Auth = () => {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="signin-password" className="text-foreground">Mot de passe</Label>
+                  <Label htmlFor="signin-password" className="text-foreground">{t('auth.password')}</Label>
                   <Input
                     id="signin-password"
                     type="password"
@@ -166,7 +170,7 @@ const Auth = () => {
                   />
                 </div>
                 <Button type="submit" className="w-full" disabled={loading}>
-                  {loading ? "Connexion..." : "Se connecter"}
+                  {loading ? t('auth.signingIn') : t('auth.signInButton')}
                 </Button>
               </form>
             </TabsContent>
@@ -200,17 +204,17 @@ const Auth = () => {
                 </div>
                 
                 <div className="space-y-2">
-                  <Label htmlFor="signup-name" className="text-foreground">Nom d'affichage</Label>
+                  <Label htmlFor="signup-name" className="text-foreground">{t('auth.displayName')}</Label>
                   <Input
                     id="signup-name"
                     type="text"
                     value={displayName}
                     onChange={(e) => setDisplayName(e.target.value)}
-                    placeholder="Votre nom"
+                    placeholder={t('auth.displayNamePlaceholder')}
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="signup-email" className="text-foreground">Email</Label>
+                  <Label htmlFor="signup-email" className="text-foreground">{t('auth.email')}</Label>
                   <Input
                     id="signup-email"
                     type="email"
@@ -220,7 +224,7 @@ const Auth = () => {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="signup-password" className="text-foreground">Mot de passe</Label>
+                  <Label htmlFor="signup-password" className="text-foreground">{t('auth.password')}</Label>
                   <Input
                     id="signup-password"
                     type="password"
@@ -231,7 +235,7 @@ const Auth = () => {
                   />
                 </div>
                 <Button type="submit" className="w-full" disabled={loading}>
-                  {loading ? "Inscription..." : "S'inscrire"}
+                  {loading ? t('auth.signingUp') : t('auth.signUpButton')}
                 </Button>
               </form>
             </TabsContent>

@@ -1,4 +1,5 @@
 import { Linkedin, Shield, FileText, Cookie, Eye } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
 import RiskWarningSlider from './RiskWarningSlider';
 import prismaLogo from '@/assets/prisma-logo.png';
@@ -93,13 +94,13 @@ const Footer = ({ riskCategory }: FooterProps) => {
             </h3>
             <div className="space-y-3">
               {footerLinks.legal.map((link) => (
-                <a
+                <Link
                   key={link.label}
-                  href={link.href}
+                  to={link.href}
                   className="block font-body text-sm text-white/70 hover:text-spectrum-teal transition-colors duration-200"
                 >
                   {link.label}
-                </a>
+                </Link>
               ))}
             </div>
           </div>
@@ -111,13 +112,13 @@ const Footer = ({ riskCategory }: FooterProps) => {
             </h3>
             <div className="space-y-3">
               {footerLinks.support.map((link) => (
-                <a
+                <Link
                   key={link.label}
-                  href={link.href}
+                  to={link.href}
                   className="block font-body text-sm text-white/70 hover:text-spectrum-teal transition-colors duration-200"
                 >
                   {link.label}
-                </a>
+                </Link>
               ))}
             </div>
 

@@ -147,6 +147,62 @@ const Partners = () => {
           </div>
         </section>
 
+        {/* Partner Types */}
+        <section className="py-20 bg-warm-white">
+          <div className="section-container">
+            <h2 className="font-serif font-bold text-4xl text-deep-navy text-center mb-12">
+              {t('partners.types.title') || 'Who Can Partner With Us'}
+            </h2>
+            <div className="grid md:grid-cols-3 gap-8">
+              {partnerTypes.map((partner, index) => (
+                <div key={index} className="bg-card rounded-xl p-8 border border-border/20 hover:shadow-lg transition-all">
+                  <partner.icon className="w-12 h-12 text-metallic-gold mb-6" />
+                  <h3 className="font-serif font-bold text-2xl text-deep-navy mb-4">{partner.type}</h3>
+                  <p className="font-sans text-deep-navy/80 mb-6">{partner.description}</p>
+                  <ul className="space-y-2">
+                    {partner.benefits.map((benefit, i) => (
+                      <li key={i} className="flex items-center gap-2 text-sm text-deep-navy/70">
+                        <CheckCircle className="w-4 h-4 text-metallic-gold" />
+                        {benefit}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* How It Works */}
+        <section id="how-it-works" className="py-20 bg-gradient-subtle">
+          <div className="section-container">
+            <h2 className="font-serif font-bold text-4xl text-deep-navy text-center mb-4">
+              {t('partners.howItWorks.title') || 'How It Works'}
+            </h2>
+            <p className="font-sans text-deep-navy/70 text-center mb-12 max-w-2xl mx-auto">
+              {t('partners.howItWorks.subtitle') || 'A simple four-step process to start distributing investment coupons'}
+            </p>
+            <div className="grid md:grid-cols-4 gap-6">
+              {howItWorks.map((step, index) => (
+                <div key={index} className="relative">
+                  <div className="bg-card rounded-xl p-6 border border-border/20 h-full">
+                    <div className="w-10 h-10 rounded-full bg-metallic-gold text-deep-navy font-bold flex items-center justify-center mb-4">
+                      {step.step}
+                    </div>
+                    <h3 className="font-serif font-bold text-lg text-deep-navy mb-3">{step.title}</h3>
+                    <p className="font-sans text-sm text-deep-navy/70">{step.description}</p>
+                  </div>
+                  {index < howItWorks.length - 1 && (
+                    <div className="hidden md:block absolute top-1/2 -right-3 transform -translate-y-1/2 text-metallic-gold text-2xl">
+                      →
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* Final CTA */}
         <section className="py-20 bg-gradient-hero">
           <div className="section-container">

@@ -39,7 +39,7 @@ const Footer = ({ riskCategory }: FooterProps) => {
   ];
 
   return (
-    <footer className="bg-midnight-navy text-white py-16">
+    <footer className="bg-darker-navy text-white py-16">
       <div className="section-container">
         <div className="mb-8 border-b border-white/20 pb-8">
           <RiskWarningSlider categoryKey={riskCategory} />

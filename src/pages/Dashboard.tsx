@@ -457,20 +457,20 @@ const CouponItem = ({ coupon, t, language }: { coupon: Coupon; t: (key: string) 
   };
 
   return (
-    <div className="flex items-center justify-between p-4 border rounded-lg hover:bg-accent/50 transition-colors">
+    <div className="flex items-center justify-between p-4 border border-border rounded-lg hover:bg-accent/50 transition-colors">
       <div className="flex-1">
         <div className="flex items-center gap-3">
-          <h4 className="font-semibold">{coupon.title}</h4>
+          <h4 className="font-semibold text-card-foreground">{coupon.title}</h4>
           <Badge className={getCouponStatusVariant(coupon.status)}>
             {getStatusText(coupon.status)}
           </Badge>
         </div>
-        <p className="text-sm text-muted-foreground mt-1">{coupon.description}</p>
+        <p className="text-sm text-card-foreground/70 mt-1">{coupon.description}</p>
         <div className="flex items-center gap-4 mt-2 text-sm">
-          <span className="font-mono bg-muted px-2 py-1 rounded">{coupon.code}</span>
-          <span className="text-primary font-semibold">{coupon.value}€</span>
+          <span className="font-mono bg-gray-100 text-card-foreground px-2 py-1 rounded">{coupon.code}</span>
+          <span className="text-card-foreground font-semibold">{coupon.value}€</span>
           {coupon.expires_at && (
-            <span className="text-muted-foreground">
+            <span className="text-card-foreground/60">
               {t('dashboard.coupons.expires')}: {new Date(coupon.expires_at).toLocaleDateString(language === 'fr' ? 'fr-FR' : 'en-US')}
             </span>
           )}

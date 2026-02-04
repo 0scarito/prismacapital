@@ -63,7 +63,7 @@ const DiciDocumentation = () => {
             <h1 className="text-4xl font-bold text-foreground mb-4">
               {t('footer.dici')}
             </h1>
-            <p className="text-muted-foreground mb-8">
+            <p className="text-foreground/70 mb-8">
               Accédez aux Documents d'Informations Clés (DIC/DICI) pour tous nos produits d'investissement.
             </p>
 
@@ -74,13 +74,13 @@ const DiciDocumentation = () => {
                   <Info className="w-8 h-8 text-primary flex-shrink-0" />
                   <div>
                     <h2 className="font-semibold text-lg mb-2">Qu'est-ce qu'un DICI ?</h2>
-                    <p className="text-muted-foreground">
+                    <p className="text-card-foreground/80">
                       Le Document d'Informations Clés pour l'Investisseur (DICI) ou Document 
                       d'Information Clé (DIC) est un document réglementaire standardisé qui 
                       fournit les informations essentielles sur un produit d'investissement. 
                       Il présente de manière claire et concise :
                     </p>
-                    <ul className="list-disc pl-6 mt-2 text-muted-foreground space-y-1">
+                    <ul className="list-disc pl-6 mt-2 text-card-foreground/70 space-y-1">
                       <li>Les objectifs et la politique d'investissement</li>
                       <li>Le profil de risque et de rendement (échelle de 1 à 7)</li>
                       <li>Les frais applicables</li>
@@ -99,7 +99,7 @@ const DiciDocumentation = () => {
                   <AlertTriangle className="w-6 h-6 text-amber-500 flex-shrink-0" />
                   <div>
                     <h3 className="font-semibold mb-1">Obligation réglementaire</h3>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-sm text-card-foreground/70">
                       Conformément à la réglementation européenne (PRIIPS et OPCVM), nous vous 
                       recommandons de lire attentivement le DIC/DICI de chaque produit avant 
                       d'investir. Ces documents vous aident à comprendre les caractéristiques, 
@@ -136,7 +136,7 @@ const DiciDocumentation = () => {
                               <span className="text-xs px-2 py-1 bg-primary/10 text-primary rounded">
                                 {doc.type}
                               </span>
-                              <span className="text-xs text-muted-foreground">
+                              <span className="text-xs text-card-foreground/60">
                                 Mis à jour : {new Date(doc.date).toLocaleDateString('fr-FR')}
                               </span>
                             </div>
@@ -172,7 +172,7 @@ const DiciDocumentation = () => {
                   <div className="flex items-center justify-between p-4 border rounded-lg hover:bg-accent/50 transition-colors">
                     <div>
                       <h4 className="font-medium">Conditions Générales d'Utilisation</h4>
-                      <span className="text-xs text-muted-foreground">Version 2.1 - Décembre 2024</span>
+                      <span className="text-xs text-card-foreground/60">Version 2.1 - Décembre 2024</span>
                     </div>
                     <Button variant="secondary" size="sm">
                       <Download className="w-4 h-4 mr-1" />
@@ -182,7 +182,7 @@ const DiciDocumentation = () => {
                   <div className="flex items-center justify-between p-4 border rounded-lg hover:bg-accent/50 transition-colors">
                     <div>
                       <h4 className="font-medium">Politique de Traitement des Réclamations</h4>
-                      <span className="text-xs text-muted-foreground">Version 1.0 - Janvier 2024</span>
+                      <span className="text-xs text-card-foreground/60">Version 1.0 - Janvier 2024</span>
                     </div>
                     <Button variant="secondary" size="sm">
                       <Download className="w-4 h-4 mr-1" />
@@ -192,7 +192,7 @@ const DiciDocumentation = () => {
                   <div className="flex items-center justify-between p-4 border rounded-lg hover:bg-accent/50 transition-colors">
                     <div>
                       <h4 className="font-medium">Politique de Conflits d'Intérêts</h4>
-                      <span className="text-xs text-muted-foreground">Version 1.0 - Janvier 2024</span>
+                      <span className="text-xs text-card-foreground/60">Version 1.0 - Janvier 2024</span>
                     </div>
                     <Button variant="secondary" size="sm">
                       <Download className="w-4 h-4 mr-1" />
@@ -202,7 +202,7 @@ const DiciDocumentation = () => {
                   <div className="flex items-center justify-between p-4 border rounded-lg hover:bg-accent/50 transition-colors">
                     <div>
                       <h4 className="font-medium">Politique de Meilleure Exécution</h4>
-                      <span className="text-xs text-muted-foreground">Version 1.0 - Janvier 2024</span>
+                      <span className="text-xs text-card-foreground/60">Version 1.0 - Janvier 2024</span>
                     </div>
                     <Button variant="secondary" size="sm">
                       <Download className="w-4 h-4 mr-1" />
@@ -218,7 +218,7 @@ const DiciDocumentation = () => {
               <CardContent className="pt-6">
                 <div className="text-center">
                   <h3 className="font-semibold mb-2">Besoin d'aide pour comprendre ces documents ?</h3>
-                  <p className="text-muted-foreground text-sm mb-4">
+                  <p className="text-card-foreground/70 text-sm mb-4">
                     Notre équipe est disponible pour vous accompagner dans la lecture 
                     et la compréhension des documents réglementaires.
                   </p>

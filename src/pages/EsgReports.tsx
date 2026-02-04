@@ -76,7 +76,7 @@ const EsgReports = () => {
             <h1 className="text-4xl font-bold text-foreground mb-4">
               {t('footer.esg')}
             </h1>
-            <p className="text-muted-foreground mb-8">
+            <p className="text-foreground/70 mb-8">
               Notre engagement pour un investissement responsable et durable.
             </p>
 
@@ -89,7 +89,7 @@ const EsgReports = () => {
                     {Math.round((esgMetrics.environmental.score + esgMetrics.social.score + esgMetrics.governance.score) / 3)}
                     <span className="text-xl text-muted-foreground">/100</span>
                   </div>
-                  <p className="text-sm text-muted-foreground mt-2">
+                  <p className="text-sm text-card-foreground/60 mt-2">
                     Évaluation au 31 décembre 2024
                   </p>
                 </div>
@@ -122,7 +122,7 @@ const EsgReports = () => {
                   <div className="space-y-2">
                     {esgMetrics.environmental.metrics.map((metric, index) => (
                       <div key={index} className="flex justify-between text-sm">
-                        <span className="text-muted-foreground">{metric.label}</span>
+                        <span className="text-card-foreground/60">{metric.label}</span>
                         <span className={metric.trend === 'positive' ? 'text-green-500' : ''}>
                           {metric.value}
                         </span>
@@ -156,7 +156,7 @@ const EsgReports = () => {
                   <div className="space-y-2">
                     {esgMetrics.social.metrics.map((metric, index) => (
                       <div key={index} className="flex justify-between text-sm">
-                        <span className="text-muted-foreground">{metric.label}</span>
+                        <span className="text-card-foreground/60">{metric.label}</span>
                         <span className={metric.trend === 'positive' ? 'text-green-500' : ''}>
                           {metric.value}
                         </span>
@@ -190,7 +190,7 @@ const EsgReports = () => {
                   <div className="space-y-2">
                     {esgMetrics.governance.metrics.map((metric, index) => (
                       <div key={index} className="flex justify-between text-sm">
-                        <span className="text-muted-foreground">{metric.label}</span>
+                        <span className="text-card-foreground/60">{metric.label}</span>
                         <span className={metric.trend === 'positive' ? 'text-green-500' : ''}>
                           {metric.value}
                         </span>
@@ -221,7 +221,7 @@ const EsgReports = () => {
                       </div>
                       <div>
                         <h3 className="font-semibold mb-1">{commitment.title}</h3>
-                        <p className="text-sm text-muted-foreground">
+                        <p className="text-sm text-card-foreground/70">
                           {commitment.description}
                         </p>
                       </div>
@@ -236,7 +236,7 @@ const EsgReports = () => {
               <CardHeader>
                 <CardTitle>Notre Approche d'Investissement Responsable</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4 text-muted-foreground">
+              <CardContent className="space-y-4 text-card-foreground/80">
                 <p>
                   Chez Prisma Capital Cards, nous intégrons les critères ESG à chaque étape de notre 
                   processus de sélection d'investissements. Notre approche repose sur trois piliers :
@@ -291,10 +291,10 @@ const EsgReports = () => {
                       <div>
                         <h4 className="font-medium">{report.title}</h4>
                         <div className="flex items-center gap-4 mt-1">
-                          <span className="text-xs text-muted-foreground">
+                          <span className="text-xs text-card-foreground/60">
                             Publié le {new Date(report.date).toLocaleDateString('fr-FR')}
                           </span>
-                          <span className="text-xs text-muted-foreground">
+                          <span className="text-xs text-card-foreground/60">
                             {report.size}
                           </span>
                         </div>

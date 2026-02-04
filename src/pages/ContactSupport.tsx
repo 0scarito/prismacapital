@@ -67,7 +67,7 @@ const ContactSupport = () => {
             <h1 className="text-4xl font-bold text-foreground mb-4">
               {t('footer.contactSupport')}
             </h1>
-            <p className="text-muted-foreground mb-8">
+            <p className="text-foreground/70 mb-8">
               Notre équipe est à votre disposition pour répondre à toutes vos questions.
             </p>
 
@@ -139,7 +139,7 @@ const ContactSupport = () => {
                           rows={6}
                           required
                         />
-                        <p className="text-xs text-muted-foreground">
+                        <p className="text-xs text-card-foreground/60">
                           {formData.message.length}/2000 caractères
                         </p>
                       </div>
@@ -168,11 +168,11 @@ const ContactSupport = () => {
                         <Mail className="w-6 h-6 text-primary" />
                       </div>
                       <div>
-                        <h3 className="font-semibold mb-1">Email</h3>
-                        <p className="text-muted-foreground text-sm">
+                        <h3 className="font-semibold mb-1 text-card-foreground">Email</h3>
+                        <p className="text-card-foreground/70 text-sm">
                           support@prismacapital.fr
                         </p>
-                        <p className="text-muted-foreground text-sm">
+                        <p className="text-card-foreground/70 text-sm">
                           partenariat@prismacapital.fr
                         </p>
                       </div>
@@ -187,11 +187,11 @@ const ContactSupport = () => {
                         <Phone className="w-6 h-6 text-primary" />
                       </div>
                       <div>
-                        <h3 className="font-semibold mb-1">Téléphone</h3>
-                        <p className="text-muted-foreground text-sm">
+                        <h3 className="font-semibold mb-1 text-card-foreground">Téléphone</h3>
+                        <p className="text-card-foreground/70 text-sm">
                           +33 1 23 45 67 89
                         </p>
-                        <p className="text-xs text-muted-foreground mt-1">
+                        <p className="text-xs text-card-foreground/60 mt-1">
                           Appel non surtaxé
                         </p>
                       </div>
@@ -206,11 +206,11 @@ const ContactSupport = () => {
                         <Clock className="w-6 h-6 text-primary" />
                       </div>
                       <div>
-                        <h3 className="font-semibold mb-1">Horaires</h3>
-                        <p className="text-muted-foreground text-sm">
+                        <h3 className="font-semibold mb-1 text-card-foreground">Horaires</h3>
+                        <p className="text-card-foreground/70 text-sm">
                           Lundi - Vendredi
                         </p>
-                        <p className="text-muted-foreground text-sm">
+                        <p className="text-card-foreground/70 text-sm">
                           9h00 - 18h00 (CET)
                         </p>
                       </div>
@@ -220,10 +220,10 @@ const ContactSupport = () => {
 
                 <Card className="bg-primary/5 border-primary/20">
                   <CardContent className="pt-6">
-                    <h3 className="font-semibold mb-2">Temps de réponse</h3>
-                    <p className="text-sm text-muted-foreground">
+                    <h3 className="font-semibold mb-2 text-card-foreground">Temps de réponse</h3>
+                    <p className="text-sm text-card-foreground/70">
                       Nous nous engageons à répondre à toutes les demandes sous 
-                      <strong className="text-foreground"> 24 à 48 heures </strong>
+                      <strong className="text-card-foreground"> 24 à 48 heures </strong>
                       ouvrées.
                     </p>
                   </CardContent>
@@ -231,8 +231,8 @@ const ContactSupport = () => {
 
                 <Card>
                   <CardContent className="pt-6">
-                    <h3 className="font-semibold mb-2">Adresse postale</h3>
-                    <p className="text-sm text-muted-foreground">
+                    <h3 className="font-semibold mb-2 text-card-foreground">Adresse postale</h3>
+                    <p className="text-sm text-card-foreground/70">
                       Prisma Capital Cards SAS<br />
                       25 Avenue des Champs-Élysées<br />
                       75008 Paris, France

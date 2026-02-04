@@ -32,8 +32,8 @@
     --secondary: var(--metallic-gold);
     --secondary-foreground: var(--deep-navy);
     
-    --muted: var(--light-gray);
-    --muted-foreground: var(--deep-navy);
+    --muted: 215 40% 20%;
+    --muted-foreground: 214 20% 70%;
     
     --accent: var(--metallic-gold);
     --accent-foreground: var(--deep-navy);

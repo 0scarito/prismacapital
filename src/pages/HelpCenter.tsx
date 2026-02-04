@@ -23,33 +23,33 @@ const HelpCenter = () => {
   const categories = [
     {
       icon: BookOpen,
-      title: "Premiers Pas",
-      description: "Comment démarrer avec Prisma Capital"
+      titleKey: "helpCenter.categories.gettingStarted.title",
+      descriptionKey: "helpCenter.categories.gettingStarted.description"
     },
     {
       icon: CreditCard,
-      title: "Achats & Paiements",
-      description: "Tout sur les achats de coupons"
+      titleKey: "helpCenter.categories.payment.title",
+      descriptionKey: "helpCenter.categories.payment.description"
     },
     {
       icon: Gift,
-      title: "Cadeaux",
-      description: "Offrir un investissement"
+      titleKey: "helpCenter.categories.gifts.title",
+      descriptionKey: "helpCenter.categories.gifts.description"
     },
     {
       icon: Wallet,
-      title: "Encaissement",
-      description: "Retirer vos gains"
+      titleKey: "helpCenter.categories.cashout.title",
+      descriptionKey: "helpCenter.categories.cashout.description"
     },
     {
       icon: User,
-      title: "Mon Compte",
-      description: "Gestion du profil"
+      titleKey: "helpCenter.categories.account.title",
+      descriptionKey: "helpCenter.categories.account.description"
     },
     {
       icon: Shield,
-      title: "Sécurité",
-      description: "Protection des données"
+      titleKey: "helpCenter.categories.security.title",
+      descriptionKey: "helpCenter.categories.security.description"
     }
   ];
 
@@ -61,10 +61,10 @@ const HelpCenter = () => {
         <div className="section-container">
           <div className="max-w-4xl mx-auto">
             <h1 className="text-4xl font-bold text-foreground mb-4">
-              {t('footer.helpCenter')}
+              {t('helpCenter.title')}
             </h1>
             <p className="text-foreground/70 mb-8">
-              Trouvez des réponses à vos questions et apprenez à utiliser notre plateforme.
+              {t('helpCenter.subtitle')}
             </p>
 
             {/* Quick Links */}
@@ -73,8 +73,8 @@ const HelpCenter = () => {
                 <Card key={index} className="cursor-pointer hover:border-primary transition-colors">
                   <CardContent className="flex flex-col items-center text-center p-6">
                     <category.icon className="w-8 h-8 text-primary mb-3" />
-                    <h3 className="font-semibold text-sm text-card-foreground">{category.title}</h3>
-                    <p className="text-xs text-card-foreground/60 mt-1">{category.description}</p>
+                    <h3 className="font-semibold text-sm text-card-foreground">{t(category.titleKey)}</h3>
+                    <p className="text-xs text-card-foreground/60 mt-1">{t(category.descriptionKey)}</p>
                   </CardContent>
                 </Card>
               ))}

@@ -7,7 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-import { LogOut, Gift, Calendar, Euro, QrCode, TrendingUp, TrendingDown, Loader2 } from 'lucide-react';
+import { LogOut, Gift, Calendar, Euro, QrCode, TrendingUp, TrendingDown, Loader2, Wallet, Copy, Check } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import prismaLogo from '@/assets/prisma-logo.png';
@@ -279,12 +279,15 @@ const Dashboard = () => {
             <div className="flex items-center gap-3">
               <span className="text-slate-50">{t('dashboard.personalSpace')}</span>
               <Badge variant="outline" className="bg-blue-500/10 text-blue-500 border-blue-500/20">
-                Client Account
+                {t('dashboard.clientAccount')}
               </Badge>
             </div>
           </div>
           <div className="flex items-center space-x-4">
-            
+            <Button variant="outline" size="sm" onClick={() => navigate('/portfolio')}>
+              <Wallet className="h-4 w-4 mr-2" />
+              {t('dashboard.viewPortfolio')}
+            </Button>
             <Button variant="outline" size="sm" onClick={handleGoHome}>
               {t('nav.home')}
             </Button>
@@ -353,6 +356,34 @@ const Dashboard = () => {
                 </CardContent>
               </Card>
             </div>
+
+            {/* Coupons List */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <QrCode className="h-5 w-5" />
+                  {t('dashboard.coupons.title')}
+                </CardTitle>
+                <CardDescription>{t('dashboard.coupons.description')}</CardDescription>
+              </CardHeader>
+              <CardContent>
+                {coupons.length === 0 ? (
+                  <div className="text-center py-8 text-muted-foreground">
+                    <Gift className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                    <p>{t('dashboard.coupons.empty')}</p>
+                    <Button variant="outline" className="mt-4" onClick={() => navigate('/investments')}>
+                      {t('dashboard.coupons.browse')}
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    {coupons.map((coupon) => (
+                      <CouponItem key={coupon.id} coupon={coupon} t={t} language={language} />
+                    ))}
+                  </div>
+                )}
+              </CardContent>
+            </Card>
           </TabsContent>
 
           <TabsContent value="trends" className="space-y-6">
@@ -405,4 +436,51 @@ const Dashboard = () => {
       </div>
     </div>;
 };
+
+// Coupon item component with copy functionality
+const CouponItem = ({ coupon, t, language }: { coupon: Coupon; t: (key: string) => string; language: string }) => {
+  const [copied, setCopied] = useState(false);
+  
+  const handleCopy = async () => {
+    await navigator.clipboard.writeText(coupon.code);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const getStatusText = (status: string) => {
+    switch (status) {
+      case 'active': return t('dashboard.status.active');
+      case 'used': return t('dashboard.status.used');
+      case 'expired': return t('dashboard.status.expired');
+      default: return status;
+    }
+  };
+
+  return (
+    <div className="flex items-center justify-between p-4 border rounded-lg hover:bg-accent/50 transition-colors">
+      <div className="flex-1">
+        <div className="flex items-center gap-3">
+          <h4 className="font-semibold">{coupon.title}</h4>
+          <Badge className={getCouponStatusVariant(coupon.status)}>
+            {getStatusText(coupon.status)}
+          </Badge>
+        </div>
+        <p className="text-sm text-muted-foreground mt-1">{coupon.description}</p>
+        <div className="flex items-center gap-4 mt-2 text-sm">
+          <span className="font-mono bg-muted px-2 py-1 rounded">{coupon.code}</span>
+          <span className="text-primary font-semibold">{coupon.value}€</span>
+          {coupon.expires_at && (
+            <span className="text-muted-foreground">
+              {t('dashboard.coupons.expires')}: {new Date(coupon.expires_at).toLocaleDateString(language === 'fr' ? 'fr-FR' : 'en-US')}
+            </span>
+          )}
+        </div>
+      </div>
+      <Button variant="ghost" size="sm" onClick={handleCopy}>
+        {copied ? <Check className="h-4 w-4 text-green-500" /> : <Copy className="h-4 w-4" />}
+      </Button>
+    </div>
+  );
+};
+
 export default Dashboard;

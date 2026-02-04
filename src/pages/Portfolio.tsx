@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import { useAuth } from '@/hooks/useAuth';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { supabase } from '@/integrations/supabase/client';
@@ -37,6 +38,7 @@ interface WalletData {
 
 const PortfolioContent = () => {
   const { user } = useAuth();
+  const { t } = useLanguage();
   const navigate = useNavigate();
   const { toast } = useToast();
   
@@ -188,7 +190,7 @@ const PortfolioContent = () => {
         <Navigation />
         <main className="pt-24 pb-20">
           <div className="section-container">
-            <div className="text-center">Loading portfolio...</div>
+            <div className="text-center">{t('portfolio.loading')}</div>
           </div>
         </main>
         <Footer />
@@ -209,18 +211,18 @@ const PortfolioContent = () => {
               className="mb-6"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
-              Back to Dashboard
+              {t('portfolio.backToDashboard')}
             </Button>
 
             <h1 className="font-serif font-bold text-4xl text-foreground mb-8">
-              My Portfolio
+              {t('portfolio.title')}
             </h1>
 
             {/* Summary Cards */}
             <div className="grid md:grid-cols-3 gap-6 mb-8">
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between pb-2">
-                  <CardTitle className="text-sm font-medium">Total Value</CardTitle>
+                  <CardTitle className="text-sm font-medium">{t('portfolio.totalValue')}</CardTitle>
                   <TrendingUp className="w-4 h-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
@@ -230,7 +232,7 @@ const PortfolioContent = () => {
 
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between pb-2">
-                  <CardTitle className="text-sm font-medium">Total Gain/Loss</CardTitle>
+                  <CardTitle className="text-sm font-medium">{t('portfolio.totalGainLoss')}</CardTitle>
                   <DollarSign className="w-4 h-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
@@ -242,7 +244,7 @@ const PortfolioContent = () => {
 
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between pb-2">
-                  <CardTitle className="text-sm font-medium">Wallet Balance</CardTitle>
+                  <CardTitle className="text-sm font-medium">{t('portfolio.walletBalance')}</CardTitle>
                   <Wallet className="w-4 h-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
@@ -253,7 +255,7 @@ const PortfolioContent = () => {
                       className="mt-2"
                       onClick={handleWithdraw}
                     >
-                      Withdraw to Bank
+                      {t('portfolio.withdrawToBank')}
                     </Button>
                   )}
                 </CardContent>
@@ -262,12 +264,12 @@ const PortfolioContent = () => {
 
             {/* Active Holdings */}
             <div className="space-y-4">
-              <h2 className="text-2xl font-bold">Active Investments</h2>
+              <h2 className="text-2xl font-bold">{t('portfolio.activeInvestments')}</h2>
               
               {holdings.filter(h => h.status === 'active').length === 0 ? (
                 <Card>
                   <CardContent className="pt-6 text-center text-muted-foreground">
-                    No active investments yet. Browse our investment opportunities to get started!
+                    {t('portfolio.noActiveInvestments')}
                   </CardContent>
                 </Card>
               ) : (
@@ -315,7 +317,7 @@ const PortfolioContent = () => {
                                 variant="outline"
                                 onClick={() => setCashOutHolding(holding)}
                               >
-                                Cash Out
+                                {t('portfolio.cashOut')}
                               </Button>
                             </div>
                           </div>
@@ -329,7 +331,7 @@ const PortfolioContent = () => {
             {/* Cashed Out Holdings */}
             {holdings.filter(h => h.status === 'cashed_out').length > 0 && (
               <div className="space-y-4 mt-8">
-                <h2 className="text-2xl font-bold">Cashed Out Investments</h2>
+                <h2 className="text-2xl font-bold">{t('portfolio.cashedOutInvestments')}</h2>
                 {holdings
                   .filter(h => h.status === 'cashed_out')
                   .map((holding) => (

@@ -193,9 +193,10 @@ const HelpCenter = () => {
                   <AccordionItem value="item-2">
                     <AccordionTrigger>Le destinataire doit-il avoir un compte ?</AccordionTrigger>
                     <AccordionContent>
-                      Non, le destinataire recevra un email l'invitant à créer un compte gratuit pour 
-                      accepter son cadeau. S'il a déjà un compte, le cadeau sera directement ajouté 
-                      à son portefeuille.
+                      <strong>Oui</strong>, le destinataire doit avoir un compte Prisma Capital existant 
+                      pour recevoir un cadeau. Cela garantit la sécurité et la traçabilité des transferts. 
+                      Si le destinataire n'a pas encore de compte, invitez-le d'abord à s'inscrire sur 
+                      notre plateforme avant d'effectuer le transfert.
                     </AccordionContent>
                   </AccordionItem>
                 </Accordion>

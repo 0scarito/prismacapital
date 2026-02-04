@@ -70,14 +70,14 @@ const Navigation = () => {
   return <nav className={`fixed top-0 left-0 right-0 z-50 border-b border-border/40 transition-all duration-300 ${isScrolled ? 'bg-background/80 backdrop-blur-md' : 'bg-primary/90 backdrop-blur-md'}`}>
       <div className="pr-4 md:pr-8">
         <div className="flex items-center justify-between py-4">
-          {/* Logo - Non-interactive, positioned on the left */}
-          <div className="flex items-center space-x-3">
+          {/* Logo - Clickable to return home */}
+          <Link to="/" className="flex items-center space-x-3 cursor-pointer">
             <img 
               src={prismaLogo} 
               alt="Prisma Capital Logo" 
               className="h-14 w-auto object-contain"
             />
-          </div>
+          </Link>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">

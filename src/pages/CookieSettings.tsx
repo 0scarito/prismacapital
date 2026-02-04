@@ -7,6 +7,7 @@ import { Switch } from '@/components/ui/switch';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import { Cookie, Shield, BarChart3, Target, Save } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 interface CookiePreferences {
   essential: boolean;
@@ -19,14 +20,13 @@ const CookieSettings = () => {
   const { t } = useLanguage();
   const { toast } = useToast();
   const [preferences, setPreferences] = useState<CookiePreferences>({
-    essential: true, // Always required
+    essential: true,
     analytics: false,
     marketing: false,
     preferences: false,
   });
 
   useEffect(() => {
-    // Load saved preferences from localStorage
     const saved = localStorage.getItem('cookiePreferences');
     if (saved) {
       try {
@@ -41,8 +41,8 @@ const CookieSettings = () => {
   const handleSave = () => {
     localStorage.setItem('cookiePreferences', JSON.stringify(preferences));
     toast({
-      title: "Préférences enregistrées",
-      description: "Vos préférences de cookies ont été mises à jour.",
+      title: t('cookies.preferencesSaved'),
+      description: t('cookies.preferencesSavedDesc'),
     });
   };
 
@@ -56,8 +56,8 @@ const CookieSettings = () => {
     setPreferences(allAccepted);
     localStorage.setItem('cookiePreferences', JSON.stringify(allAccepted));
     toast({
-      title: "Tous les cookies acceptés",
-      description: "Vous pouvez modifier vos préférences à tout moment.",
+      title: t('cookies.allAccepted'),
+      description: t('cookies.allAcceptedDesc'),
     });
   };
 
@@ -71,8 +71,8 @@ const CookieSettings = () => {
     setPreferences(onlyEssential);
     localStorage.setItem('cookiePreferences', JSON.stringify(onlyEssential));
     toast({
-      title: "Cookies optionnels refusés",
-      description: "Seuls les cookies essentiels sont activés.",
+      title: t('cookies.optionalRejected'),
+      description: t('cookies.optionalRejectedDesc'),
     });
   };
 
@@ -80,48 +80,48 @@ const CookieSettings = () => {
     {
       id: 'essential',
       icon: Shield,
-      title: 'Cookies Essentiels',
-      description: 'Ces cookies sont nécessaires au fonctionnement du site. Ils permettent d\'utiliser les fonctionnalités principales comme l\'authentification et la sécurité.',
+      titleKey: 'cookies.essential.title',
+      descriptionKey: 'cookies.essential.description',
       required: true,
       cookies: [
-        { name: 'session_id', purpose: 'Maintien de la session utilisateur', duration: 'Session' },
-        { name: 'csrf_token', purpose: 'Protection contre les attaques CSRF', duration: 'Session' },
-        { name: 'cookie_consent', purpose: 'Mémorisation des préférences cookies', duration: '1 an' },
+        { name: 'session_id', purposeKey: 'Session management', durationKey: 'cookies.session' },
+        { name: 'csrf_token', purposeKey: 'CSRF protection', durationKey: 'cookies.session' },
+        { name: 'cookie_consent', purposeKey: 'Cookie preferences', durationKey: 'cookies.duration.1year' },
       ],
     },
     {
       id: 'analytics',
       icon: BarChart3,
-      title: 'Cookies Analytiques',
-      description: 'Ces cookies nous aident à comprendre comment les visiteurs utilisent le site. Toutes les données sont anonymisées.',
+      titleKey: 'cookies.analytics.title',
+      descriptionKey: 'cookies.analytics.description',
       required: false,
       cookies: [
-        { name: '_ga', purpose: 'Identification visiteur Google Analytics', duration: '2 ans' },
-        { name: '_gid', purpose: 'Distinction des utilisateurs', duration: '24 heures' },
-        { name: '_gat', purpose: 'Limitation du taux de requêtes', duration: '1 minute' },
+        { name: '_ga', purposeKey: 'Google Analytics ID', durationKey: 'cookies.duration.2years' },
+        { name: '_gid', purposeKey: 'User distinction', durationKey: 'cookies.duration.24hours' },
+        { name: '_gat', purposeKey: 'Request throttling', durationKey: 'cookies.duration.1minute' },
       ],
     },
     {
       id: 'marketing',
       icon: Target,
-      title: 'Cookies Marketing',
-      description: 'Ces cookies sont utilisés pour vous proposer des publicités personnalisées et mesurer l\'efficacité de nos campagnes.',
+      titleKey: 'cookies.marketing.title',
+      descriptionKey: 'cookies.marketing.description',
       required: false,
       cookies: [
-        { name: '_fbp', purpose: 'Suivi Facebook Pixel', duration: '3 mois' },
-        { name: 'ads_prefs', purpose: 'Préférences publicitaires', duration: '6 mois' },
+        { name: '_fbp', purposeKey: 'Facebook Pixel', durationKey: 'cookies.duration.3months' },
+        { name: 'ads_prefs', purposeKey: 'Ad preferences', durationKey: 'cookies.duration.6months' },
       ],
     },
     {
       id: 'preferences',
       icon: Cookie,
-      title: 'Cookies de Préférences',
-      description: 'Ces cookies permettent de mémoriser vos préférences comme la langue ou la région.',
+      titleKey: 'cookies.preferences.title',
+      descriptionKey: 'cookies.preferences.description',
       required: false,
       cookies: [
-        { name: 'language', purpose: 'Langue préférée', duration: '1 an' },
-        { name: 'theme', purpose: 'Thème d\'affichage (clair/sombre)', duration: '1 an' },
-        { name: 'currency', purpose: 'Devise préférée', duration: '1 an' },
+        { name: 'language', purposeKey: 'Language preference', durationKey: 'cookies.duration.1year' },
+        { name: 'theme', purposeKey: 'Display theme', durationKey: 'cookies.duration.1year' },
+        { name: 'currency', purposeKey: 'Currency preference', durationKey: 'cookies.duration.1year' },
       ],
     },
   ];
@@ -134,20 +134,20 @@ const CookieSettings = () => {
         <div className="section-container">
           <div className="max-w-4xl mx-auto">
             <h1 className="text-4xl font-bold text-foreground mb-4">
-              {t('footer.cookies')}
+              {t('cookies.title')}
             </h1>
             <p className="text-foreground/70 mb-8">
-              Gérez vos préférences de cookies pour personnaliser votre expérience sur notre site.
+              {t('cookies.subtitle')}
             </p>
 
             {/* Quick Actions */}
             <Card className="mb-8">
               <CardContent className="flex flex-col sm:flex-row gap-4 pt-6">
                 <Button onClick={handleAcceptAll} className="flex-1">
-                  Tout accepter
+                  {t('cookies.acceptAll')}
                 </Button>
                 <Button onClick={handleRejectOptional} variant="outline" className="flex-1">
-                  Refuser les optionnels
+                  {t('cookies.rejectOptional')}
                 </Button>
               </CardContent>
             </Card>
@@ -163,9 +163,9 @@ const CookieSettings = () => {
                           <category.icon className="w-5 h-5 text-primary" />
                         </div>
                         <div>
-                          <CardTitle className="text-lg">{category.title}</CardTitle>
+                          <CardTitle className="text-lg">{t(category.titleKey)}</CardTitle>
                           {category.required && (
-                            <span className="text-xs text-card-foreground/60">Toujours actifs</span>
+                            <span className="text-xs text-card-foreground/60">{t('cookies.essential.alwaysActive')}</span>
                           )}
                         </div>
                       </div>
@@ -181,12 +181,12 @@ const CookieSettings = () => {
                       />
                     </div>
                     <CardDescription className="mt-2">
-                      {category.description}
+                      {t(category.descriptionKey)}
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
                     <div className="bg-gray-100 rounded-lg p-4">
-                      <h4 className="font-medium text-sm mb-3 text-card-foreground">Cookies utilisés :</h4>
+                      <h4 className="font-medium text-sm mb-3 text-card-foreground">{t('cookies.cookiesUsed')} :</h4>
                       <div className="space-y-2">
                         {category.cookies.map((cookie, index) => (
                           <div key={index} className="flex justify-between text-sm">
@@ -195,11 +195,11 @@ const CookieSettings = () => {
                                 {cookie.name}
                               </span>
                               <span className="text-card-foreground/70 ml-2">
-                                {cookie.purpose}
+                                {cookie.purposeKey}
                               </span>
                             </div>
                             <span className="text-card-foreground/60 text-xs">
-                              {cookie.duration}
+                              {t(cookie.durationKey)}
                             </span>
                           </div>
                         ))}
@@ -214,31 +214,21 @@ const CookieSettings = () => {
             <div className="mt-8 flex justify-end">
               <Button onClick={handleSave} size="lg">
                 <Save className="w-4 h-4 mr-2" />
-                Enregistrer mes préférences
+                {t('cookies.save')}
               </Button>
             </div>
 
             {/* Additional Information */}
             <Card className="mt-8">
               <CardHeader>
-                <CardTitle>Plus d'informations</CardTitle>
+                <CardTitle>{t('cookies.moreInfo')}</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4 text-card-foreground/80">
+                <p>{t('cookies.moreInfoText1')}</p>
+                <p>{t('cookies.moreInfoText2')}</p>
                 <p>
-                  Un cookie est un petit fichier texte stocké sur votre appareil lorsque vous 
-                  visitez un site web. Les cookies sont largement utilisés pour faire fonctionner 
-                  les sites web, les rendre plus efficaces, et fournir des informations aux 
-                  propriétaires du site.
-                </p>
-                <p>
-                  Vous pouvez à tout moment modifier vos préférences en revenant sur cette page. 
-                  Vous pouvez également supprimer les cookies stockés sur votre appareil via les 
-                  paramètres de votre navigateur.
-                </p>
-                <p>
-                  Pour plus d'informations sur la façon dont nous utilisons vos données, 
-                  consultez notre <a href="/privacy-policy" className="text-primary hover:underline">
-                  Politique de Confidentialité</a>.
+                  {t('cookies.moreInfoText3')} <Link to="/privacy-policy" className="text-primary hover:underline">
+                  {t('cookies.privacyPolicy')}</Link>.
                 </p>
               </CardContent>
             </Card>

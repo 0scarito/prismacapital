@@ -12,15 +12,8 @@ import { useToast } from '@/hooks/use-toast';
 import { Mail, Phone, Clock, MessageSquare, Send } from 'lucide-react';
 import { z } from 'zod';
 
-const contactSchema = z.object({
-  name: z.string().min(2, 'Le nom doit contenir au moins 2 caractères').max(100),
-  email: z.string().email('Email invalide').max(255),
-  subject: z.string().min(1, 'Veuillez sélectionner un sujet'),
-  message: z.string().min(10, 'Le message doit contenir au moins 10 caractères').max(2000),
-});
-
 const ContactSupport = () => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -30,6 +23,13 @@ const ContactSupport = () => {
     message: '',
   });
 
+  const contactSchema = z.object({
+    name: z.string().min(2, t('support.contact.validation.name')).max(100),
+    email: z.string().email(t('support.contact.validation.email')).max(255),
+    subject: z.string().min(1, t('support.contact.validation.subject')),
+    message: z.string().min(10, t('support.contact.validation.message')).max(2000),
+  });
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -37,7 +37,7 @@ const ContactSupport = () => {
     const validation = contactSchema.safeParse(formData);
     if (!validation.success) {
       toast({
-        title: "Erreur de validation",
+        title: t('support.contact.validationError'),
         description: validation.error.errors[0].message,
         variant: "destructive",
       });
@@ -49,8 +49,8 @@ const ContactSupport = () => {
     await new Promise(resolve => setTimeout(resolve, 1000));
 
     toast({
-      title: "Message envoyé",
-      description: "Notre équipe vous répondra sous 24 à 48 heures.",
+      title: t('support.contact.successTitle'),
+      description: t('support.contact.successDescription'),
     });
 
     setFormData({ name: '', email: '', subject: '', message: '' });
@@ -68,7 +68,7 @@ const ContactSupport = () => {
               {t('footer.contactSupport')}
             </h1>
             <p className="text-foreground/70 mb-8">
-              Notre équipe est à votre disposition pour répondre à toutes vos questions.
+              {t('support.contact.subtitle')}
             </p>
 
             <div className="grid lg:grid-cols-3 gap-8">
@@ -78,79 +78,79 @@ const ContactSupport = () => {
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <MessageSquare className="w-5 h-5 text-primary" />
-                      Envoyez-nous un message
+                      {t('support.contact.sendMessage')}
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
                     <form onSubmit={handleSubmit} className="space-y-6">
                       <div className="grid md:grid-cols-2 gap-4">
                         <div className="space-y-2">
-                          <Label htmlFor="name">Nom complet *</Label>
+                          <Label htmlFor="name">{t('support.contact.fullName')} *</Label>
                           <Input
                             id="name"
                             value={formData.name}
                             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                            placeholder="Jean Dupont"
+                            placeholder={t('support.contact.fullNamePlaceholder')}
                             required
                           />
                         </div>
                         <div className="space-y-2">
-                          <Label htmlFor="email">Email *</Label>
+                          <Label htmlFor="email">{t('support.contact.email')} *</Label>
                           <Input
                             id="email"
                             type="email"
                             value={formData.email}
                             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                            placeholder="jean@exemple.fr"
+                            placeholder={t('support.contact.emailPlaceholder')}
                             required
                           />
                         </div>
                       </div>
 
                       <div className="space-y-2">
-                        <Label htmlFor="subject">Sujet *</Label>
+                        <Label htmlFor="subject">{t('support.contact.subject')} *</Label>
                         <Select
                           value={formData.subject}
                           onValueChange={(value) => setFormData({ ...formData, subject: value })}
                         >
                           <SelectTrigger>
-                            <SelectValue placeholder="Sélectionnez un sujet" />
+                            <SelectValue placeholder={t('support.contact.subjectPlaceholder')} />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="account">Mon compte</SelectItem>
-                            <SelectItem value="payment">Paiement / Facturation</SelectItem>
-                            <SelectItem value="investment">Question sur un investissement</SelectItem>
-                            <SelectItem value="cashout">Retrait / Encaissement</SelectItem>
-                            <SelectItem value="gift">Cadeaux / Transfert</SelectItem>
-                            <SelectItem value="technical">Problème technique</SelectItem>
-                            <SelectItem value="partnership">Partenariat</SelectItem>
-                            <SelectItem value="other">Autre</SelectItem>
+                            <SelectItem value="account">{t('support.contact.subjects.account')}</SelectItem>
+                            <SelectItem value="payment">{t('support.contact.subjects.payment')}</SelectItem>
+                            <SelectItem value="investment">{t('support.contact.subjects.investment')}</SelectItem>
+                            <SelectItem value="cashout">{t('support.contact.subjects.cashout')}</SelectItem>
+                            <SelectItem value="gift">{t('support.contact.subjects.gift')}</SelectItem>
+                            <SelectItem value="technical">{t('support.contact.subjects.technical')}</SelectItem>
+                            <SelectItem value="partnership">{t('support.contact.subjects.partnership')}</SelectItem>
+                            <SelectItem value="other">{t('support.contact.subjects.other')}</SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
 
                       <div className="space-y-2">
-                        <Label htmlFor="message">Votre message *</Label>
+                        <Label htmlFor="message">{t('support.contact.message')} *</Label>
                         <Textarea
                           id="message"
                           value={formData.message}
                           onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                          placeholder="Décrivez votre demande en détail..."
+                          placeholder={t('support.contact.messagePlaceholder')}
                           rows={6}
                           required
                         />
                         <p className="text-xs text-card-foreground/60">
-                          {formData.message.length}/2000 caractères
+                          {formData.message.length}/2000 {t('support.contact.characters')}
                         </p>
                       </div>
 
                       <Button type="submit" size="lg" className="w-full" disabled={loading}>
                         {loading ? (
-                          "Envoi en cours..."
+                          t('support.contact.sending')
                         ) : (
                           <>
                             <Send className="w-4 h-4 mr-2" />
-                            Envoyer le message
+                            {t('support.contact.sendButton')}
                           </>
                         )}
                       </Button>
@@ -168,7 +168,7 @@ const ContactSupport = () => {
                         <Mail className="w-6 h-6 text-primary" />
                       </div>
                       <div>
-                        <h3 className="font-semibold mb-1 text-card-foreground">Email</h3>
+                        <h3 className="font-semibold mb-1 text-card-foreground">{t('support.contact.email')}</h3>
                         <p className="text-card-foreground/70 text-sm">
                           support@prismacapital.fr
                         </p>
@@ -187,12 +187,12 @@ const ContactSupport = () => {
                         <Phone className="w-6 h-6 text-primary" />
                       </div>
                       <div>
-                        <h3 className="font-semibold mb-1 text-card-foreground">Téléphone</h3>
+                        <h3 className="font-semibold mb-1 text-card-foreground">{t('support.contact.phone')}</h3>
                         <p className="text-card-foreground/70 text-sm">
                           +33 1 23 45 67 89
                         </p>
                         <p className="text-xs text-card-foreground/60 mt-1">
-                          Appel non surtaxé
+                          {t('support.contact.noSurcharge')}
                         </p>
                       </div>
                     </div>
@@ -206,12 +206,12 @@ const ContactSupport = () => {
                         <Clock className="w-6 h-6 text-primary" />
                       </div>
                       <div>
-                        <h3 className="font-semibold mb-1 text-card-foreground">Horaires</h3>
+                        <h3 className="font-semibold mb-1 text-card-foreground">{t('support.contact.hours')}</h3>
                         <p className="text-card-foreground/70 text-sm">
-                          Lundi - Vendredi
+                          {t('support.contact.weekdays')}
                         </p>
                         <p className="text-card-foreground/70 text-sm">
-                          9h00 - 18h00 (CET)
+                          {t('support.contact.timeRange')}
                         </p>
                       </div>
                     </div>
@@ -220,18 +220,18 @@ const ContactSupport = () => {
 
                 <Card className="bg-primary/5 border-primary/20">
                   <CardContent className="pt-6">
-                    <h3 className="font-semibold mb-2 text-card-foreground">Temps de réponse</h3>
+                    <h3 className="font-semibold mb-2 text-card-foreground">{t('support.contact.responseTime')}</h3>
                     <p className="text-sm text-card-foreground/70">
-                      Nous nous engageons à répondre à toutes les demandes sous 
-                      <strong className="text-card-foreground"> 24 à 48 heures </strong>
-                      ouvrées.
+                      {t('support.contact.responsePromise')}
+                      <strong className="text-card-foreground"> 24-48 </strong>
+                      {t('support.contact.businessHours')}.
                     </p>
                   </CardContent>
                 </Card>
 
                 <Card>
                   <CardContent className="pt-6">
-                    <h3 className="font-semibold mb-2 text-card-foreground">Adresse postale</h3>
+                    <h3 className="font-semibold mb-2 text-card-foreground">{t('support.contact.postalAddress')}</h3>
                     <p className="text-sm text-card-foreground/70">
                       Prisma Capital Cards SAS<br />
                       25 Avenue des Champs-Élysées<br />

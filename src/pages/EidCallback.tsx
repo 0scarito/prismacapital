@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useAuth } from '@/hooks/useAuth';
 import { Loader2, CheckCircle, XCircle } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -17,6 +18,7 @@ const EidCallback = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const { t } = useLanguage();
+  const { user, refreshEidStatus } = useAuth();
 
   useEffect(() => {
     const verifyEidTransaction = async () => {
@@ -46,9 +48,31 @@ const EidCallback = () => {
           return;
         }
 
-        console.log('eID verification successful:', { isNewUser: data.isNewUser });
+        console.log('eID verification successful:', { isNewUser: data.isNewUser, verificationOnly: data.verificationOnly });
 
-        // Use the token to sign in
+        // Clear stored transaction ID
+        sessionStorage.removeItem('eid_transaction_id');
+
+        // Case 1: User was already authenticated - this is verification only
+        if (data.verificationOnly) {
+          // Refresh eID status in auth context
+          await refreshEidStatus();
+          
+          setStatus('success');
+          
+          toast({
+            title: t('auth.eidSuccess') || 'Identity verified',
+            description: t('dashboard.identityVerifiedDesc') || 'Your identity has been verified. You can now make purchases.',
+          });
+
+          // Redirect back to dashboard
+          setTimeout(() => {
+            navigate('/dashboard');
+          }, 1500);
+          return;
+        }
+
+        // Case 2: Not authenticated - need to sign in with token
         if (data.auth?.token) {
           const { error: verifyError } = await supabase.auth.verifyOtp({
             token_hash: data.auth.token,
@@ -62,9 +86,6 @@ const EidCallback = () => {
             return;
           }
         }
-
-        // Clear stored transaction ID
-        sessionStorage.removeItem('eid_transaction_id');
 
         setStatus('success');
         
@@ -94,7 +115,7 @@ const EidCallback = () => {
     };
 
     verifyEidTransaction();
-  }, [searchParams, navigate, toast, t]);
+  }, [searchParams, navigate, toast, t, refreshEidStatus]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-background/80 p-4">
@@ -128,8 +149,8 @@ const EidCallback = () => {
           {status === 'error' && (
             <>
               <XCircle className="h-12 w-12 text-destructive" />
-              <Button onClick={() => navigate('/auth')} variant="outline">
-                {t('common.back') || 'Back to Login'}
+              <Button onClick={() => navigate('/dashboard')} variant="outline">
+                {t('common.back') || 'Back to Dashboard'}
               </Button>
             </>
           )}

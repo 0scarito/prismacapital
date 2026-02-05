@@ -42,11 +42,26 @@ serve(async (req) => {
     const SUPABASE_ANON_KEY = Deno.env.get("SUPABASE_ANON_KEY")!;
     const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 
+    // Check if user is already authenticated
+    const authHeader = req.headers.get("authorization");
+    let authenticatedUserId: string | null = null;
+    
+    if (authHeader) {
+      const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+        global: { headers: { Authorization: authHeader } }
+      });
+      const { data: { user } } = await supabaseClient.auth.getUser();
+      if (user) {
+        authenticatedUserId = user.id;
+        console.log("User already authenticated:", { userId: authenticatedUserId });
+      }
+    }
+
     const body: RequestBody = await req.json();
-    console.log("Scrive eID auth request:", { action: body.action });
+    console.log("Scrive eID auth request:", { action: body.action, hasAuthUser: !!authenticatedUserId });
 
     if (body.action === "create") {
-      // Create transaction - public endpoint (no auth required)
+      // Create transaction - can be called by authenticated or unauthenticated users
       const { provider, redirectUrl } = body as CreateTransactionRequest;
 
       if (!provider || !redirectUrl) {
@@ -149,10 +164,63 @@ serve(async (req) => {
         );
       }
 
-      // Use service role to check/create user
+      // Use service role for database operations
       const supabaseAdmin = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 
-      // Check if user exists with this personal number
+      // CASE 1: User is already authenticated - this is identity verification only
+      if (authenticatedUserId) {
+        console.log("Verifying identity for existing authenticated user:", { userId: authenticatedUserId });
+        
+        // Check if this personal number is already used by another account
+        const { data: existingProfile } = await supabaseAdmin
+          .from("profiles")
+          .select("id")
+          .eq("eid_personal_number", personalNumber)
+          .neq("id", authenticatedUserId)
+          .maybeSingle();
+
+        if (existingProfile) {
+          console.error("Personal number already linked to another account");
+          return new Response(
+            JSON.stringify({ error: "This eID is already linked to another account" }),
+            { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+          );
+        }
+
+        // Update the authenticated user's profile with eID verification
+        const { error: updateError } = await supabaseAdmin
+          .from("profiles")
+          .update({ 
+            eid_personal_number: personalNumber,
+          })
+          .eq("id", authenticatedUserId);
+
+        if (updateError) {
+          console.error("Error updating profile with eID:", updateError);
+          return new Response(
+            JSON.stringify({ error: "Failed to update profile with eID" }),
+            { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+          );
+        }
+
+        console.log("Successfully verified identity for user:", { userId: authenticatedUserId });
+
+        return new Response(
+          JSON.stringify({
+            success: true,
+            isNewUser: false,
+            verificationOnly: true,
+            identity: {
+              personalNumber,
+              name: fullName,
+              provider: scriveData.provider,
+            },
+          }),
+          { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
+      }
+
+      // CASE 2: User is NOT authenticated - check if user exists with this personal number
       const { data: existingProfile, error: profileError } = await supabaseAdmin
         .from("profiles")
         .select("id, display_name")

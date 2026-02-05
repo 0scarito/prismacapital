@@ -9,9 +9,10 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-import { CreditCard, Package } from 'lucide-react';
+import { CreditCard, Package, ShieldAlert } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import { z } from 'zod';
@@ -23,7 +24,7 @@ const checkoutSchema = z.object({
 
 const CheckoutContent = () => {
   const { items, clearCart } = useCart();
-  const { user } = useAuth();
+  const { user, isEidVerified } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
   const { t } = useLanguage();
@@ -184,6 +185,24 @@ const CheckoutContent = () => {
               {t('checkout.title') || 'Checkout'}
             </h1>
 
+            {/* eID Verification Warning */}
+            {!isEidVerified && (
+              <Alert variant="destructive" className="mb-6">
+                <ShieldAlert className="h-4 w-4" />
+                <AlertTitle>{t('checkout.verificationRequired') || 'Identity Verification Required'}</AlertTitle>
+                <AlertDescription>
+                  {t('checkout.verificationRequiredDesc') || 'You must verify your identity before making purchases. Please go to your dashboard to complete verification.'}
+                  <Button 
+                    variant="link" 
+                    className="p-0 h-auto ml-1 text-destructive-foreground underline"
+                    onClick={() => navigate('/dashboard')}
+                  >
+                    {t('checkout.goToDashboard') || 'Go to Dashboard'}
+                  </Button>
+                </AlertDescription>
+              </Alert>
+            )}
+
             <div className="grid lg:grid-cols-3 gap-6">
               <div className="lg:col-span-2 space-y-6">
                 {/* Gift Option */}
@@ -311,11 +330,16 @@ const CheckoutContent = () => {
                       className="w-full"
                       size="lg"
                       onClick={handlePurchase}
-                      disabled={loading || validatingRecipient || calculateTotal() === 0}
+                      disabled={loading || validatingRecipient || calculateTotal() === 0 || !isEidVerified}
                     >
                       <CreditCard className="w-4 h-4 mr-2" />
                       {loading || validatingRecipient ? (t('checkout.processing') || 'Processing...') : (t('checkout.completePurchase') || 'Complete Purchase')}
                     </Button>
+                    {!isEidVerified && (
+                      <p className="text-xs text-destructive text-center mt-2">
+                        {t('checkout.verifyFirst') || 'Please verify your identity first'}
+                      </p>
+                    )}
                   </CardContent>
                 </Card>
               </div>

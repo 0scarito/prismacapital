@@ -40,19 +40,19 @@ const EidVerificationCard = ({ isVerified, onVerificationStart }: EidVerificatio
 
   if (isVerified) {
     return (
-      <Card className="border-green-500/30 bg-green-500/5">
+      <Card className="border-green-500/30 bg-card">
         <CardHeader>
           <div className="flex items-center justify-between">
-            <CardTitle className="flex items-center gap-2 text-lg">
+            <CardTitle className="flex items-center gap-2 text-lg text-card-foreground">
               <ShieldCheck className="h-5 w-5 text-green-500" />
               {t('dashboard.identityVerified') || 'Identity Verified'}
             </CardTitle>
-            <Badge className="bg-green-500/20 text-green-500 border-green-500/30">
+            <Badge className="bg-green-500/20 text-green-600 border-green-500/30">
               <CheckCircle className="h-3 w-3 mr-1" />
               {t('dashboard.verified') || 'Verified'}
             </Badge>
           </div>
-          <CardDescription>
+          <CardDescription className="text-card-foreground/70">
             {t('dashboard.identityVerifiedDesc') || 'Your identity has been verified. You can now make purchases.'}
           </CardDescription>
         </CardHeader>
@@ -61,30 +61,30 @@ const EidVerificationCard = ({ isVerified, onVerificationStart }: EidVerificatio
   }
 
   return (
-    <Card className="border-amber-500/30 bg-amber-500/5">
+    <Card className="border-amber-500/30 bg-card">
       <CardHeader>
         <div className="flex items-center justify-between">
-          <CardTitle className="flex items-center gap-2 text-lg">
+          <CardTitle className="flex items-center gap-2 text-lg text-card-foreground">
             <ShieldAlert className="h-5 w-5 text-amber-500" />
             {t('dashboard.verifyIdentity') || 'Verify Your Identity'}
           </CardTitle>
-          <Badge variant="outline" className="bg-amber-500/20 text-amber-500 border-amber-500/30">
+          <Badge variant="outline" className="bg-amber-500/20 text-amber-600 border-amber-500/30">
             {t('dashboard.required') || 'Required'}
           </Badge>
         </div>
-        <CardDescription>
+        <CardDescription className="text-card-foreground/70">
           {t('dashboard.verifyIdentityDesc') || 'You must verify your identity before making any purchases. This is required for regulatory compliance.'}
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-3">
-        <p className="text-sm text-muted-foreground mb-4">
+        <p className="text-sm text-card-foreground/70 mb-4">
           {t('dashboard.selectEidProvider') || 'Select your eID provider to verify your identity:'}
         </p>
         
         <Button
           type="button"
           variant="outline"
-          className="w-full justify-start gap-3"
+          className="w-full justify-start gap-3 text-card-foreground border-border hover:bg-accent"
           disabled={!!eidLoading}
           onClick={() => handleEidVerification('seBankID')}
         >
@@ -99,7 +99,7 @@ const EidVerificationCard = ({ isVerified, onVerificationStart }: EidVerificatio
         <Button
           type="button"
           variant="outline"
-          className="w-full justify-start gap-3"
+          className="w-full justify-start gap-3 text-card-foreground border-border hover:bg-accent"
           disabled={!!eidLoading}
           onClick={() => handleEidVerification('noBankID')}
         >
@@ -114,7 +114,7 @@ const EidVerificationCard = ({ isVerified, onVerificationStart }: EidVerificatio
         <Button
           type="button"
           variant="outline"
-          className="w-full justify-start gap-3"
+          className="w-full justify-start gap-3 text-card-foreground border-border hover:bg-accent"
           disabled={!!eidLoading}
           onClick={() => handleEidVerification('dkMitID')}
         >

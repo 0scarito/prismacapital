@@ -317,6 +317,67 @@ const Auth = () => {
                   {loading ? t('auth.signingUp') : t('auth.signUpButton')}
                 </Button>
               </form>
+              
+              {/* eID Signup Section */}
+              <div className="mt-6">
+                <div className="relative">
+                  <div className="absolute inset-0 flex items-center">
+                    <Separator className="w-full" />
+                  </div>
+                  <div className="relative flex justify-center text-xs uppercase">
+                    <span className="bg-card px-2 text-muted-foreground">
+                      {t('auth.eidSignup') || 'Or sign up with eID'}
+                    </span>
+                  </div>
+                </div>
+                
+                <div className="mt-4 space-y-2">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="w-full justify-start gap-3"
+                    disabled={!!eidLoading}
+                    onClick={() => handleEidLogin('seBankID')}
+                  >
+                    {eidLoading === 'seBankID' ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <span className="text-lg">🇸🇪</span>
+                    )}
+                    {t('auth.swedishBankId') || 'Swedish BankID'}
+                  </Button>
+                  
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="w-full justify-start gap-3"
+                    disabled={!!eidLoading}
+                    onClick={() => handleEidLogin('noBankID')}
+                  >
+                    {eidLoading === 'noBankID' ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <span className="text-lg">🇳🇴</span>
+                    )}
+                    {t('auth.norwegianBankId') || 'Norwegian BankID'}
+                  </Button>
+                  
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="w-full justify-start gap-3"
+                    disabled={!!eidLoading}
+                    onClick={() => handleEidLogin('dkMitID')}
+                  >
+                    {eidLoading === 'dkMitID' ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <span className="text-lg">🇩🇰</span>
+                    )}
+                    {t('auth.danishMitId') || 'Danish MitID'}
+                  </Button>
+                </div>
+              </div>
             </TabsContent>
           </Tabs>
         </CardContent>

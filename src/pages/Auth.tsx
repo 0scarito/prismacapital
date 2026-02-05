@@ -6,12 +6,13 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Separator } from '@/components/ui/separator';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 import { useLanguage } from '@/contexts/LanguageContext';
 import prismaLogo from '@/assets/prisma-logo-blue.png';
 import { z } from 'zod';
-import { Briefcase, User } from 'lucide-react';
+import { Briefcase, User, Loader2 } from 'lucide-react';
 
 const signInSchema = z.object({
   email: z.string().email('Invalid email format').max(255, 'Email too long'),
@@ -30,7 +31,8 @@ const Auth = () => {
   const [displayName, setDisplayName] = useState('');
   const [role, setRole] = useState<'client' | 'wealth_manager'>('client');
   const [loading, setLoading] = useState(false);
-  const { signIn, signUp, user } = useAuth();
+  const [eidLoading, setEidLoading] = useState<string | null>(null);
+  const { signIn, signUp, signInWithEid, user } = useAuth();
   const { toast } = useToast();
   const { t } = useLanguage();
   const navigate = useNavigate();
@@ -114,6 +116,22 @@ const Auth = () => {
     setLoading(false);
   };
 
+  const handleEidLogin = async (provider: 'seBankID' | 'noBankID' | 'dkMitID') => {
+    setEidLoading(provider);
+    try {
+      await signInWithEid(provider);
+      // Redirect happens in signInWithEid
+    } catch (err) {
+      console.error('eID login error:', err);
+      toast({
+        title: t('auth.eidError') || 'eID verification failed',
+        description: 'Please try again',
+        variant: 'destructive',
+      });
+      setEidLoading(null);
+    }
+  };
+
   return (
     <div className="min-h-screen relative flex items-center justify-center bg-gradient-to-br from-background to-background/80 p-4">
       <Button
@@ -173,6 +191,67 @@ const Auth = () => {
                   {loading ? t('auth.signingIn') : t('auth.signInButton')}
                 </Button>
               </form>
+              
+              {/* eID Login Section */}
+              <div className="mt-6">
+                <div className="relative">
+                  <div className="absolute inset-0 flex items-center">
+                    <Separator className="w-full" />
+                  </div>
+                  <div className="relative flex justify-center text-xs uppercase">
+                    <span className="bg-card px-2 text-muted-foreground">
+                      {t('auth.eidLogin') || 'Or login with eID'}
+                    </span>
+                  </div>
+                </div>
+                
+                <div className="mt-4 space-y-2">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="w-full justify-start gap-3"
+                    disabled={!!eidLoading}
+                    onClick={() => handleEidLogin('seBankID')}
+                  >
+                    {eidLoading === 'seBankID' ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <span className="text-lg">🇸🇪</span>
+                    )}
+                    {t('auth.swedishBankId') || 'Swedish BankID'}
+                  </Button>
+                  
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="w-full justify-start gap-3"
+                    disabled={!!eidLoading}
+                    onClick={() => handleEidLogin('noBankID')}
+                  >
+                    {eidLoading === 'noBankID' ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <span className="text-lg">🇳🇴</span>
+                    )}
+                    {t('auth.norwegianBankId') || 'Norwegian BankID'}
+                  </Button>
+                  
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="w-full justify-start gap-3"
+                    disabled={!!eidLoading}
+                    onClick={() => handleEidLogin('dkMitID')}
+                  >
+                    {eidLoading === 'dkMitID' ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <span className="text-lg">🇩🇰</span>
+                    )}
+                    {t('auth.danishMitId') || 'Danish MitID'}
+                  </Button>
+                </div>
+              </div>
             </TabsContent>
             
             <TabsContent value="signup">

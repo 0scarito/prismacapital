@@ -37,6 +37,7 @@ import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import Portfolio from "./pages/Portfolio";
 import RequestMandate from "./pages/RequestMandate";
+import EidCallback from "./pages/EidCallback";
 import ScrollToTop from "./components/ScrollToTop";
 
 const queryClient = new QueryClient();
@@ -71,6 +72,7 @@ const App = () => (
               <Route path="/checkout" element={<Checkout />} />
               <Route path="/portfolio" element={<Portfolio />} />
               <Route path="/auth" element={<Auth />} />
+              <Route path="/auth/eid-callback" element={<EidCallback />} />
               <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
               <Route path="/partner-dashboard" element={<ProtectedRoute><PartnerDashboard /></ProtectedRoute>} />
               <Route path="/legal-notices" element={<LegalNotices />} />
@@ -98,6 +100,7 @@ const App = () => (
               <Route path="/fr/faq" element={<FAQ />} />
               <Route path="/fr/payment" element={<Payment />} />
               <Route path="/fr/auth" element={<Auth />} />
+              <Route path="/fr/auth/eid-callback" element={<EidCallback />} />
               <Route path="/fr/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
               <Route path="/fr/partner-dashboard" element={<ProtectedRoute><PartnerDashboard /></ProtectedRoute>} />
               <Route path="/fr/legal-notices" element={<LegalNotices />} />
@@ -124,6 +127,7 @@ const App = () => (
               <Route path="/en/faq" element={<FAQ />} />
               <Route path="/en/payment" element={<Payment />} />
               <Route path="/en/auth" element={<Auth />} />
+              <Route path="/en/auth/eid-callback" element={<EidCallback />} />
               <Route path="/en/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
               <Route path="/en/partner-dashboard" element={<ProtectedRoute><PartnerDashboard /></ProtectedRoute>} />
               <Route path="/en/legal-notices" element={<LegalNotices />} />

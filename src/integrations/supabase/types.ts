@@ -397,6 +397,7 @@ export type Database = {
           avatar_url: string | null
           created_at: string | null
           display_name: string | null
+          eid_personal_number: string | null
           id: string
           is_partner_user: boolean | null
           partner_id: string | null
@@ -406,6 +407,7 @@ export type Database = {
           avatar_url?: string | null
           created_at?: string | null
           display_name?: string | null
+          eid_personal_number?: string | null
           id: string
           is_partner_user?: boolean | null
           partner_id?: string | null
@@ -415,6 +417,7 @@ export type Database = {
           avatar_url?: string | null
           created_at?: string | null
           display_name?: string | null
+          eid_personal_number?: string | null
           id?: string
           is_partner_user?: boolean | null
           partner_id?: string | null

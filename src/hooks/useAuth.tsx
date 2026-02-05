@@ -2,6 +2,8 @@ import { useState, useEffect, createContext, useContext } from 'react';
 import { User, Session, AuthError } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 
+type EidProvider = 'seBankID' | 'noBankID' | 'dkMitID';
+
 interface AuthContextType {
   user: User | null;
   session: Session | null;
@@ -18,6 +20,7 @@ interface AuthContextType {
     role?: 'client' | 'wealth_manager'
   ) => Promise<{ error: AuthError | null }>;
   signOut: () => Promise<void>;
+  signInWithEid: (provider: EidProvider) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -140,6 +143,32 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     await supabase.auth.signOut();
   };
 
+  /**
+   * Sign in with Nordic eID (Swedish BankID, Norwegian BankID, Danish MitID)
+   */
+  const signInWithEid = async (provider: EidProvider): Promise<void> => {
+    const redirectUrl = `${window.location.origin}/auth/eid-callback`;
+    
+    const { data, error } = await supabase.functions.invoke('scrive-eid-auth', {
+      body: {
+        action: 'create',
+        provider,
+        redirectUrl,
+      },
+    });
+
+    if (error || !data?.accessUrl) {
+      console.error('eID create transaction error:', error || 'No accessUrl returned');
+      throw new Error('Failed to initiate eID authentication');
+    }
+
+    // Store transaction ID for callback verification
+    sessionStorage.setItem('eid_transaction_id', data.transactionId);
+    
+    // Redirect to Scrive eID (full redirect, not iframe)
+    window.location.href = data.accessUrl;
+  };
+
   const value = {
     user,
     session,
@@ -148,6 +177,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     signIn,
     signUp,
     signOut,
+    signInWithEid,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

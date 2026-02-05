@@ -40,6 +40,7 @@
   "auth.wealthManager": "A CGP / Financial Institution",
   "auth.wealthManagerDesc": "Distribute coupons to my clients",
   "auth.eidLogin": "Or login with eID",
+  "auth.eidSignup": "Or sign up with eID",
   "auth.eidSelect": "Select your eID provider",
   "auth.swedishBankId": "Swedish BankID",
   "auth.norwegianBankId": "Norwegian BankID",

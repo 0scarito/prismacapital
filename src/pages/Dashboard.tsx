@@ -12,6 +12,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import prismaLogo from '@/assets/prisma-logo.png';
 import { getCouponStatusVariant } from '@/lib/badgeStyles';
+import EidVerificationCard from '@/components/EidVerificationCard';
 
 interface Coupon {
   id: string;
@@ -43,7 +44,8 @@ const Dashboard = () => {
   const {
     user,
     signOut,
-    loading
+    loading,
+    isEidVerified
   } = useAuth();
   const { t, language } = useLanguage();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -308,6 +310,11 @@ const Dashboard = () => {
           <p className="text-slate-50">
             {t('dashboard.manageCoupons')}
           </p>
+        </div>
+
+        {/* eID Verification Card */}
+        <div className="mb-6">
+          <EidVerificationCard isVerified={isEidVerified} />
         </div>
 
         {/* Main Content */}

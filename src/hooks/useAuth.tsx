@@ -9,6 +9,7 @@ interface AuthContextType {
   session: Session | null;
   loading: boolean;
   userRole: 'client' | 'wealth_manager' | null;
+  isEidVerified: boolean;
   signIn: (
     email: string,
     password: string
@@ -21,6 +22,7 @@ interface AuthContextType {
   ) => Promise<{ error: AuthError | null }>;
   signOut: () => Promise<void>;
   signInWithEid: (provider: EidProvider) => Promise<void>;
+  refreshEidStatus: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -33,6 +35,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [userRole, setUserRole] = useState<'client' | 'wealth_manager' | null>(null);
+  const [isEidVerified, setIsEidVerified] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -42,13 +45,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setSession(session);
         setUser(session?.user ?? null);
         
-        // Fetch user role when session changes
+        // Fetch user role and eID status when session changes
         if (session?.user) {
           setTimeout(() => {
             fetchUserRole(session.user.id);
+            fetchEidStatus(session.user.id);
           }, 0);
         } else {
           setUserRole(null);
+          setIsEidVerified(false);
         }
         
         setLoading(false);
@@ -62,6 +67,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       
       if (session?.user) {
         fetchUserRole(session.user.id);
+        fetchEidStatus(session.user.id);
       }
       
       setLoading(false);
@@ -80,6 +86,28 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       }
     } catch (err) {
       console.error('Error fetching user role:', err);
+    }
+  };
+
+  const fetchEidStatus = async (userId: string) => {
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('eid_personal_number')
+        .eq('id', userId)
+        .single();
+      
+      if (!error && data) {
+        setIsEidVerified(!!data.eid_personal_number);
+      }
+    } catch (err) {
+      console.error('Error fetching eID status:', err);
+    }
+  };
+
+  const refreshEidStatus = async () => {
+    if (user) {
+      await fetchEidStatus(user.id);
     }
   };
 
@@ -144,7 +172,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   /**
-   * Sign in with Nordic eID (Swedish BankID, Norwegian BankID, Danish MitID)
+   * Initiate eID verification (Swedish BankID, Norwegian BankID, Danish MitID)
    */
   const signInWithEid = async (provider: EidProvider): Promise<void> => {
     const redirectUrl = `${window.location.origin}/auth/eid-callback`;
@@ -159,7 +187,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     if (error || !data?.accessUrl) {
       console.error('eID create transaction error:', error || 'No accessUrl returned');
-      throw new Error('Failed to initiate eID authentication');
+      throw new Error('Failed to initiate eID verification');
     }
 
     // Store transaction ID for callback verification
@@ -174,10 +202,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     session,
     loading,
     userRole,
+    isEidVerified,
     signIn,
     signUp,
     signOut,
     signInWithEid,
+    refreshEidStatus,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

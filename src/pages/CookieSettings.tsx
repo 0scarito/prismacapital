@@ -185,7 +185,7 @@ const CookieSettings = () => {
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <div className="bg-gray-100 rounded-lg p-4">
+                    <div className="bg-muted rounded-lg p-4">
                       <h4 className="font-medium text-sm mb-3 text-card-foreground">{t('cookies.cookiesUsed')} :</h4>
                       <div className="space-y-2">
                         {category.cookies.map((cookie, index) => (

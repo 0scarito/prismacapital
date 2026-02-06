@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { supabase } from '@/integrations/supabase/client';
-import { Loader2, CheckCircle, XCircle } from 'lucide-react';
+import { Loader2, CheckCircle, XCircle, AlertTriangle } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -19,7 +19,7 @@ interface VoveidVerificationProps {
   onVerificationComplete: () => void;
 }
 
-type VerificationStatus = 'idle' | 'loading' | 'ready' | 'verifying' | 'success' | 'failed' | 'canceled';
+type VerificationStatus = 'idle' | 'loading' | 'ready' | 'verifying' | 'checking' | 'success' | 'failed' | 'canceled';
 
 interface VoveidConfig {
   publicKey: string;
@@ -31,12 +31,14 @@ const VoveidVerification = ({ isOpen, onClose, onVerificationComplete }: VoveidV
   const [status, setStatus] = useState<VerificationStatus>('idle');
   const [sessionToken, setSessionToken] = useState<string | null>(null);
   const [config, setConfig] = useState<VoveidConfig | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const { toast } = useToast();
   const { t } = useLanguage();
 
   // Fetch configuration and create session
   const createSession = useCallback(async () => {
     setStatus('loading');
+    setErrorMessage(null);
 
     try {
       // First get config if we don't have it
@@ -80,6 +82,7 @@ const VoveidVerification = ({ isOpen, onClose, onVerificationComplete }: VoveidV
     } catch (err) {
       console.error('Failed to create VoveID session:', err);
       setStatus('failed');
+      setErrorMessage(err instanceof Error ? err.message : 'Failed to start verification');
       toast({
         title: t('auth.voveidError') || 'Verification Error',
         description: err instanceof Error ? err.message : 'Failed to start verification. Please try again.',
@@ -96,6 +99,7 @@ const VoveidVerification = ({ isOpen, onClose, onVerificationComplete }: VoveidV
     }
 
     setStatus('verifying');
+    setErrorMessage(null);
 
     try {
       // Use the npm package directly
@@ -122,6 +126,7 @@ const VoveidVerification = ({ isOpen, onClose, onVerificationComplete }: VoveidV
             });
           } else {
             setStatus('failed');
+            setErrorMessage('Verification was not successful. Please try again.');
             toast({
               title: t('auth.voveidError') || 'Verification Failed',
               description: 'Please try again or contact support.',
@@ -133,6 +138,7 @@ const VoveidVerification = ({ isOpen, onClose, onVerificationComplete }: VoveidV
     } catch (err) {
       console.error('VoveID SDK error:', err);
       setStatus('failed');
+      setErrorMessage(err instanceof Error ? err.message : 'Failed to start verification');
       toast({
         title: t('auth.voveidError') || 'Verification Error',
         description: 'Failed to start verification. Please try again.',
@@ -141,8 +147,10 @@ const VoveidVerification = ({ isOpen, onClose, onVerificationComplete }: VoveidV
     }
   }, [sessionToken, config, toast, t]);
 
-  // Check verification status on backend
+  // Check verification status on backend - only show success when confirmed
   const checkVerificationStatus = async () => {
+    setStatus('checking');
+    
     try {
       const { data, error } = await supabase.functions.invoke('voveid-auth', {
         body: { action: 'get-status' },
@@ -156,23 +164,39 @@ const VoveidVerification = ({ isOpen, onClose, onVerificationComplete }: VoveidV
         setStatus('success');
         toast({
           title: t('auth.voveidSuccess') || 'Identity Verified',
-          description: 'Your identity has been successfully verified.',
+          description: data?.identity?.name 
+            ? `Welcome, ${data.identity.name}! Your identity has been verified.`
+            : 'Your identity has been successfully verified.',
         });
         onVerificationComplete();
-      } else {
-        // Status might still be pending, the webhook will handle it
-        setStatus('success');
+      } else if (data?.status === 'failed') {
+        // Verification explicitly failed
+        setStatus('failed');
+        setErrorMessage('Verification failed. Please try again with valid documents.');
         toast({
-          title: t('auth.voveidSuccess') || 'Verification Submitted',
-          description: 'Your verification is being processed.',
+          title: t('auth.voveidError') || 'Verification Failed',
+          description: 'Your verification could not be completed. Please try again.',
+          variant: 'destructive',
         });
-        onVerificationComplete();
+      } else {
+        // Status is still pending - don't auto-complete, wait for webhook
+        setStatus('failed');
+        setErrorMessage('Verification is still processing. Please wait a moment and try again.');
+        toast({
+          title: 'Verification Processing',
+          description: 'Your verification is being processed. Please wait and check again.',
+        });
       }
     } catch (err) {
       console.error('Status check error:', err);
-      // Even if status check fails, the webhook might still update
-      setStatus('success');
-      onVerificationComplete();
+      // Don't show success if we can't confirm the status
+      setStatus('failed');
+      setErrorMessage('Could not confirm verification status. Please refresh and try again.');
+      toast({
+        title: 'Verification Status Unknown',
+        description: 'We could not confirm your verification. Please refresh and check your dashboard.',
+        variant: 'destructive',
+      });
     }
   };
 
@@ -189,13 +213,21 @@ const VoveidVerification = ({ isOpen, onClose, onVerificationComplete }: VoveidV
       setStatus('idle');
       setSessionToken(null);
       setConfig(null);
+      setErrorMessage(null);
     }
   }, [isOpen]);
 
   const handleClose = () => {
-    if (status !== 'verifying') {
+    if (status !== 'verifying' && status !== 'checking') {
       onClose();
     }
+  };
+
+  const handleRetry = () => {
+    setStatus('idle');
+    setSessionToken(null);
+    setErrorMessage(null);
+    createSession();
   };
 
   return (
@@ -203,8 +235,8 @@ const VoveidVerification = ({ isOpen, onClose, onVerificationComplete }: VoveidV
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            {status === 'success' && <CheckCircle className="h-5 w-5 text-green-500" />}
-            {status === 'failed' && <XCircle className="h-5 w-5 text-red-500" />}
+            {status === 'success' && <CheckCircle className="h-5 w-5 text-primary" />}
+            {status === 'failed' && <XCircle className="h-5 w-5 text-destructive" />}
             {t('auth.voveidTitle') || 'Identity Verification'}
           </DialogTitle>
           <DialogDescription>
@@ -245,10 +277,19 @@ const VoveidVerification = ({ isOpen, onClose, onVerificationComplete }: VoveidV
             </>
           )}
 
+          {status === 'checking' && (
+            <>
+              <Loader2 className="h-8 w-8 animate-spin text-primary" />
+              <p className="text-sm text-muted-foreground">
+                Confirming verification status...
+              </p>
+            </>
+          )}
+
           {status === 'success' && (
             <>
-              <CheckCircle className="h-12 w-12 text-green-500" />
-              <p className="text-sm text-green-600 font-medium">
+              <CheckCircle className="h-12 w-12 text-primary" />
+              <p className="text-sm text-primary font-medium">
                 {t('auth.voveidSuccess') || 'Identity verified successfully!'}
               </p>
               <Button onClick={onClose} variant="outline" className="w-full">
@@ -259,12 +300,17 @@ const VoveidVerification = ({ isOpen, onClose, onVerificationComplete }: VoveidV
 
           {status === 'failed' && (
             <>
-              <XCircle className="h-12 w-12 text-red-500" />
-              <p className="text-sm text-red-600 font-medium">
+              <XCircle className="h-12 w-12 text-destructive" />
+              <p className="text-sm text-destructive font-medium">
                 {t('auth.voveidError') || 'Verification failed'}
               </p>
+              {errorMessage && (
+                <p className="text-xs text-muted-foreground text-center">
+                  {errorMessage}
+                </p>
+              )}
               <div className="flex gap-2 w-full">
-                <Button onClick={createSession} variant="outline" className="flex-1">
+                <Button onClick={handleRetry} variant="outline" className="flex-1">
                   {t('common.retry') || 'Retry'}
                 </Button>
                 <Button onClick={onClose} variant="ghost" className="flex-1">
@@ -276,11 +322,12 @@ const VoveidVerification = ({ isOpen, onClose, onVerificationComplete }: VoveidV
 
           {status === 'canceled' && (
             <>
+              <AlertTriangle className="h-12 w-12 text-amber-500" />
               <p className="text-sm text-muted-foreground">
                 {t('auth.voveidCanceled') || 'Verification was canceled'}
               </p>
               <div className="flex gap-2 w-full">
-                <Button onClick={createSession} variant="outline" className="flex-1">
+                <Button onClick={handleRetry} variant="outline" className="flex-1">
                   {t('common.retry') || 'Try Again'}
                 </Button>
                 <Button onClick={onClose} variant="ghost" className="flex-1">

@@ -24,7 +24,7 @@ const checkoutSchema = z.object({
 
 const CheckoutContent = () => {
   const { items, clearCart } = useCart();
-  const { user, isEidVerified } = useAuth();
+  const { user, isEidVerified, kycStatus } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
   const { t } = useLanguage();
@@ -158,12 +158,24 @@ const CheckoutContent = () => {
           description: 'Complete your payment in the new window',
         });
       }
-    } catch (error) {
-      toast({
-        title: 'Error',
-        description: 'Failed to initiate payment. Please try again.',
-        variant: 'destructive',
-      });
+    } catch (error: any) {
+      // Handle specific error codes from the backend
+      const errorData = error?.message ? JSON.parse(error.message) : null;
+      const errorCode = errorData?.code;
+      
+      if (errorCode === 'KYC_REQUIRED') {
+        toast({
+          title: 'Identity Verification Required',
+          description: 'Please complete identity verification on your dashboard before making purchases.',
+          variant: 'destructive',
+        });
+      } else {
+        toast({
+          title: 'Error',
+          description: 'Failed to initiate payment. Please try again.',
+          variant: 'destructive',
+        });
+      }
     } finally {
       setLoading(false);
     }
@@ -191,7 +203,12 @@ const CheckoutContent = () => {
                 <ShieldAlert className="h-4 w-4" />
                 <AlertTitle>{t('checkout.verificationRequired') || 'Identity Verification Required'}</AlertTitle>
                 <AlertDescription>
-                  {t('checkout.verificationRequiredDesc') || 'You must verify your identity before making purchases. Please go to your dashboard to complete verification.'}
+                  {kycStatus === 'pending' 
+                    ? (t('checkout.verificationPendingDesc') || 'Your identity verification is being processed. Please wait for it to complete before making purchases.')
+                    : kycStatus === 'failed'
+                    ? (t('checkout.verificationFailedDesc') || 'Your identity verification was not successful. Please go to your dashboard to try again.')
+                    : (t('checkout.verificationRequiredDesc') || 'You must verify your identity before making purchases. Please go to your dashboard to complete verification.')
+                  }
                   <Button 
                     variant="link" 
                     className="p-0 h-auto ml-1 text-destructive-foreground underline"

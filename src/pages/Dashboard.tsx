@@ -45,7 +45,9 @@ const Dashboard = () => {
     user,
     signOut,
     loading,
-    isEidVerified
+    isEidVerified,
+    kycStatus,
+    verifiedName
   } = useAuth();
   const { t, language } = useLanguage();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -314,7 +316,11 @@ const Dashboard = () => {
 
         {/* eID Verification Card */}
         <div className="mb-6">
-          <EidVerificationCard isVerified={isEidVerified} />
+          <EidVerificationCard 
+            isVerified={isEidVerified} 
+            kycStatus={kycStatus}
+            verifiedName={verifiedName}
+          />
         </div>
 
         {/* Main Content */}

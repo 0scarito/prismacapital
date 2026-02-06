@@ -8,6 +8,28 @@ const corsHeaders = {
 };
 
 /**
+ * Compute HMAC-SHA256 signature for webhook verification
+ */
+async function computeHmacSha256(payload: string, secret: string): Promise<string> {
+  const encoder = new TextEncoder();
+  const keyData = encoder.encode(secret);
+  const messageData = encoder.encode(payload);
+  
+  const cryptoKey = await crypto.subtle.importKey(
+    "raw",
+    keyData,
+    { name: "HMAC", hash: "SHA-256" },
+    false,
+    ["sign"]
+  );
+  
+  const signature = await crypto.subtle.sign("HMAC", cryptoKey, messageData);
+  return Array.from(new Uint8Array(signature))
+    .map(b => b.toString(16).padStart(2, '0'))
+    .join('');
+}
+
+/**
  * VoveID Webhook Handler
  * 
  * This endpoint receives async verification updates from VoveID.
@@ -32,18 +54,33 @@ serve(async (req) => {
   }
 
   try {
-    const VOVEID_API_KEY = Deno.env.get("VOVEID_API_KEY");
+    const VOVEID_WEBHOOK_SECRET = Deno.env.get("VOVEID_WEBHOOK_SECRET");
     const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
     const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 
-    // Optional: Verify webhook signature if VoveID provides one
+    // Get raw body for signature verification
+    const rawBody = await req.text();
+    
+    // Verify webhook signature if secret is configured
     const signature = req.headers.get("x-voveid-signature");
-    if (signature) {
-      console.log("Webhook signature present:", signature.substring(0, 10) + "...");
-      // TODO: Implement signature verification if VoveID provides documentation
+    if (VOVEID_WEBHOOK_SECRET && signature) {
+      const computedSignature = await computeHmacSha256(rawBody, VOVEID_WEBHOOK_SECRET);
+      
+      if (signature !== computedSignature) {
+        console.error("Invalid webhook signature");
+        return new Response(
+          JSON.stringify({ error: "Invalid signature" }),
+          { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
+      }
+      console.log("Webhook signature verified successfully");
+    } else if (VOVEID_WEBHOOK_SECRET && !signature) {
+      console.warn("Webhook secret configured but no signature in request");
+    } else {
+      console.log("No webhook secret configured - skipping signature verification");
     }
 
-    const body = await req.json();
+    const body = JSON.parse(rawBody);
     console.log("VoveID webhook received:", {
       event: body.event || body.type,
       refId: body.refId || body.userId,
@@ -55,6 +92,28 @@ serve(async (req) => {
     const refId = body.refId || body.userId || body.data?.refId;
     const status = body.status || body.data?.status;
     const documentData = body.documentData || body.data?.documentData || {};
+
+    // Process verification failures
+    if (["verification.failed", "user.rejected", "failed"].includes(event) || 
+        status === "failed" || status === "rejected") {
+      console.log("Processing failed verification:", { event, status, refId });
+      
+      if (refId) {
+        const supabaseAdmin = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
+        
+        await supabaseAdmin
+          .from("profiles")
+          .update({ kyc_status: "failed" })
+          .eq("id", refId);
+        
+        console.log("Updated profile to failed status:", { refId });
+      }
+      
+      return new Response(
+        JSON.stringify({ received: true, processed: true, action: "marked_failed" }),
+        { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
 
     // Only process successful verifications
     if (!["verification.completed", "user.approved", "success"].includes(event) && 
@@ -84,7 +143,7 @@ serve(async (req) => {
                     `${documentData.firstName || ""} ${documentData.lastName || ""}`.trim() ||
                     body.name;
 
-    console.log("Processing verification:", { refId, hasPersonalNumber: !!personalNumber });
+    console.log("Processing verification:", { refId, hasPersonalNumber: !!personalNumber, hasName: !!fullName });
 
     // Update user profile
     const supabaseAdmin = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
@@ -92,7 +151,7 @@ serve(async (req) => {
     // Check if user exists
     const { data: profile, error: profileError } = await supabaseAdmin
       .from("profiles")
-      .select("id, eid_personal_number")
+      .select("id, eid_personal_number, kyc_status")
       .eq("id", refId)
       .maybeSingle();
 
@@ -105,7 +164,7 @@ serve(async (req) => {
     }
 
     // Skip if already verified
-    if (profile.eid_personal_number) {
+    if (profile.eid_personal_number && profile.kyc_status === "verified") {
       console.log("User already verified, skipping:", refId);
       return new Response(
         JSON.stringify({ received: true, alreadyVerified: true }),
@@ -123,18 +182,28 @@ serve(async (req) => {
 
     if (existingProfile) {
       console.error("Personal number already linked to another account");
+      
+      // Mark as failed since identity is already used
+      await supabaseAdmin
+        .from("profiles")
+        .update({ kyc_status: "failed" })
+        .eq("id", refId);
+      
       return new Response(
         JSON.stringify({ error: "Identity already linked to another account" }),
         { status: 409, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
-    // Update profile with verification
+    // Update profile with full verification data
     const { error: updateError } = await supabaseAdmin
       .from("profiles")
       .update({ 
         eid_personal_number: personalNumber,
         kyc_provider: "voveid",
+        verified_name: fullName || null,
+        kyc_status: "verified",
+        kyc_verified_at: new Date().toISOString(),
       })
       .eq("id", refId);
 
@@ -146,7 +215,7 @@ serve(async (req) => {
       );
     }
 
-    console.log("Successfully updated profile via webhook:", { refId, personalNumber });
+    console.log("Successfully updated profile via webhook:", { refId, personalNumber, verifiedName: fullName });
 
     return new Response(
       JSON.stringify({ 

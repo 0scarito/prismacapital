@@ -212,6 +212,7 @@ serve(async (req) => {
           .from("profiles")
           .update({ 
             eid_personal_number: personalNumber,
+            kyc_provider: "onfido",
           })
           .eq("id", authenticatedUserId);
 
@@ -292,6 +293,7 @@ serve(async (req) => {
           .update({ 
             eid_personal_number: personalNumber,
             display_name: fullName,
+            kyc_provider: "onfido",
           })
           .eq("id", userId);
 

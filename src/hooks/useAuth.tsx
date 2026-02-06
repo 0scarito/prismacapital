@@ -99,13 +99,35 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     try {
       const { data, error } = await supabase
         .from('profiles')
-        .select('eid_personal_number, kyc_status, verified_name')
+        .select('eid_personal_number, kyc_status, verified_name, updated_at')
         .eq('id', userId)
         .single();
       
       if (!error && data) {
-        setIsEidVerified(!!data.eid_personal_number && data.kyc_status === 'verified');
-        setKycStatus((data.kyc_status as KycStatus) || 'none');
+        let currentStatus = (data.kyc_status as KycStatus) || 'none';
+        
+        // Check if pending verification has timed out (> 30 minutes)
+        if (currentStatus === 'pending' && data.updated_at) {
+          const updatedAt = new Date(data.updated_at);
+          const now = new Date();
+          const minutesSincePending = (now.getTime() - updatedAt.getTime()) / (1000 * 60);
+          
+          if (minutesSincePending > 30) {
+            console.log('Pending verification timed out, resetting status');
+            // Reset to 'none' so user can restart verification
+            const { error: resetError } = await supabase
+              .from('profiles')
+              .update({ kyc_status: 'none' })
+              .eq('id', userId);
+            
+            if (!resetError) {
+              currentStatus = 'none';
+            }
+          }
+        }
+        
+        setIsEidVerified(!!data.eid_personal_number && currentStatus === 'verified');
+        setKycStatus(currentStatus);
         setVerifiedName(data.verified_name || null);
       }
     } catch (err) {

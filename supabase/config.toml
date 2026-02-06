@@ -1,1 +1,34 @@
 project_id = "pxvfvwnblvljwxymnvpr"
+
+[functions.cash-out]
+verify_jwt = false
+
+[functions.create-payment]
+verify_jwt = false
+
+[functions.scrive-eid-auth]
+verify_jwt = false
+
+[functions.send-mandate-notification]
+verify_jwt = false
+
+[functions.send-purchase-email]
+verify_jwt = false
+
+[functions.stripe-webhook]
+verify_jwt = false
+
+[functions.validate-gift-recipient]
+verify_jwt = false
+
+[functions.verify-payment]
+verify_jwt = false
+
+[functions.withdraw-funds]
+verify_jwt = false
+
+[functions.voveid-auth]
+verify_jwt = false
+
+[functions.voveid-webhook]
+verify_jwt = false

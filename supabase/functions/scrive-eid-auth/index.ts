@@ -7,7 +7,7 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
-const SCRIVE_BASE_URL = "https://api.scrive.com/eid/v1";
+const SCRIVE_BASE_URL = "https://eid.scrive.com/api/v1";
 
 interface CreateTransactionRequest {
   action: "create";

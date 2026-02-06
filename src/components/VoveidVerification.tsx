@@ -34,37 +34,48 @@ interface VoveidVerificationProps {
 
 type VerificationStatus = 'idle' | 'loading' | 'ready' | 'verifying' | 'success' | 'failed' | 'canceled';
 
+interface VoveidConfig {
+  publicKey: string;
+  flowId: string;
+  environment: string;
+}
+
 const VoveidVerification = ({ isOpen, onClose, onVerificationComplete }: VoveidVerificationProps) => {
   const [status, setStatus] = useState<VerificationStatus>('idle');
   const [sessionToken, setSessionToken] = useState<string | null>(null);
+  const [config, setConfig] = useState<VoveidConfig | null>(null);
   const { toast } = useToast();
   const { t } = useLanguage();
 
-  // Get environment variables
-  const publicKey = import.meta.env.VITE_VOVEID_PUBLIC_KEY;
-  const flowId = import.meta.env.VITE_VOVEID_FLOW_ID;
-  const environment = import.meta.env.VITE_VOVEID_ENVIRONMENT || 'Sandbox';
-
-  // Create verification session
+  // Fetch configuration and create session
   const createSession = useCallback(async () => {
-    if (!flowId) {
-      console.error('VoveID Flow ID not configured');
-      toast({
-        title: t('auth.voveidError') || 'Configuration Error',
-        description: 'VoveID is not properly configured',
-        variant: 'destructive',
-      });
-      return;
-    }
-
     setStatus('loading');
 
     try {
+      // First get config if we don't have it
+      let voveidConfig = config;
+      if (!voveidConfig) {
+        const { data: configData, error: configError } = await supabase.functions.invoke('voveid-auth', {
+          body: { action: 'get-config' },
+        });
+
+        if (configError) {
+          console.error('VoveID config error:', configError);
+          throw new Error('Failed to load VoveID configuration');
+        }
+
+        if (!configData?.publicKey || !configData?.flowId) {
+          throw new Error('VoveID configuration incomplete');
+        }
+
+        voveidConfig = configData as VoveidConfig;
+        setConfig(voveidConfig);
+        console.log('VoveID config loaded');
+      }
+
+      // Now create the session
       const { data, error } = await supabase.functions.invoke('voveid-auth', {
-        body: {
-          action: 'create-session',
-          flowId,
-        },
+        body: { action: 'create-session' },
       });
 
       if (error) {
@@ -84,16 +95,16 @@ const VoveidVerification = ({ isOpen, onClose, onVerificationComplete }: VoveidV
       setStatus('failed');
       toast({
         title: t('auth.voveidError') || 'Verification Error',
-        description: 'Failed to start verification. Please try again.',
+        description: err instanceof Error ? err.message : 'Failed to start verification. Please try again.',
         variant: 'destructive',
       });
     }
-  }, [flowId, toast, t]);
+  }, [config, toast, t]);
 
   // Start VoveID SDK verification
   const startVerification = useCallback(async () => {
-    if (!sessionToken || !publicKey) {
-      console.error('Missing sessionToken or publicKey');
+    if (!sessionToken || !config) {
+      console.error('Missing sessionToken or config');
       return;
     }
 
@@ -116,8 +127,8 @@ const VoveidVerification = ({ isOpen, onClose, onVerificationComplete }: VoveidV
       // Initialize and start VoveID
       const vove = new window.Vove!();
       vove.start({
-        environment: environment,
-        publicKey: publicKey,
+        environment: config.environment,
+        publicKey: config.publicKey,
         sessionToken: sessionToken,
         onVerificationComplete: async (result: string) => {
           console.log('VoveID verification result:', result);
@@ -150,7 +161,7 @@ const VoveidVerification = ({ isOpen, onClose, onVerificationComplete }: VoveidV
         variant: 'destructive',
       });
     }
-  }, [sessionToken, publicKey, environment, toast, t]);
+  }, [sessionToken, config, toast, t]);
 
   // Check verification status on backend
   const checkVerificationStatus = async () => {
@@ -199,6 +210,7 @@ const VoveidVerification = ({ isOpen, onClose, onVerificationComplete }: VoveidV
     if (!isOpen) {
       setStatus('idle');
       setSessionToken(null);
+      setConfig(null);
     }
   }, [isOpen]);
 

@@ -213,6 +213,9 @@ serve(async (req) => {
           .update({ 
             eid_personal_number: personalNumber,
             kyc_provider: "onfido",
+            verified_name: fullName || null,
+            kyc_status: "verified",
+            kyc_verified_at: new Date().toISOString(),
           })
           .eq("id", authenticatedUserId);
 
@@ -294,6 +297,9 @@ serve(async (req) => {
             eid_personal_number: personalNumber,
             display_name: fullName,
             kyc_provider: "onfido",
+            verified_name: fullName || null,
+            kyc_status: "verified",
+            kyc_verified_at: new Date().toISOString(),
           })
           .eq("id", userId);
 

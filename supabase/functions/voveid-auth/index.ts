@@ -89,6 +89,9 @@ serve(async (req) => {
     const VOVEID_PUBLIC_KEY = Deno.env.get("VITE_VOVEID_PUBLIC_KEY");
     const VOVEID_FLOW_ID = Deno.env.get("VITE_VOVEID_FLOW_ID");
 
+    // Admin client for profile updates
+    const supabaseAdmin = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
+
     if (body.action === "get-config") {
       // Return public configuration for the frontend
       if (!VOVEID_PUBLIC_KEY || !VOVEID_FLOW_ID) {
@@ -118,6 +121,16 @@ serve(async (req) => {
 
       console.log("Creating VoveID verification session:", { flowId: VOVEID_FLOW_ID, refId: user.id });
 
+      // Set kyc_status to pending when starting verification
+      const { error: pendingError } = await supabaseAdmin
+        .from("profiles")
+        .update({ kyc_status: "pending" })
+        .eq("id", user.id);
+
+      if (pendingError) {
+        console.error("Error setting pending status:", pendingError);
+      }
+
       // Create verification session with VoveID
       const voveResponse = await fetch(`${VOVEID_BASE_URL}/sessions`, {
         method: "POST",
@@ -135,6 +148,13 @@ serve(async (req) => {
       if (!voveResponse.ok) {
         const errorText = await voveResponse.text();
         console.error("VoveID API error:", voveResponse.status, errorText);
+        
+        // Reset status to none on failure
+        await supabaseAdmin
+          .from("profiles")
+          .update({ kyc_status: "none" })
+          .eq("id", user.id);
+        
         return new Response(
           JSON.stringify({ error: "Failed to create verification session", details: errorText }),
           { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
@@ -154,6 +174,13 @@ serve(async (req) => {
 
       if (!sessionToken) {
         console.error("No session token in VoveID response:", voveData);
+        
+        // Reset status to none on failure
+        await supabaseAdmin
+          .from("profiles")
+          .update({ kyc_status: "none" })
+          .eq("id", user.id);
+        
         return new Response(
           JSON.stringify({ error: "No session token received from VoveID", response: voveData }),
           { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
@@ -221,9 +248,6 @@ serve(async (req) => {
           hasName: !!fullName 
         });
 
-        // Update user profile with verification data
-        const supabaseAdmin = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
-
         // Check if this personal number is already used by another account
         const { data: existingProfile } = await supabaseAdmin
           .from("profiles")
@@ -234,18 +258,28 @@ serve(async (req) => {
 
         if (existingProfile) {
           console.error("Personal number already linked to another account");
+          
+          // Set status to failed
+          await supabaseAdmin
+            .from("profiles")
+            .update({ kyc_status: "failed" })
+            .eq("id", user.id);
+          
           return new Response(
             JSON.stringify({ error: "This identity is already linked to another account" }),
             { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
           );
         }
 
-        // Update profile with verification
+        // Update profile with full verification data
         const { error: updateError } = await supabaseAdmin
           .from("profiles")
           .update({ 
             eid_personal_number: personalNumber,
             kyc_provider: "voveid",
+            verified_name: fullName || null,
+            kyc_status: "verified",
+            kyc_verified_at: new Date().toISOString(),
           })
           .eq("id", user.id);
 
@@ -271,7 +305,23 @@ serve(async (req) => {
         );
       }
 
-      // Verification not complete
+      // Verification failed
+      if (voveData.status === "failed" || voveData.status === "rejected") {
+        await supabaseAdmin
+          .from("profiles")
+          .update({ kyc_status: "failed" })
+          .eq("id", user.id);
+        
+        return new Response(
+          JSON.stringify({
+            success: false,
+            status: "failed",
+          }),
+          { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
+      }
+
+      // Verification not complete - still pending
       return new Response(
         JSON.stringify({
           success: false,

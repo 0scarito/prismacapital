@@ -41,6 +41,49 @@ serve(async (req) => {
       throw new Error("User not authenticated");
     }
 
+    // SECURITY: Server-side KYC verification check
+    // This prevents bypassing the frontend-only check
+    const { data: profile, error: profileError } = await supabaseClient
+      .from("profiles")
+      .select("eid_personal_number, kyc_status")
+      .eq("id", user.id)
+      .single();
+
+    if (profileError) {
+      console.error("Error fetching profile:", profileError);
+      return new Response(
+        JSON.stringify({ 
+          error: "Could not verify user profile",
+          code: "PROFILE_ERROR"
+        }),
+        {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+          status: 500,
+        }
+      );
+    }
+
+    // Check if user has completed KYC verification
+    if (!profile?.eid_personal_number || profile?.kyc_status !== 'verified') {
+      console.log("User KYC not verified:", { 
+        userId: user.id, 
+        hasEid: !!profile?.eid_personal_number,
+        kycStatus: profile?.kyc_status 
+      });
+      return new Response(
+        JSON.stringify({ 
+          error: "Identity verification required. Please complete KYC verification before making purchases.",
+          code: "KYC_REQUIRED"
+        }),
+        {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+          status: 403,
+        }
+      );
+    }
+
+    console.log("KYC verified for user:", { userId: user.id, kycStatus: profile.kyc_status });
+
     const body = await req.json();
     
     // Validate request body

@@ -401,8 +401,11 @@ export type Database = {
           id: string
           is_partner_user: boolean | null
           kyc_provider: string | null
+          kyc_status: string | null
+          kyc_verified_at: string | null
           partner_id: string | null
           updated_at: string | null
+          verified_name: string | null
         }
         Insert: {
           avatar_url?: string | null
@@ -412,8 +415,11 @@ export type Database = {
           id: string
           is_partner_user?: boolean | null
           kyc_provider?: string | null
+          kyc_status?: string | null
+          kyc_verified_at?: string | null
           partner_id?: string | null
           updated_at?: string | null
+          verified_name?: string | null
         }
         Update: {
           avatar_url?: string | null
@@ -423,8 +429,11 @@ export type Database = {
           id?: string
           is_partner_user?: boolean | null
           kyc_provider?: string | null
+          kyc_status?: string | null
+          kyc_verified_at?: string | null
           partner_id?: string | null
           updated_at?: string | null
+          verified_name?: string | null
         }
         Relationships: [
           {

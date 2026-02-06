@@ -2,12 +2,16 @@ import { useState, useEffect, createContext, useContext } from 'react';
 import { User, Session, AuthError } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 
+export type KycStatus = 'none' | 'pending' | 'verified' | 'failed';
+
 interface AuthContextType {
   user: User | null;
   session: Session | null;
   loading: boolean;
   userRole: 'client' | 'wealth_manager' | null;
   isEidVerified: boolean;
+  kycStatus: KycStatus;
+  verifiedName: string | null;
   signIn: (
     email: string,
     password: string
@@ -34,6 +38,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [session, setSession] = useState<Session | null>(null);
   const [userRole, setUserRole] = useState<'client' | 'wealth_manager' | null>(null);
   const [isEidVerified, setIsEidVerified] = useState(false);
+  const [kycStatus, setKycStatus] = useState<KycStatus>('none');
+  const [verifiedName, setVerifiedName] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -47,11 +53,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         if (session?.user) {
           setTimeout(() => {
             fetchUserRole(session.user.id);
-            fetchEidStatus(session.user.id);
+            fetchKycData(session.user.id);
           }, 0);
         } else {
           setUserRole(null);
           setIsEidVerified(false);
+          setKycStatus('none');
+          setVerifiedName(null);
         }
         
         setLoading(false);
@@ -65,7 +73,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       
       if (session?.user) {
         fetchUserRole(session.user.id);
-        fetchEidStatus(session.user.id);
+        fetchKycData(session.user.id);
       }
       
       setLoading(false);
@@ -87,25 +95,27 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  const fetchEidStatus = async (userId: string) => {
+  const fetchKycData = async (userId: string) => {
     try {
       const { data, error } = await supabase
         .from('profiles')
-        .select('eid_personal_number')
+        .select('eid_personal_number, kyc_status, verified_name')
         .eq('id', userId)
         .single();
       
       if (!error && data) {
-        setIsEidVerified(!!data.eid_personal_number);
+        setIsEidVerified(!!data.eid_personal_number && data.kyc_status === 'verified');
+        setKycStatus((data.kyc_status as KycStatus) || 'none');
+        setVerifiedName(data.verified_name || null);
       }
     } catch (err) {
-      console.error('Error fetching eID status:', err);
+      console.error('Error fetching KYC data:', err);
     }
   };
 
   const refreshEidStatus = async () => {
     if (user) {
-      await fetchEidStatus(user.id);
+      await fetchKycData(user.id);
     }
   };
 
@@ -201,6 +211,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     loading,
     userRole,
     isEidVerified,
+    kycStatus,
+    verifiedName,
     signIn,
     signUp,
     signOut,

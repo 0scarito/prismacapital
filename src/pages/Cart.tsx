@@ -5,12 +5,13 @@ import { useCart } from '@/contexts/CartContext';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ShoppingCart, Trash2, ArrowRight } from 'lucide-react';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { ShoppingCart, Trash2, ArrowRight, ShieldAlert } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 
 const Cart = () => {
   const { items, removeItem } = useCart();
-  const { user } = useAuth();
+  const { user, isEidVerified, kycStatus } = useAuth();
   const navigate = useNavigate();
   const { t } = useLanguage();
 
@@ -24,6 +25,9 @@ const Cart = () => {
     navigate('/checkout');
   };
 
+  // Show verification warning for logged-in users who haven't completed KYC
+  const showVerificationWarning = user && !isEidVerified && kycStatus !== 'pending';
+
   return (
     <div className="min-h-screen bg-background">
       <Navigation />
@@ -34,6 +38,30 @@ const Cart = () => {
             <h1 className="font-serif font-bold text-4xl text-foreground mb-8">
               {t('cart.title') || 'Shopping Cart'}
             </h1>
+
+            {/* Verification Warning */}
+            {showVerificationWarning && items.length > 0 && (
+              <Alert variant="destructive" className="mb-6">
+                <ShieldAlert className="h-4 w-4" />
+                <AlertTitle>{t('cart.verificationRequired') || 'Identity Verification Required'}</AlertTitle>
+                <AlertDescription className="flex flex-col gap-2">
+                  <span>
+                    {kycStatus === 'failed' 
+                      ? (t('cart.verificationFailedDesc') || 'Your previous verification attempt was not successful. Please complete verification before checkout.')
+                      : (t('cart.verificationRequiredDesc') || 'You must verify your identity before making purchases. Complete verification to proceed.')
+                    }
+                  </span>
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    className="w-fit"
+                    onClick={() => navigate('/dashboard')}
+                  >
+                    {t('cart.goToDashboard') || 'Go to Dashboard to Verify'}
+                  </Button>
+                </AlertDescription>
+              </Alert>
+            )}
 
             {items.length === 0 ? (
               <Card>

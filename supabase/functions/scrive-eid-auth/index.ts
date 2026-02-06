@@ -11,7 +11,7 @@ const SCRIVE_BASE_URL = "https://api.scrive.com/eid/v1";
 
 interface CreateTransactionRequest {
   action: "create";
-  provider: "seBankID" | "noBankID" | "dkMitID";
+  provider: "onfido";
   redirectUrl: string;
 }
 
@@ -148,18 +148,28 @@ serve(async (req) => {
         );
       }
 
-      // Extract identity from providerInfo
+      // Extract identity from providerInfo (Onfido KYC)
       const providerInfo = scriveData.providerInfo || {};
-      const personalNumber = providerInfo.personalNumber || providerInfo.pid || providerInfo.ssn;
-      const fullName = providerInfo.name || providerInfo.fullName || 
-        `${providerInfo.givenName || ""} ${providerInfo.surname || ""}`.trim();
+      console.log("Onfido providerInfo keys:", Object.keys(providerInfo));
       
-      console.log("eID identity extracted:", { hasPersonalNumber: !!personalNumber, hasName: !!fullName });
+      // Onfido may return document_number, applicant_id, or other identifiers
+      const personalNumber = providerInfo.document_number || 
+                            providerInfo.applicant_id || 
+                            providerInfo.personalNumber || 
+                            providerInfo.pid || 
+                            providerInfo.ssn ||
+                            scriveData.id; // fallback to transaction ID
+      
+      const fullName = providerInfo.name || 
+                      providerInfo.fullName || 
+                      `${providerInfo.first_name || providerInfo.givenName || ""} ${providerInfo.last_name || providerInfo.surname || ""}`.trim();
+      
+      console.log("Identity extracted:", { hasPersonalNumber: !!personalNumber, hasName: !!fullName, provider: scriveData.provider });
 
       if (!personalNumber) {
-        console.error("No personal number in providerInfo:", Object.keys(providerInfo));
+        console.error("No identifier found in providerInfo:", JSON.stringify(providerInfo));
         return new Response(
-          JSON.stringify({ error: "Could not extract identity from eID" }),
+          JSON.stringify({ error: "Could not extract identity from verification" }),
           { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
         );
       }

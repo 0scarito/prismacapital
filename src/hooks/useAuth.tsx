@@ -2,8 +2,6 @@ import { useState, useEffect, createContext, useContext } from 'react';
 import { User, Session, AuthError } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 
-type EidProvider = 'seBankID' | 'noBankID' | 'dkMitID';
-
 interface AuthContextType {
   user: User | null;
   session: Session | null;
@@ -21,7 +19,7 @@ interface AuthContextType {
     role?: 'client' | 'wealth_manager'
   ) => Promise<{ error: AuthError | null }>;
   signOut: () => Promise<void>;
-  signInWithEid: (provider: EidProvider) => Promise<void>;
+  verifyIdentity: () => Promise<void>;
   refreshEidStatus: () => Promise<void>;
 }
 
@@ -172,28 +170,28 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   /**
-   * Initiate eID verification (Swedish BankID, Norwegian BankID, Danish MitID)
+   * Initiate identity verification via Scrive Onfido KYC
    */
-  const signInWithEid = async (provider: EidProvider): Promise<void> => {
+  const verifyIdentity = async (): Promise<void> => {
     const redirectUrl = `${window.location.origin}/auth/eid-callback`;
     
     const { data, error } = await supabase.functions.invoke('scrive-eid-auth', {
       body: {
         action: 'create',
-        provider,
+        provider: 'onfido',
         redirectUrl,
       },
     });
 
     if (error || !data?.accessUrl) {
-      console.error('eID create transaction error:', error || 'No accessUrl returned');
-      throw new Error('Failed to initiate eID verification');
+      console.error('Identity verification error:', error || 'No accessUrl returned');
+      throw new Error('Failed to initiate identity verification');
     }
 
     // Store transaction ID for callback verification
     sessionStorage.setItem('eid_transaction_id', data.transactionId);
     
-    // Redirect to Scrive eID (full redirect, not iframe)
+    // Redirect to Scrive/Onfido (full redirect, not iframe)
     window.location.href = data.accessUrl;
   };
 
@@ -206,7 +204,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     signIn,
     signUp,
     signOut,
-    signInWithEid,
+    verifyIdentity,
     refreshEidStatus,
   };
 

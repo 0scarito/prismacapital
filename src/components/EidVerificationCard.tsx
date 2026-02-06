@@ -5,9 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { ShieldCheck, ShieldAlert, Loader2, CheckCircle } from 'lucide-react';
-
-type EidProvider = 'seBankID' | 'noBankID' | 'dkMitID';
+import { ShieldCheck, ShieldAlert, Loader2, CheckCircle, UserCheck } from 'lucide-react';
 
 interface EidVerificationCardProps {
   isVerified: boolean;
@@ -15,26 +13,26 @@ interface EidVerificationCardProps {
 }
 
 const EidVerificationCard = ({ isVerified, onVerificationStart }: EidVerificationCardProps) => {
-  const [eidLoading, setEidLoading] = useState<EidProvider | null>(null);
-  const { signInWithEid } = useAuth();
+  const [loading, setLoading] = useState(false);
+  const { verifyIdentity } = useAuth();
   const { toast } = useToast();
   const { t } = useLanguage();
 
-  const handleEidVerification = async (provider: EidProvider) => {
-    setEidLoading(provider);
+  const handleVerification = async () => {
+    setLoading(true);
     onVerificationStart?.();
     
     try {
-      await signInWithEid(provider);
-      // Redirect happens in signInWithEid
+      await verifyIdentity();
+      // Redirect happens in verifyIdentity
     } catch (err) {
-      console.error('eID verification error:', err);
+      console.error('Identity verification error:', err);
       toast({
-        title: t('auth.eidError') || 'eID verification failed',
+        title: t('auth.eidError') || 'Verification failed',
         description: 'Please try again',
         variant: 'destructive',
       });
-      setEidLoading(null);
+      setLoading(false);
     }
   };
 
@@ -76,54 +74,26 @@ const EidVerificationCard = ({ isVerified, onVerificationStart }: EidVerificatio
           {t('dashboard.verifyIdentityDesc') || 'You must verify your identity before making any purchases. This is required for regulatory compliance.'}
         </CardDescription>
       </CardHeader>
-      <CardContent className="space-y-3">
+      <CardContent>
         <p className="text-sm text-card-foreground/70 mb-4">
-          {t('dashboard.selectEidProvider') || 'Select your eID provider to verify your identity:'}
+          {t('dashboard.kycDescription') || 'Complete a quick identity verification to comply with financial regulations.'}
         </p>
         
         <Button
           type="button"
-          variant="outline"
-          className="w-full justify-start gap-3 text-card-foreground border-border hover:bg-accent"
-          disabled={!!eidLoading}
-          onClick={() => handleEidVerification('seBankID')}
+          className="w-full gap-2"
+          disabled={loading}
+          onClick={handleVerification}
         >
-          {eidLoading === 'seBankID' ? (
+          {loading ? (
             <Loader2 className="h-4 w-4 animate-spin" />
           ) : (
-            <span className="text-lg">🇸🇪</span>
+            <UserCheck className="h-4 w-4" />
           )}
-          {t('auth.swedishBankId') || 'Swedish BankID'}
-        </Button>
-        
-        <Button
-          type="button"
-          variant="outline"
-          className="w-full justify-start gap-3 text-card-foreground border-border hover:bg-accent"
-          disabled={!!eidLoading}
-          onClick={() => handleEidVerification('noBankID')}
-        >
-          {eidLoading === 'noBankID' ? (
-            <Loader2 className="h-4 w-4 animate-spin" />
-          ) : (
-            <span className="text-lg">🇳🇴</span>
-          )}
-          {t('auth.norwegianBankId') || 'Norwegian BankID'}
-        </Button>
-        
-        <Button
-          type="button"
-          variant="outline"
-          className="w-full justify-start gap-3 text-card-foreground border-border hover:bg-accent"
-          disabled={!!eidLoading}
-          onClick={() => handleEidVerification('dkMitID')}
-        >
-          {eidLoading === 'dkMitID' ? (
-            <Loader2 className="h-4 w-4 animate-spin" />
-          ) : (
-            <span className="text-lg">🇩🇰</span>
-          )}
-          {t('auth.danishMitId') || 'Danish MitID'}
+          {loading 
+            ? (t('dashboard.verifying') || 'Verifying...') 
+            : (t('dashboard.startVerification') || 'Start Identity Verification')
+          }
         </Button>
       </CardContent>
     </Card>

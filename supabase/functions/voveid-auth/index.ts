@@ -7,20 +7,23 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
-// VoveID API URLs
-const VOVEID_SANDBOX_URL = "https://api.sandbox.voveid.com";
-const VOVEID_PRODUCTION_URL = "https://api.voveid.com";
+// VoveID API URLs - Sandbox uses .net, Production uses .com
+const VOVEID_SANDBOX_URL = "https://api.voveid.net/v2";
+const VOVEID_PRODUCTION_URL = "https://api.voveid.com/v2";
 
 interface CreateSessionRequest {
   action: "create-session";
-  flowId: string;
 }
 
 interface GetStatusRequest {
   action: "get-status";
 }
 
-type RequestBody = CreateSessionRequest | GetStatusRequest;
+interface GetConfigRequest {
+  action: "get-config";
+}
+
+type RequestBody = CreateSessionRequest | GetStatusRequest | GetConfigRequest;
 
 serve(async (req) => {
   // Handle CORS preflight
@@ -82,20 +85,41 @@ serve(async (req) => {
     const body: RequestBody = await req.json();
     console.log("VoveID auth request:", { action: body.action, userId: user.id });
 
-    if (body.action === "create-session") {
-      const { flowId } = body as CreateSessionRequest;
+    // Get config from environment
+    const VOVEID_PUBLIC_KEY = Deno.env.get("VITE_VOVEID_PUBLIC_KEY");
+    const VOVEID_FLOW_ID = Deno.env.get("VITE_VOVEID_FLOW_ID");
 
-      if (!flowId) {
+    if (body.action === "get-config") {
+      // Return public configuration for the frontend
+      if (!VOVEID_PUBLIC_KEY || !VOVEID_FLOW_ID) {
+        console.error("VoveID public key or flow ID not configured");
         return new Response(
-          JSON.stringify({ error: "Missing flowId" }),
+          JSON.stringify({ error: "VoveID configuration incomplete" }),
+          { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
+      }
+
+      return new Response(
+        JSON.stringify({
+          publicKey: VOVEID_PUBLIC_KEY,
+          flowId: VOVEID_FLOW_ID,
+          environment: VOVEID_ENVIRONMENT,
+        }),
+        { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+
+    } else if (body.action === "create-session") {
+      if (!VOVEID_FLOW_ID) {
+        return new Response(
+          JSON.stringify({ error: "VoveID flow ID not configured" }),
           { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
         );
       }
 
-      console.log("Creating VoveID verification session:", { flowId, refId: user.id });
+      console.log("Creating VoveID verification session:", { flowId: VOVEID_FLOW_ID, refId: user.id });
 
       // Create verification session with VoveID
-      const voveResponse = await fetch(`${VOVEID_BASE_URL}/v2/verification-session`, {
+      const voveResponse = await fetch(`${VOVEID_BASE_URL}/sessions`, {
         method: "POST",
         headers: {
           "x-api-key": VOVEID_API_KEY,
@@ -103,9 +127,10 @@ serve(async (req) => {
         },
         body: JSON.stringify({
           refId: user.id, // Use user ID as reference
-          flowId: flowId,
+          flowId: VOVEID_FLOW_ID,
         }),
       });
+
 
       if (!voveResponse.ok) {
         const errorText = await voveResponse.text();
@@ -117,11 +142,27 @@ serve(async (req) => {
       }
 
       const voveData = await voveResponse.json();
-      console.log("VoveID session created:", { sessionToken: voveData.sessionToken ? "present" : "missing" });
+      console.log("VoveID API response:", JSON.stringify(voveData));
+      
+      // VoveID may return the token as 'sessionToken' or 'token'
+      const sessionToken = voveData.sessionToken || voveData.token;
+      console.log("VoveID session created:", { 
+        sessionToken: sessionToken ? "present" : "missing",
+        sessionId: voveData.sessionId || voveData.id,
+        responseKeys: Object.keys(voveData)
+      });
+
+      if (!sessionToken) {
+        console.error("No session token in VoveID response:", voveData);
+        return new Response(
+          JSON.stringify({ error: "No session token received from VoveID", response: voveData }),
+          { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
+      }
 
       return new Response(
         JSON.stringify({
-          sessionToken: voveData.sessionToken,
+          sessionToken: sessionToken,
           sessionId: voveData.sessionId || voveData.id,
         }),
         { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
@@ -131,7 +172,7 @@ serve(async (req) => {
       // Get verification status for the authenticated user
       console.log("Getting VoveID status for user:", { refId: user.id });
 
-      const voveResponse = await fetch(`${VOVEID_BASE_URL}/v2/users/${user.id}`, {
+      const voveResponse = await fetch(`${VOVEID_BASE_URL}/users/${user.id}`, {
         method: "GET",
         headers: {
           "x-api-key": VOVEID_API_KEY,

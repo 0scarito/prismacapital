@@ -11,20 +11,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-
-// VoveID SDK types
-declare global {
-  interface Window {
-    Vove?: new () => {
-      start: (config: {
-        environment: string;
-        publicKey: string;
-        sessionToken: string;
-        onVerificationComplete: (status: string) => void;
-      }) => void;
-    };
-  }
-}
+import Vove, { VoveEnvironment } from '@vove-id/web-sdk';
 
 interface VoveidVerificationProps {
   isOpen: boolean;
@@ -111,23 +98,14 @@ const VoveidVerification = ({ isOpen, onClose, onVerificationComplete }: VoveidV
     setStatus('verifying');
 
     try {
-      // Dynamically load VoveID SDK if not already loaded
-      if (!window.Vove) {
-        const script = document.createElement('script');
-        script.src = 'https://cdn.voveid.com/web-sdk/latest/vove.min.js';
-        script.async = true;
-        document.head.appendChild(script);
-        
-        await new Promise<void>((resolve, reject) => {
-          script.onload = () => resolve();
-          script.onerror = () => reject(new Error('Failed to load VoveID SDK'));
-        });
-      }
-
-      // Initialize and start VoveID
-      const vove = new window.Vove!();
+      // Use the npm package directly
+      const vove = new Vove();
+      const voveEnv = config.environment === 'production' 
+        ? VoveEnvironment.PRODUCTION 
+        : VoveEnvironment.SANDBOX;
+      
       vove.start({
-        environment: config.environment,
+        environment: voveEnv,
         publicKey: config.publicKey,
         sessionToken: sessionToken,
         onVerificationComplete: async (result: string) => {

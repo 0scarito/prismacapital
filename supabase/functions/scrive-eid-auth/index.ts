@@ -7,7 +7,10 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
-const SCRIVE_BASE_URL = "https://eid.scrive.com/api/v1";
+// Use sandbox URL for testing - switch to "https://eid.scrive.com/api/v1" for production
+const SCRIVE_BASE_URL = Deno.env.get("SCRIVE_EID_SANDBOX") === "false" 
+  ? "https://eid.scrive.com/api/v1" 
+  : "https://eid-sandbox.scrive.com/api/v1";
 
 interface CreateTransactionRequest {
   action: "create";
@@ -36,6 +39,7 @@ serve(async (req) => {
       hasToken: !!SCRIVE_EID_TOKEN,
       tokenLength: SCRIVE_EID_TOKEN?.length || 0,
       tokenPrefix: SCRIVE_EID_TOKEN?.substring(0, 4) || "none",
+      apiBaseUrl: SCRIVE_BASE_URL,
     });
     
     if (!SCRIVE_EID_TOKEN) {

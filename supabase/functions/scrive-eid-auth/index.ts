@@ -30,6 +30,14 @@ serve(async (req) => {
 
   try {
     const SCRIVE_EID_TOKEN = Deno.env.get("SCRIVE_EID_TOKEN");
+    
+    // Debug: Log environment variable availability (not values)
+    console.log("Environment check:", {
+      hasToken: !!SCRIVE_EID_TOKEN,
+      tokenLength: SCRIVE_EID_TOKEN?.length || 0,
+      tokenPrefix: SCRIVE_EID_TOKEN?.substring(0, 4) || "none",
+    });
+    
     if (!SCRIVE_EID_TOKEN) {
       console.error("SCRIVE_EID_TOKEN is not configured");
       return new Response(

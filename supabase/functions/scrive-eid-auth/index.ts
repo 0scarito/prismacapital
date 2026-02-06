@@ -7,8 +7,8 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
-// Scrive eID Hub API - production URL (test vs prod is determined by token)
-const SCRIVE_BASE_URL = "https://eid.scrive.com/api/v1";
+// Scrive eID Hub API - using testbed for test tokens
+const SCRIVE_BASE_URL = "https://testbed-eid.scrive.com/api/v1";
 
 interface CreateTransactionRequest {
   action: "create";

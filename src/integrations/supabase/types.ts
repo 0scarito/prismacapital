@@ -400,6 +400,7 @@ export type Database = {
           eid_personal_number: string | null
           id: string
           is_partner_user: boolean | null
+          kyc_provider: string | null
           partner_id: string | null
           updated_at: string | null
         }
@@ -410,6 +411,7 @@ export type Database = {
           eid_personal_number?: string | null
           id: string
           is_partner_user?: boolean | null
+          kyc_provider?: string | null
           partner_id?: string | null
           updated_at?: string | null
         }
@@ -420,6 +422,7 @@ export type Database = {
           eid_personal_number?: string | null
           id?: string
           is_partner_user?: boolean | null
+          kyc_provider?: string | null
           partner_id?: string | null
           updated_at?: string | null
         }

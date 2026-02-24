@@ -1,90 +1,39 @@
 
 
-# VoveID Webhook Secret Configuration
+## Plan: Rework Scrive eID Auth Using Postman Collection
 
-## Summary
+### Analysis
 
-The webhook infrastructure is fully implemented and ready. The only remaining step is to add your signing secret so the backend can cryptographically verify that incoming webhooks are genuinely from VoveID.
+After reviewing the Postman collection and the current `scrive-eid-auth` edge function, there are two issues to fix:
 
----
+1. **Missing "Start transaction" step**: The Postman collection shows a 3-step flow: Create → Start → Redirect. The current code skips the Start step entirely, going directly from Create to Redirect. This may be why the flow fails at Scrive's frontend.
 
-## Current Status
+2. **Empty Onfido provider parameters**: The current code sends `providerParameters: { auth: {} }` instead of properly specifying the Onfido-specific fields (like `uiLocale`, `allowedDocumentTypes`, etc.) that the Postman collection documents.
 
-| Component | Status |
-|-----------|--------|
-| Webhook endpoint code | Complete with HMAC-SHA256 verification |
-| Webhook URL | `https://pxvfvwnblvljwxymnvpr.supabase.co/functions/v1/voveid-webhook` |
-| VoveID endpoint ID | `ep_39INDm67hdncFqX0BuW354BaRPC` (configured in your dashboard) |
-| Signing secret | **Needs to be added** |
+### What Changes
 
----
+**Edge function `supabase/functions/scrive-eid-auth/index.ts`:**
 
-## What Happens When Webhook Fires
+- **Create action**: Send proper Onfido-specific `providerParameters` in the create request body, including sensible defaults for `uiLocale`, `allowedDocumentTypes`, and the `report` type
+- **Add Start step**: After creating the transaction, call `POST /api/v1/transaction/{tId}/start` before returning the `accessUrl` to the frontend. This is the step the current code is missing.
+- **Verify action**: No structural changes needed; the GET transaction endpoint is already correct. Add logging of the full response for better debugging.
 
-When a user completes verification, VoveID sends a POST request to your webhook with:
+**No frontend changes needed** -- the `useAuth.tsx` hook and `EidCallback.tsx` already handle the redirect and callback correctly. The fix is purely server-side.
 
-```text
-1. User completes liveness check + document scan in VoveID SDK
-2. VoveID processes the verification
-3. VoveID sends webhook to your endpoint with:
-   - event: "verification.completed" or "user.approved"
-   - refId: User's Supabase ID
-   - documentData: { fullName, documentNumber, etc. }
-   - x-voveid-signature header (HMAC signature)
-4. Your webhook:
-   - Verifies the signature matches
-   - Updates the user's profile with:
-     - kyc_status: "verified"
-     - verified_name: Legal name from ID
-     - eid_personal_number: Document number
-     - kyc_verified_at: Timestamp
-5. User can now make purchases
-```
-
----
-
-## Implementation Step
-
-### Add Webhook Signing Secret
-
-Store the secret so the webhook can verify incoming requests:
-
-- **Secret Name**: `VOVEID_WEBHOOK_SECRET`
-- **Secret Value**: `whsec_FET4JAbFCp6ElnS92FHrqmB6M0HHXNTc`
-
----
-
-## Technical Details
-
-### Signature Verification Flow
-
-The webhook already implements this logic (lines 64-81 in `voveid-webhook/index.ts`):
+### Technical Details
 
 ```text
-1. Read raw request body
-2. Get x-voveid-signature header
-3. Compute HMAC-SHA256(body, VOVEID_WEBHOOK_SECRET)
-4. Compare computed signature with header
-5. Reject with 401 if mismatch
+Current flow (broken):
+  Frontend → Edge Fn: create → Scrive: POST /transaction/new → return accessUrl → redirect
+
+Fixed flow (per Postman collection):
+  Frontend → Edge Fn: create → Scrive: POST /transaction/new
+                                      → Scrive: POST /transaction/{tId}/start
+                                      → return accessUrl → redirect
 ```
 
-### Webhook Response Messages
-
-| Scenario | Response |
-|----------|----------|
-| Signature invalid | `401: Invalid signature` |
-| Verification successful | `200: { received: true, processed: true, userId: "..." }` |
-| Verification failed | `200: { received: true, action: "marked_failed" }` |
-| Already verified | `200: { received: true, alreadyVerified: true }` |
-| User not found | `404: User not found` |
-
----
-
-## Files Changed
-
-| File | Change |
-|------|--------|
-| Supabase Secrets | Add `VOVEID_WEBHOOK_SECRET` |
-
-No code changes required - the implementation is complete.
+The edge function's `create` action will:
+1. POST to `/api/v1/transaction/new` with `provider: "onfido"`, `method: "auth"`, `redirectUrl`, and populated `providerParameters.auth.onfido` fields
+2. POST to `/api/v1/transaction/{tId}/start` to activate the transaction
+3. Return `accessUrl` and `transactionId` to the frontend
 

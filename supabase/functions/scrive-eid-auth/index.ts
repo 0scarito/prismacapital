@@ -97,7 +97,7 @@ serve(async (req) => {
           providerParameters: {
             auth: {
               onfido: {
-                uiLocale: "en_US",
+                uiLocale: "en-US",
                 allowedDocumentTypes: ["passport", "national_identity_card", "driving_licence"],
                 report: "documentFacialSimilarityMotion",
               },

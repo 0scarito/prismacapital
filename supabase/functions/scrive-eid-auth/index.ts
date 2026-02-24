@@ -83,7 +83,8 @@ serve(async (req) => {
 
       console.log("Creating Scrive transaction:", { provider, redirectUrl });
 
-      const scriveResponse = await fetch(`${SCRIVE_BASE_URL}/transaction/new`, {
+      // Step 1: Create the transaction with Onfido-specific provider parameters
+      const createResponse = await fetch(`${SCRIVE_BASE_URL}/transaction/new`, {
         method: "POST",
         headers: {
           "Authorization": `Bearer ${SCRIVE_EID_TOKEN}`,
@@ -93,26 +94,58 @@ serve(async (req) => {
           method: "auth",
           provider,
           redirectUrl,
-          providerParameters: { auth: {} },
+          providerParameters: {
+            auth: {
+              onfido: {
+                uiLocale: "en_US",
+                allowedDocumentTypes: ["passport", "national_identity_card", "driving_licence"],
+                report: "document_with_facial_similarity_motion",
+              },
+            },
+          },
         }),
       });
 
-      if (!scriveResponse.ok) {
-        const errorText = await scriveResponse.text();
-        console.error("Scrive API error:", scriveResponse.status, errorText);
+      if (!createResponse.ok) {
+        const errorText = await createResponse.text();
+        console.error("Scrive create error:", createResponse.status, errorText);
         return new Response(
-          JSON.stringify({ error: "Failed to initiate eID authentication" }),
+          JSON.stringify({ error: "Failed to create eID transaction" }),
           { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
         );
       }
 
-      const scriveData = await scriveResponse.json();
-      console.log("Scrive transaction created:", { id: scriveData.id });
+      const createData = await createResponse.json();
+      console.log("Scrive transaction created:", { id: createData.id, accessUrl: createData.accessUrl });
+
+      // Step 2: Start the transaction
+      const startResponse = await fetch(`${SCRIVE_BASE_URL}/transaction/${createData.id}/start`, {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${SCRIVE_EID_TOKEN}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!startResponse.ok) {
+        const errorText = await startResponse.text();
+        console.error("Scrive start error:", startResponse.status, errorText);
+        return new Response(
+          JSON.stringify({ error: "Failed to start eID transaction" }),
+          { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
+      }
+
+      const startData = await startResponse.json();
+      console.log("Scrive transaction started:", { id: startData.id, status: startData.status });
+
+      // Use accessUrl from create response (start may also return it)
+      const accessUrl = startData.accessUrl || createData.accessUrl;
 
       return new Response(
         JSON.stringify({
-          accessUrl: scriveData.accessUrl,
-          transactionId: scriveData.id,
+          accessUrl,
+          transactionId: createData.id,
         }),
         { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
@@ -146,7 +179,7 @@ serve(async (req) => {
       }
 
       const scriveData = await scriveResponse.json();
-      console.log("Scrive transaction status:", { status: scriveData.status });
+      console.log("Scrive transaction details:", JSON.stringify(scriveData, null, 2));
 
       if (scriveData.status !== "complete") {
         return new Response(

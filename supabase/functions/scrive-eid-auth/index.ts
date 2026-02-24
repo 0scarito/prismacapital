@@ -99,7 +99,7 @@ serve(async (req) => {
               onfido: {
                 uiLocale: "en_US",
                 allowedDocumentTypes: ["passport", "national_identity_card", "driving_licence"],
-                report: "document_with_facial_similarity_motion",
+                report: "documentFacialSimilarityMotion",
               },
             },
           },

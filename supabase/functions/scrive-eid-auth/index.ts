@@ -98,7 +98,7 @@ serve(async (req) => {
             auth: {
               onfido: {
                 uiLocale: "en-US",
-                allowedDocumentTypes: ["passport", "national_identity_card", "driving_licence"],
+                allowedDocumentTypes: ["Passport", "NationalIdentityCard", "DrivingLicence"],
                 report: "documentFacialSimilarityMotion",
               },
             },
@@ -110,7 +110,7 @@ serve(async (req) => {
         const errorText = await createResponse.text();
         console.error("Scrive create error:", createResponse.status, errorText);
         return new Response(
-          JSON.stringify({ error: "Failed to create eID transaction" }),
+          JSON.stringify({ error: "Failed to create eID transaction", upstream_status: createResponse.status, upstream_error: errorText }),
           { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
         );
       }
@@ -125,13 +125,14 @@ serve(async (req) => {
           "Authorization": `Bearer ${SCRIVE_EID_TOKEN}`,
           "Content-Type": "application/json",
         },
+        body: "{}",
       });
 
       if (!startResponse.ok) {
         const errorText = await startResponse.text();
         console.error("Scrive start error:", startResponse.status, errorText);
         return new Response(
-          JSON.stringify({ error: "Failed to start eID transaction" }),
+          JSON.stringify({ error: "Failed to start eID transaction", upstream_status: startResponse.status, upstream_error: errorText }),
           { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
         );
       }

@@ -1,157 +1,124 @@
 
-## Scrive Integration Assessment (What I did now, what is wrong, and what to send Scrive)
 
-### 1) What I inspected right now
-I investigated the live integration using your current backend function and the uploaded Postman collection:
+## Plan: End-to-End KYC Status Tracking for Scrive/Onfido
 
-1. Read current function code: `supabase/functions/scrive-eid-auth/index.ts`
-2. Read your uploaded Postman collection: `user-uploads://eID_Hub.postman_collection.json`
-3. Triggered the function directly with a test create call (`action: "create", provider: "onfido"`)
-4. Pulled fresh backend function logs for `scrive-eid-auth`
+### The Problem
 
-### 2) Confirmed root cause (from live logs)
-The 500 error in your app is a wrapped upstream 400 from Scrive.  
-Exact backend log error:
+Right now, after a user completes the Onfido ID check and gets redirected back to your app, **nothing actually updates their profile**. Here is why:
+
+1. The `scrive-eid-auth` `verify` action fetches raw Scrive transaction data and returns it as-is
+2. The `EidCallback` page checks for `data.success` -- but the Scrive response has no `success` field, it has `status`, `providerInfo.onfidoAuth.completionData`, etc.
+3. No code extracts identity data (name, document number) from the Scrive response
+4. No code writes `kyc_status`, `verified_name`, or `eid_personal_number` to the profiles table for the Onfido provider
+5. The VoveID flow handles all of this correctly (via `voveid-auth` get-status + webhook) -- Onfido/Scrive has none of it
+
+### What Scrive Returns After Onfido Completion
+
+From your logs, a completed Scrive transaction includes:
 
 ```text
-Scrive create error: 400
-Error in $.providerParameters.onfido.allowedDocumentTypes[0]:
-parsing ... OnfidoDocumentType failed, expected one of:
-["NationalIdentityCard","DrivingLicence","Passport","ResidencePermit"],
-but found tag "passport"
+status: "completed" | "started" | "failed"
+providerInfo.onfidoAuth.completionData   → identity results (name, DOB, document)
+providerInfo.onfidoAuth.checksClear      → boolean (did checks pass)
+providerInfo.onfidoAuth.applicantId      → Onfido applicant ID
 ```
 
-So the request currently fails because `allowedDocumentTypes` uses lowercase/underscore enum values:
-- `passport`
-- `national_identity_card`
-- `driving_licence`
+When `status` is still `"started"`, the user has not finished yet. When `"completed"` and `checksClear === true`, identity data is available in `completionData`.
 
-Scrive expects exact enum tags:
-- `Passport`
-- `NationalIdentityCard`
-- `DrivingLicence`
-- `ResidencePermit`
+### What We Need From Scrive (Questions for Their Team)
 
-### 3) Why this happens (technical mismatch)
-Your current request body sends:
+Before implementing, you should confirm these with Scrive:
 
-```json
-"allowedDocumentTypes": ["passport", "national_identity_card", "driving_licence"]
-```
+1. **Webhook support**: Does Scrive eID Hub support webhooks/callbacks when a transaction completes? If so, what is the payload format and how do we register a webhook URL? (This is critical for async status updates when the user takes time on Onfido.)
 
-But Scrive’s parser is strict enum-based (case-sensitive + exact spelling).  
-So the create transaction never succeeds, and your app surfaces generic `Failed to create eID transaction`.
+2. **completionData structure**: What are the exact fields inside `providerInfo.onfidoAuth.completionData` after a successful verification? We need: full name, date of birth, document number, document type, nationality.
 
-### 4) Additional compatibility note I found
-Your Postman sample shape uses `providerParameters.auth.onfido`.  
-The Scrive error path reports `providerParameters.onfido...`, which suggests their internal validation path may flatten/alias that object. Since their parser reached `allowedDocumentTypes`, the object path is at least being interpreted enough to validate this field.  
-Primary blocker is definitely enum mismatch.
+3. **checksClear semantics**: When `checksClear` is `true`, does that mean all Onfido reports passed? Are there partial-pass states?
 
-### 5) Exact fix plan (implementation)
-When implementing, I would make these changes in `supabase/functions/scrive-eid-auth/index.ts`:
+4. **Transaction status lifecycle**: What are all possible `status` values? We see `"started"` and expect `"completed"` and `"failed"` -- are there others like `"expired"` or `"error"`?
 
-1. **Fix enum values**
-   - Replace:
-     - `"passport"` → `"Passport"`
-     - `"national_identity_card"` → `"NationalIdentityCard"`
-     - `"driving_licence"` → `"DrivingLicence"`
+5. **Transaction polling**: Is it safe to poll `GET /transaction/{id}` multiple times? Any rate limits?
 
-2. **Keep working fields that are already valid**
-   - Keep `uiLocale: "en-US"` (already corrected)
-   - Keep `report: "documentFacialSimilarityMotion"` (already corrected earlier)
+### Implementation Plan
 
-3. **Improve error transparency to debug with Scrive**
-   - Return Scrive upstream status/body in function response (sanitized), instead of only generic:
-     - `"Failed to create eID transaction"`
-   - This helps support immediately see exact parser complaints.
+#### Step 1: Upgrade `scrive-eid-auth` verify action
 
-4. **Maintain the 3-step flow already in place**
-   - `POST /transaction/new`
-   - `POST /transaction/{tId}/start`
-   - return `accessUrl` for redirect
+Update the edge function's `verify` action to:
+- Accept the authenticated user's JWT (currently it does not authenticate the caller)
+- Fetch the Scrive transaction status
+- Map the Scrive status to our KYC states:
+  - `status === "completed"` + `checksClear === true` → extract identity, write `kyc_status: "verified"`, `verified_name`, `eid_personal_number`, `kyc_provider: "onfido"`, `kyc_verified_at` to profiles
+  - `status === "completed"` + `checksClear === false` → write `kyc_status: "failed"`
+  - `status === "started"` → write `kyc_status: "pending"` (user still in Onfido flow)
+  - `status === "failed"` or `"error"` → write `kyc_status: "failed"`
+- Check for duplicate `eid_personal_number` (same logic as VoveID flow)
+- Return a normalized response: `{ success, status, identity: { name, documentNumber } }`
 
-### 6) JSON payload to send Scrive team (current vs corrected)
+#### Step 2: Upgrade `scrive-eid-auth` create action
 
-#### A) What your backend is effectively sending now (failing)
-```json
-{
-  "method": "auth",
-  "provider": "onfido",
-  "redirectUrl": "https://<your-domain>/auth/eid-callback",
-  "providerParameters": {
-    "auth": {
-      "onfido": {
-        "uiLocale": "en-US",
-        "allowedDocumentTypes": [
-          "passport",
-          "national_identity_card",
-          "driving_licence"
-        ],
-        "report": "documentFacialSimilarityMotion"
-      }
-    }
-  }
-}
-```
+- Authenticate the caller via JWT
+- Set `kyc_status: "pending"` on the profile immediately when creating the transaction (matching VoveID behavior)
+- Store the `transactionId` in the profile or a new column so we can poll later
 
-#### B) Corrected payload proposal (should pass enum validation)
-```json
-{
-  "method": "auth",
-  "provider": "onfido",
-  "redirectUrl": "https://<your-domain>/auth/eid-callback",
-  "providerParameters": {
-    "auth": {
-      "onfido": {
-        "uiLocale": "en-US",
-        "allowedDocumentTypes": [
-          "Passport",
-          "NationalIdentityCard",
-          "DrivingLicence"
-        ],
-        "report": "documentFacialSimilarityMotion"
-      }
-    }
-  }
-}
-```
+#### Step 3: Fix EidCallback page
 
-### 7) What to ask Scrive support explicitly
-Send them this checklist:
+- The callback currently checks `data.success` which does not exist in Scrive responses
+- Update to use the normalized response from Step 1
+- Handle all states: verified → redirect to dashboard, pending → show "processing" message, failed → show retry
+- If pending, implement a short polling loop (check every 5 seconds, up to 2 minutes) before giving up and telling the user to check back
 
-1. Confirm exact accepted enum values for `providerParameters.auth.onfido.allowedDocumentTypes` in **testbed**.
-2. Confirm whether payload should be:
-   - `providerParameters.auth.onfido` **or**
-   - `providerParameters.onfido`
-3. Confirm accepted `report` values for your token configuration (Onfido-only token).
-4. Confirm whether `start` endpoint for Onfido requires an empty JSON body or no body.
-5. Confirm redirect whitelist requirements for:
-   - preview domain(s)
-   - production domain
+#### Step 4: Add `useAuth` Onfido flow parity
 
-### 8) Ready-to-send “support summary” (you can paste this)
+- In `verifyIdentity()`, set local `kycStatus` to `"pending"` immediately
+- After redirect back and successful verify, `refreshEidStatus()` picks up the new profile data automatically (this already works)
+
+#### Step 5: (Optional but recommended) Add Scrive webhook endpoint
+
+Create a new edge function `scrive-webhook` that:
+- Receives Scrive transaction completion notifications
+- Extracts identity data and updates profiles
+- This eliminates the need for polling and handles cases where the user closes the browser before the callback fires
+
+This depends on whether Scrive supports webhooks -- question 1 above.
+
+### Security Considerations
+
+- The `scrive-eid-auth` function currently has no JWT validation -- anyone can call it. We will add authentication so only logged-in users can create/verify transactions, and the user ID comes from the JWT, not the request body.
+- Move the hardcoded `SCRIVE_EID_TOKEN` to use the `SCRIVE_EID_TOKEN` secret (already configured) via `Deno.env.get()` instead of the constant in the code.
+- Identity deduplication: same document number cannot be used by two accounts (already implemented for VoveID, will replicate for Onfido).
+
+### Files to Modify
+
+| File | Change |
+|---|---|
+| `supabase/functions/scrive-eid-auth/index.ts` | Add JWT auth, upgrade verify action with profile updates, use secret for token |
+| `src/pages/EidCallback.tsx` | Fix response parsing, add polling for pending state |
+| `src/hooks/useAuth.tsx` | Set pending status on create, minor cleanup |
+
+### What You Should Send Scrive
+
 ```text
-We are integrating Scrive eID Hub (Onfido only) against testbed host: https://testbed-eid.scrive.com.
+We have the Scrive eID Hub Onfido integration working (create + start + redirect).
+Users complete Onfido and get redirected back to our app with the transaction ID.
 
-Our create transaction call returns HTTP 400 with:
-Error in $.providerParameters.onfido.allowedDocumentTypes[0]:
-expected one of ["NationalIdentityCard","DrivingLicence","Passport","ResidencePermit"],
-found "passport".
+We now need to extract identity data from completed transactions.
 
-Current payload includes:
-allowedDocumentTypes: ["passport","national_identity_card","driving_licence"]
-report: "documentFacialSimilarityMotion"
-uiLocale: "en-US"
+Questions:
+1) Does eID Hub support webhooks for transaction completion? 
+   If yes, what is the payload format and where do we register the URL?
 
-Can you confirm:
-1) Exact payload path expected for Onfido fields (providerParameters.auth.onfido vs providerParameters.onfido),
-2) Exact enum values for allowedDocumentTypes,
-3) Valid report enum values for our token,
-4) Whether /transaction/{tId}/start requires a request body for Onfido?
+2) After a successful Onfido verification, what fields are inside 
+   providerInfo.onfidoAuth.completionData? 
+   We need: full legal name, date of birth, document number, document type.
+
+3) What are all possible transaction status values? 
+   (started, completed, failed, expired, ...?)
+
+4) When checksClear is true, does that guarantee all reports passed?
+
+5) Any rate limits on polling GET /transaction/{id}?
+
+Our token: 2e222dce-... (testbed)
+Our redirect URL: https://prismacapital.lovable.app/auth/eid-callback
 ```
 
-### 9) Implementation status right now
-- I have completed diagnosis and reproduced the failure path from live logs.
-- Root cause is identified with precise field-level validation mismatch.
-- Fix is straightforward and low-risk (enum correction + better error passthrough).
-- No database schema change is required.

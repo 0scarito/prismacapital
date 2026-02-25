@@ -207,6 +207,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const verifyIdentity = async (): Promise<void> => {
     const redirectUrl = `${window.location.origin}/auth/eid-callback`;
     
+    // Set pending immediately in local state
+    setKycStatus('pending');
+    
     const { data, error } = await supabase.functions.invoke('scrive-eid-auth', {
       body: {
         action: 'create',
@@ -217,6 +220,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     if (error || !data?.accessUrl) {
       console.error('Identity verification error:', error || 'No accessUrl returned');
+      setKycStatus('none');
       throw new Error('Failed to initiate identity verification');
     }
 

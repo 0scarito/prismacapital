@@ -202,33 +202,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   /**
-   * Initiate identity verification via Scrive Onfido KYC
+   * Initiate identity verification via VoveID
+   * VoveID verification is handled via the VoveidVerification dialog component,
+   * so this just sets the pending state. The dialog handles session creation + SDK launch.
    */
   const verifyIdentity = async (): Promise<void> => {
-    const redirectUrl = `${window.location.origin}/auth/eid-callback`;
-    
-    // Set pending immediately in local state
     setKycStatus('pending');
-    
-    const { data, error } = await supabase.functions.invoke('scrive-eid-auth', {
-      body: {
-        action: 'create',
-        provider: 'onfido',
-        redirectUrl,
-      },
-    });
-
-    if (error || !data?.accessUrl) {
-      console.error('Identity verification error:', error || 'No accessUrl returned');
-      setKycStatus('none');
-      throw new Error('Failed to initiate identity verification');
-    }
-
-    // Store transaction ID for callback verification
-    sessionStorage.setItem('eid_transaction_id', data.transactionId);
-    
-    // Redirect to Scrive/Onfido (full redirect, not iframe)
-    window.location.href = data.accessUrl;
   };
 
   const value = {

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { supabase } from '@/integrations/supabase/client';
@@ -19,7 +19,7 @@ interface VoveidVerificationProps {
   onVerificationComplete: () => void;
 }
 
-type VerificationStatus = 'idle' | 'loading' | 'ready' | 'verifying' | 'checking' | 'success' | 'failed' | 'canceled';
+type VerificationStatus = 'idle' | 'loading' | 'ready' | 'verifying' | 'checking' | 'polling' | 'success' | 'failed' | 'canceled';
 
 interface VoveidConfig {
   publicKey: string;
@@ -27,13 +27,25 @@ interface VoveidConfig {
   environment: string;
 }
 
+const POLL_INTERVAL = 5000; // 5 seconds
+const POLL_MAX_DURATION = 120000; // 2 minutes
+
 const VoveidVerification = ({ isOpen, onClose, onVerificationComplete }: VoveidVerificationProps) => {
   const [status, setStatus] = useState<VerificationStatus>('idle');
   const [sessionToken, setSessionToken] = useState<string | null>(null);
   const [config, setConfig] = useState<VoveidConfig | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const pollingRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const pollStartRef = useRef<number>(0);
   const { toast } = useToast();
   const { t } = useLanguage();
+
+  const stopPolling = useCallback(() => {
+    if (pollingRef.current) {
+      clearInterval(pollingRef.current);
+      pollingRef.current = null;
+    }
+  }, []);
 
   // Fetch configuration and create session
   const createSession = useCallback(async () => {
@@ -41,42 +53,23 @@ const VoveidVerification = ({ isOpen, onClose, onVerificationComplete }: VoveidV
     setErrorMessage(null);
 
     try {
-      // First get config if we don't have it
       let voveidConfig = config;
       if (!voveidConfig) {
         const { data: configData, error: configError } = await supabase.functions.invoke('voveid-auth', {
           body: { action: 'get-config' },
         });
-
-        if (configError) {
-          console.error('VoveID config error:', configError);
-          throw new Error('Failed to load VoveID configuration');
-        }
-
-        if (!configData?.publicKey || !configData?.flowId) {
-          throw new Error('VoveID configuration incomplete');
-        }
-
+        if (configError) throw new Error('Failed to load VoveID configuration');
+        if (!configData?.publicKey || !configData?.flowId) throw new Error('VoveID configuration incomplete');
         voveidConfig = configData as VoveidConfig;
         setConfig(voveidConfig);
-        console.log('VoveID config loaded');
       }
 
-      // Now create the session
       const { data, error } = await supabase.functions.invoke('voveid-auth', {
         body: { action: 'create-session' },
       });
+      if (error) throw new Error(error.message);
+      if (!data?.sessionToken) throw new Error('No session token received');
 
-      if (error) {
-        console.error('VoveID session error:', error);
-        throw new Error(error.message);
-      }
-
-      if (!data?.sessionToken) {
-        throw new Error('No session token received');
-      }
-
-      console.log('VoveID session created');
       setSessionToken(data.sessionToken);
       setStatus('ready');
     } catch (err) {
@@ -91,32 +84,117 @@ const VoveidVerification = ({ isOpen, onClose, onVerificationComplete }: VoveidV
     }
   }, [config, toast, t]);
 
+  // Poll for verification status (handles async webhook processing)
+  const pollForStatus = useCallback(async () => {
+    try {
+      const { data, error } = await supabase.functions.invoke('voveid-auth', {
+        body: { action: 'get-status' },
+      });
+
+      if (error) {
+        console.error('Poll status error:', error);
+        return; // Keep polling, don't fail yet
+      }
+
+      if (data?.status === 'verified' && data?.success) {
+        stopPolling();
+        setStatus('success');
+        toast({
+          title: t('auth.voveidSuccess') || 'Identity Verified',
+          description: data?.identity?.name
+            ? `Welcome, ${data.identity.name}! Your identity has been verified.`
+            : 'Your identity has been successfully verified.',
+        });
+        onVerificationComplete();
+        return;
+      }
+
+      if (data?.status === 'failed') {
+        stopPolling();
+        setStatus('failed');
+        setErrorMessage(data?.error || 'Verification failed. Please try again with valid documents.');
+        toast({
+          title: t('auth.voveidError') || 'Verification Failed',
+          description: 'Your verification could not be completed. Please try again.',
+          variant: 'destructive',
+        });
+        return;
+      }
+
+      // Still pending – check timeout
+      if (Date.now() - pollStartRef.current > POLL_MAX_DURATION) {
+        stopPolling();
+        setStatus('failed');
+        setErrorMessage('Verification is taking longer than expected. Please check back later from your dashboard.');
+        toast({
+          title: 'Verification Processing',
+          description: 'Your verification is still being processed. Check your dashboard for updates.',
+        });
+      }
+    } catch (err) {
+      console.error('Poll error:', err);
+    }
+  }, [stopPolling, toast, t, onVerificationComplete]);
+
+  // Check verification status - starts polling if pending
+  const checkVerificationStatus = useCallback(async () => {
+    setStatus('checking');
+
+    try {
+      const { data, error } = await supabase.functions.invoke('voveid-auth', {
+        body: { action: 'get-status' },
+      });
+
+      if (error) throw new Error(error.message);
+
+      if (data?.success && data?.status === 'verified') {
+        setStatus('success');
+        toast({
+          title: t('auth.voveidSuccess') || 'Identity Verified',
+          description: data?.identity?.name
+            ? `Welcome, ${data.identity.name}! Your identity has been verified.`
+            : 'Your identity has been successfully verified.',
+        });
+        onVerificationComplete();
+      } else if (data?.status === 'failed') {
+        setStatus('failed');
+        setErrorMessage('Verification failed. Please try again with valid documents.');
+      } else {
+        // Status is pending/in_progress – start polling
+        setStatus('polling');
+        pollStartRef.current = Date.now();
+        pollingRef.current = setInterval(pollForStatus, POLL_INTERVAL);
+      }
+    } catch (err) {
+      console.error('Status check error:', err);
+      // Can't confirm – start polling as fallback
+      setStatus('polling');
+      pollStartRef.current = Date.now();
+      pollingRef.current = setInterval(pollForStatus, POLL_INTERVAL);
+    }
+  }, [toast, t, onVerificationComplete, pollForStatus]);
+
   // Start VoveID SDK verification
   const startVerification = useCallback(async () => {
-    if (!sessionToken || !config) {
-      console.error('Missing sessionToken or config');
-      return;
-    }
+    if (!sessionToken || !config) return;
 
     setStatus('verifying');
     setErrorMessage(null);
 
     try {
-      // Use the npm package directly
       const vove = new Vove();
-      const voveEnv = config.environment === 'production' 
-        ? VoveEnvironment.PRODUCTION 
+      const voveEnv = config.environment === 'production'
+        ? VoveEnvironment.PRODUCTION
         : VoveEnvironment.SANDBOX;
-      
+
       vove.start({
         environment: voveEnv,
         publicKey: config.publicKey,
         sessionToken: sessionToken,
         onVerificationComplete: async (result: string) => {
-          console.log('VoveID verification result:', result);
-          
+          console.log('VoveID SDK result:', result);
+
           if (result === 'success') {
-            // Verify status on backend and update profile
             await checkVerificationStatus();
           } else if (result === 'canceled') {
             setStatus('canceled');
@@ -127,11 +205,6 @@ const VoveidVerification = ({ isOpen, onClose, onVerificationComplete }: VoveidV
           } else {
             setStatus('failed');
             setErrorMessage('Verification was not successful. Please try again.');
-            toast({
-              title: t('auth.voveidError') || 'Verification Failed',
-              description: 'Please try again or contact support.',
-              variant: 'destructive',
-            });
           }
         },
       });
@@ -139,66 +212,8 @@ const VoveidVerification = ({ isOpen, onClose, onVerificationComplete }: VoveidV
       console.error('VoveID SDK error:', err);
       setStatus('failed');
       setErrorMessage(err instanceof Error ? err.message : 'Failed to start verification');
-      toast({
-        title: t('auth.voveidError') || 'Verification Error',
-        description: 'Failed to start verification. Please try again.',
-        variant: 'destructive',
-      });
     }
-  }, [sessionToken, config, toast, t]);
-
-  // Check verification status on backend - only show success when confirmed
-  const checkVerificationStatus = async () => {
-    setStatus('checking');
-    
-    try {
-      const { data, error } = await supabase.functions.invoke('voveid-auth', {
-        body: { action: 'get-status' },
-      });
-
-      if (error) {
-        throw new Error(error.message);
-      }
-
-      if (data?.success && data?.status === 'verified') {
-        setStatus('success');
-        toast({
-          title: t('auth.voveidSuccess') || 'Identity Verified',
-          description: data?.identity?.name 
-            ? `Welcome, ${data.identity.name}! Your identity has been verified.`
-            : 'Your identity has been successfully verified.',
-        });
-        onVerificationComplete();
-      } else if (data?.status === 'failed') {
-        // Verification explicitly failed
-        setStatus('failed');
-        setErrorMessage('Verification failed. Please try again with valid documents.');
-        toast({
-          title: t('auth.voveidError') || 'Verification Failed',
-          description: 'Your verification could not be completed. Please try again.',
-          variant: 'destructive',
-        });
-      } else {
-        // Status is still pending - don't auto-complete, wait for webhook
-        setStatus('failed');
-        setErrorMessage('Verification is still processing. Please wait a moment and try again.');
-        toast({
-          title: 'Verification Processing',
-          description: 'Your verification is being processed. Please wait and check again.',
-        });
-      }
-    } catch (err) {
-      console.error('Status check error:', err);
-      // Don't show success if we can't confirm the status
-      setStatus('failed');
-      setErrorMessage('Could not confirm verification status. Please refresh and try again.');
-      toast({
-        title: 'Verification Status Unknown',
-        description: 'We could not confirm your verification. Please refresh and check your dashboard.',
-        variant: 'destructive',
-      });
-    }
-  };
+  }, [sessionToken, config, toast, t, checkVerificationStatus]);
 
   // Create session when dialog opens
   useEffect(() => {
@@ -207,23 +222,26 @@ const VoveidVerification = ({ isOpen, onClose, onVerificationComplete }: VoveidV
     }
   }, [isOpen, status, createSession]);
 
-  // Reset state when dialog closes
+  // Cleanup polling on unmount / close
   useEffect(() => {
     if (!isOpen) {
+      stopPolling();
       setStatus('idle');
       setSessionToken(null);
       setConfig(null);
       setErrorMessage(null);
     }
-  }, [isOpen]);
+    return () => stopPolling();
+  }, [isOpen, stopPolling]);
 
   const handleClose = () => {
-    if (status !== 'verifying' && status !== 'checking') {
+    if (status !== 'verifying' && status !== 'checking' && status !== 'polling') {
       onClose();
     }
   };
 
   const handleRetry = () => {
+    stopPolling();
     setStatus('idle');
     setSessionToken(null);
     setErrorMessage(null);
@@ -277,12 +295,17 @@ const VoveidVerification = ({ isOpen, onClose, onVerificationComplete }: VoveidV
             </>
           )}
 
-          {status === 'checking' && (
+          {(status === 'checking' || status === 'polling') && (
             <>
               <Loader2 className="h-8 w-8 animate-spin text-primary" />
               <p className="text-sm text-muted-foreground">
-                Confirming verification status...
+                {status === 'polling' ? 'Processing your verification...' : 'Confirming verification status...'}
               </p>
+              {status === 'polling' && (
+                <p className="text-xs text-muted-foreground text-center">
+                  This may take up to 2 minutes. Please don't close this window.
+                </p>
+              )}
             </>
           )}
 

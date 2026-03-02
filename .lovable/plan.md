@@ -1,124 +1,82 @@
 
 
-## Plan: End-to-End KYC Status Tracking for Scrive/Onfido
+## Plan: VoveID-Only KYC Integration Overhaul
 
-### The Problem
+### Current State Assessment
 
-Right now, after a user completes the Onfido ID check and gets redirected back to your app, **nothing actually updates their profile**. Here is why:
+After reading the VoveID official documentation and the current codebase, here is what needs fixing:
 
-1. The `scrive-eid-auth` `verify` action fetches raw Scrive transaction data and returns it as-is
-2. The `EidCallback` page checks for `data.success` -- but the Scrive response has no `success` field, it has `status`, `providerInfo.onfidoAuth.completionData`, etc.
-3. No code extracts identity data (name, document number) from the Scrive response
-4. No code writes `kyc_status`, `verified_name`, or `eid_personal_number` to the profiles table for the Onfido provider
-5. The VoveID flow handles all of this correctly (via `voveid-auth` get-status + webhook) -- Onfido/Scrive has none of it
+**What works:**
+- Session creation calls `POST /v2/sessions` with `refId` and `flowId` -- correct
+- Webhook endpoint exists at `voveid-webhook` -- but uses wrong signature verification (HMAC-SHA256 on raw body vs Svix standard)
+- `get-status` action calls `GET /v2/users/:refId` -- correct endpoint
 
-### What Scrive Returns After Onfido Completion
+**What is broken or missing:**
 
-From your logs, a completed Scrive transaction includes:
+1. **Session creation does not send user info.** VoveID accepts an optional `user` object (`firstName`, `lastName`, `gender`, `dateOfBirth`) which enables data matching. Your current code only sends `refId` + `flowId`. We should pull the user's `display_name` and pass it as `firstName`/`lastName`.
 
-```text
-status: "completed" | "started" | "failed"
-providerInfo.onfidoAuth.completionData   → identity results (name, DOB, document)
-providerInfo.onfidoAuth.checksClear      → boolean (did checks pass)
-providerInfo.onfidoAuth.applicantId      → Onfido applicant ID
-```
+2. **Webhook signature verification is wrong.** VoveID uses **Svix** webhooks. The current `voveid-webhook` computes a plain HMAC-SHA256 on the raw body with `x-voveid-signature` header. VoveID actually sends `Svix-Id`, `Svix-Timestamp`, `Svix-Signature` headers. The signature is computed as `HMAC-SHA256(base64decode(secret_after_whsec_), "${svix_id}.${svix_timestamp}.${body}")` and compared as base64.
 
-When `status` is still `"started"`, the user has not finished yet. When `"completed"` and `checksClear === true`, identity data is available in `completionData`.
+3. **Webhook status mapping is wrong.** The current webhook checks for `verification.completed`, `user.approved`, `success` etc. VoveID's actual webhook statuses are: `successful`, `suspected`, `in_progress`, `pending`. There is no `verification.completed` or `user.approved`.
 
-### What We Need From Scrive (Questions for Their Team)
+4. **Webhook does not fetch user documents.** After receiving a webhook with `status: "successful"`, you should call `GET /v2/users/:refId` to get the full identity data (name, DOB, document number from `documents[]`).
 
-Before implementing, you should confirm these with Scrive:
+5. **get-status action maps wrong statuses.** It checks for `"success"` and `"approved"` but VoveID returns `"successful"`. It also checks `documentData` which doesn't exist -- VoveID returns `documents[]` array.
 
-1. **Webhook support**: Does Scrive eID Hub support webhooks/callbacks when a transaction completes? If so, what is the payload format and how do we register a webhook URL? (This is critical for async status updates when the user takes time on Onfido.)
-
-2. **completionData structure**: What are the exact fields inside `providerInfo.onfidoAuth.completionData` after a successful verification? We need: full name, date of birth, document number, document type, nationality.
-
-3. **checksClear semantics**: When `checksClear` is `true`, does that mean all Onfido reports passed? Are there partial-pass states?
-
-4. **Transaction status lifecycle**: What are all possible `status` values? We see `"started"` and expect `"completed"` and `"failed"` -- are there others like `"expired"` or `"error"`?
-
-5. **Transaction polling**: Is it safe to poll `GET /transaction/{id}` multiple times? Any rate limits?
+6. **Frontend `VoveidVerification` component** calls `checkVerificationStatus` right after the SDK's `onVerificationComplete` fires with `"success"`. But VoveID may not have finished processing yet (webhook may come later with `in_progress` or `pending`). We need to handle the pending state properly.
 
 ### Implementation Plan
 
-#### Step 1: Upgrade `scrive-eid-auth` verify action
+#### 1. Fix `voveid-auth` edge function
 
-Update the edge function's `verify` action to:
-- Accept the authenticated user's JWT (currently it does not authenticate the caller)
-- Fetch the Scrive transaction status
-- Map the Scrive status to our KYC states:
-  - `status === "completed"` + `checksClear === true` → extract identity, write `kyc_status: "verified"`, `verified_name`, `eid_personal_number`, `kyc_provider: "onfido"`, `kyc_verified_at` to profiles
-  - `status === "completed"` + `checksClear === false` → write `kyc_status: "failed"`
-  - `status === "started"` → write `kyc_status: "pending"` (user still in Onfido flow)
-  - `status === "failed"` or `"error"` → write `kyc_status: "failed"`
-- Check for duplicate `eid_personal_number` (same logic as VoveID flow)
-- Return a normalized response: `{ success, status, identity: { name, documentNumber } }`
+- **Session creation**: Pass `user` object with `firstName`/`lastName` parsed from profile `display_name`, and `forceCreation: true` for retries
+- **get-status**: Fix status mapping (`"successful"` not `"success"`), extract identity from `documents[]` array (use `firstName`, `lastName`, `idNumber` from the ID_DOCUMENT step), handle `"suspected"` as failed
+- **get-config**: No changes needed
 
-#### Step 2: Upgrade `scrive-eid-auth` create action
+#### 2. Rewrite `voveid-webhook` edge function
 
-- Authenticate the caller via JWT
-- Set `kyc_status: "pending"` on the profile immediately when creating the transaction (matching VoveID behavior)
-- Store the `transactionId` in the profile or a new column so we can poll later
+- **Svix signature verification**: Parse `Svix-Id`, `Svix-Timestamp`, `Svix-Signature` headers. Compute `HMAC-SHA256(base64decode(secret_key), "${svixId}.${timestamp}.${body}")` and compare as base64 against the signature
+- **Status handling**: Map `successful` → fetch `GET /v2/users/:refId` for full data → update profile to `verified`. Map `suspected` → `failed`. Map `in_progress`/`pending` → keep `pending`
+- **Identity extraction**: From `GET /v2/users/:refId` response, extract `documents[0].firstName`, `documents[0].lastName`, `documents[0].idNumber` for `verified_name` and `eid_personal_number`
+- **Deduplication**: Check `eid_personal_number` uniqueness before setting verified
 
-#### Step 3: Fix EidCallback page
+#### 3. Update `VoveidVerification` component
 
-- The callback currently checks `data.success` which does not exist in Scrive responses
-- Update to use the normalized response from Step 1
-- Handle all states: verified → redirect to dashboard, pending → show "processing" message, failed → show retry
-- If pending, implement a short polling loop (check every 5 seconds, up to 2 minutes) before giving up and telling the user to check back
+- If `checkVerificationStatus` returns `pending` or `in_progress`, keep the dialog open showing "processing" state instead of showing failure
+- Add a polling loop (every 5s, up to 2 min) for pending status
+- Only close/succeed when status is `verified`, or fail on `suspected`/`failed`
 
-#### Step 4: Add `useAuth` Onfido flow parity
+#### 4. Update `useAuth` hook
 
-- In `verifyIdentity()`, set local `kycStatus` to `"pending"` immediately
-- After redirect back and successful verify, `refreshEidStatus()` picks up the new profile data automatically (this already works)
+- No structural changes needed -- it already handles `pending`/`verified`/`failed` states correctly
 
-#### Step 5: (Optional but recommended) Add Scrive webhook endpoint
+#### 5. Remove Onfido/Scrive as default
 
-Create a new edge function `scrive-webhook` that:
-- Receives Scrive transaction completion notifications
-- Extracts identity data and updates profiles
-- This eliminates the need for polling and handles cases where the user closes the browser before the callback fires
-
-This depends on whether Scrive supports webhooks -- question 1 above.
-
-### Security Considerations
-
-- The `scrive-eid-auth` function currently has no JWT validation -- anyone can call it. We will add authentication so only logged-in users can create/verify transactions, and the user ID comes from the JWT, not the request body.
-- Move the hardcoded `SCRIVE_EID_TOKEN` to use the `SCRIVE_EID_TOKEN` secret (already configured) via `Deno.env.get()` instead of the constant in the code.
-- Identity deduplication: same document number cannot be used by two accounts (already implemented for VoveID, will replicate for Onfido).
+- Update `verifyIdentity()` in `useAuth` to use VoveID instead of Scrive Onfido
+- Keep Scrive code in place but make VoveID the primary flow
 
 ### Files to Modify
 
-| File | Change |
+| File | Changes |
 |---|---|
-| `supabase/functions/scrive-eid-auth/index.ts` | Add JWT auth, upgrade verify action with profile updates, use secret for token |
-| `src/pages/EidCallback.tsx` | Fix response parsing, add polling for pending state |
-| `src/hooks/useAuth.tsx` | Set pending status on create, minor cleanup |
+| `supabase/functions/voveid-auth/index.ts` | Add user info to session creation, fix status mapping to use VoveID's actual response shape |
+| `supabase/functions/voveid-webhook/index.ts` | Rewrite signature verification to Svix standard, fix status enum mapping, add `GET /v2/users/:refId` call on success |
+| `src/components/VoveidVerification.tsx` | Handle `pending`/`in_progress` states with polling instead of immediate failure |
+| `src/hooks/useAuth.tsx` | Make VoveID the primary `verifyIdentity()` flow |
 
-### What You Should Send Scrive
+### Questions for VoveID (if any issues arise)
 
-```text
-We have the Scrive eID Hub Onfido integration working (create + start + redirect).
-Users complete Onfido and get redirected back to our app with the transaction ID.
+1. Confirm your webhook secret format starts with `whsec_` and the signing key is the base64-decoded part after the prefix
+2. Confirm `forceCreation: true` is safe to use on retry flows
+3. Confirm the `documents[]` array always contains at least one entry with `stepId: "ID_DOCUMENT"` for IDV flows
 
-We now need to extract identity data from completed transactions.
+### Extra Features You Mentioned (Phase 2)
 
-Questions:
-1) Does eID Hub support webhooks for transaction completion? 
-   If yes, what is the payload format and where do we register the URL?
+These are noted for future implementation after the core flow works:
 
-2) After a successful Onfido verification, what fields are inside 
-   providerInfo.onfidoAuth.completionData? 
-   We need: full legal name, date of birth, document number, document type.
-
-3) What are all possible transaction status values? 
-   (started, completed, failed, expired, ...?)
-
-4) When checksClear is true, does that guarantee all reports passed?
-
-5) Any rate limits on polling GET /transaction/{id}?
-
-Our token: 2e222dce-... (testbed)
-Our redirect URL: https://prismacapital.lovable.app/auth/eid-callback
-```
+- **AML/Sanctions screening**: Can be triggered via VoveID MCP or API after verification succeeds
+- **Accredited investor verification**: Address proof module via `ADDRESS_PROOF` step in VoveID flows
+- **Automated investor agreements**: Trigger document signing on `successful` webhook
+- **Tiered access control**: Already partially implemented (Invest Now blocked without KYC)
+- **Periodic re-KYC**: Cron job checking `kyc_verified_at > 12 months` to force re-verification
 

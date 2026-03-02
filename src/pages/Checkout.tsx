@@ -72,10 +72,10 @@ const CheckoutContent = () => {
         return false;
       }
 
-      if (!data?.exists) {
+      if (!data?.valid) {
         toast({
           title: 'Invalid Recipient',
-          description: 'The recipient must have a registered Prisma Capital account',
+          description: data?.error || 'Please enter a valid email address',
           variant: 'destructive',
         });
         return false;

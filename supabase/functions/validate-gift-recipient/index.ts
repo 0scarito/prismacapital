@@ -7,18 +7,16 @@ const corsHeaders = {
 };
 
 // Simple in-memory rate limiting (resets on function cold start)
-// In production, consider using Redis or database-backed rate limiting
 const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
 
-const RATE_LIMIT_MAX = 5; // Max 5 requests
-const RATE_LIMIT_WINDOW_MS = 5 * 60 * 1000; // Per 5 minute window
+const RATE_LIMIT_MAX = 5;
+const RATE_LIMIT_WINDOW_MS = 5 * 60 * 1000;
 
 function isRateLimited(userId: string): boolean {
   const now = Date.now();
   const userLimit = rateLimitMap.get(userId);
   
   if (!userLimit || now > userLimit.resetTime) {
-    // Reset or initialize rate limit
     rateLimitMap.set(userId, { count: 1, resetTime: now + RATE_LIMIT_WINDOW_MS });
     return false;
   }
@@ -83,7 +81,7 @@ serve(async (req) => {
 
     if (!email) {
       return new Response(
-        JSON.stringify({ exists: false, error: "Email is required" }),
+        JSON.stringify({ valid: false, error: "Email is required" }),
         {
           headers: { ...corsHeaders, "Content-Type": "application/json" },
           status: 400,
@@ -95,7 +93,7 @@ serve(async (req) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email) || email.length > 255) {
       return new Response(
-        JSON.stringify({ exists: false, error: "Invalid email format" }),
+        JSON.stringify({ valid: false, error: "Invalid email format" }),
         {
           headers: { ...corsHeaders, "Content-Type": "application/json" },
           status: 400,
@@ -103,26 +101,24 @@ serve(async (req) => {
       );
     }
 
-    // Check if user exists using secure database function
-    const { data: userExists, error } = await supabaseClient
-      .rpc('check_user_exists_by_email', { user_email: email });
-    
-    if (error) {
-      console.error("Error checking user:", error);
+    // Prevent sending to self
+    if (email.toLowerCase() === user.email?.toLowerCase()) {
       return new Response(
-        JSON.stringify({ exists: false, error: "Failed to validate recipient. Please try again." }),
+        JSON.stringify({ valid: false, error: "You cannot send a gift to yourself" }),
         {
           headers: { ...corsHeaders, "Content-Type": "application/json" },
-          status: 500,
+          status: 400,
         }
       );
     }
 
-    // Log the lookup for monitoring (without exposing the email in response)
-    console.log(`Email lookup by user ${user.id}: ${userExists ? 'found' : 'not found'}`);
+    // Always return valid: true for well-formed emails to prevent enumeration.
+    // The gift will be created regardless — if the recipient doesn't have an
+    // account yet, they can claim it after signing up.
+    console.log(`Gift recipient validation by user ${user.id}: email format valid`);
 
     return new Response(
-      JSON.stringify({ exists: userExists }),
+      JSON.stringify({ valid: true }),
       {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
         status: 200,
@@ -131,7 +127,7 @@ serve(async (req) => {
   } catch (error) {
     console.error("Error validating recipient:", error);
     return new Response(
-      JSON.stringify({ exists: false, error: "Failed to validate recipient. Please try again." }),
+      JSON.stringify({ valid: false, error: "Failed to validate recipient. Please try again." }),
       {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
         status: 500,

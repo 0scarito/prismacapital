@@ -53,7 +53,7 @@ const GiftTransferDialog = ({ open, onOpenChange, purchaseId, investmentName }: 
         throw new Error('Not authenticated');
       }
 
-      // Validate recipient exists using edge function
+      // Validate recipient email format via edge function
       const { data: recipientData, error: recipientError } = await supabase.functions.invoke('validate-gift-recipient', {
         body: { email: validationResult.data.email }
       });
@@ -69,10 +69,10 @@ const GiftTransferDialog = ({ open, onOpenChange, purchaseId, investmentName }: 
         return;
       }
 
-      if (!recipientData?.exists) {
+      if (!recipientData?.valid) {
         toast({
           title: 'Invalid Recipient',
-          description: 'The recipient must have a registered Prisma Capital account.',
+          description: recipientData?.error || 'Please enter a valid email address.',
           variant: 'destructive',
         });
         setLoading(false);

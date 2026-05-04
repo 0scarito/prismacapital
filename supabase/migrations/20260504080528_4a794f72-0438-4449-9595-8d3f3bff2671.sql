@@ -1,0 +1,1 @@
+DROP POLICY IF EXISTS "Wealth managers can view all profiles" ON public.profiles;

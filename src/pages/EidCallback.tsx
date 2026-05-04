@@ -19,7 +19,7 @@ const EidCallback = () => {
   const [status, setStatus] = useState<CallbackStatus>('verifying');
   const [errorMessage, setErrorMessage] = useState('');
   const [pollCount, setPollCount] = useState(0);
-  const pollTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const pollTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const navigate = useNavigate();
   const { toast } = useToast();
   const { t } = useLanguage();
